@@ -1,0 +1,64 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
+/*   Updated: 2023/11/16 14:04:11 by npaolett         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef MINISHELL_H
+# define MINISHELL_H
+
+# include "../../libft/libft.h"
+# include <errno.h>
+# include <math.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <signal.h>
+# include <stddef.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <sys/ioctl.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <unistd.h>
+
+// readline --> read a line from the terminal and return it , using prompt (char
+		// * prompt<-----
+//
+typedef struct s_mshell
+{
+	char			*commande;
+	char			**envp;
+	char			*fd_infile;
+	char			*fd_outfile;
+	int				fd[2];
+	pid_t			pid[1024];
+}					t_mshell;
+
+// ------ commande -- //
+
+typedef struct s_cmd
+{
+	char			*cmd;
+	struct s_cmd	*next;
+}					t_cmd;
+
+// ----------- ERRORI --------------- //
+void			freeList(t_cmd *head);
+
+
+// ----------- PARSING --------------//
+t_cmd				*add_cmd_list(t_cmd *list, char **commande_split, char *line);
+			// char		*find_path(char **env);
+			// char		*get_good_path(t_mshell *envp, char **commande, char **env);
+			// char		*cmd_with_good_path(t_mshell *stack, char **cmd);
+char				*display_prompt(void);
+void				commande_split_toParse(char **commande_split, char *line);
+
+#endif
