@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/16 14:04:11 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/17 14:31:44 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,10 @@ t_cmd				*add_cmd_list(t_cmd *list, char **commande_split, char *line);
 			// char		*cmd_with_good_path(t_mshell *stack, char **cmd);
 char				*display_prompt(void);
 void				commande_split_toParse(char **commande_split, char *line);
+
+
+// ------------ BUILDING ----------- // 
+int					ft_pwd(t_cmd *to_pars);
+
 
 #endif
