@@ -6,7 +6,7 @@
 #    By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/09 13:55:48 by npaolett          #+#    #+#              #
-#    Updated: 2023/11/17 14:34:13 by npaolett         ###   ########.fr        #
+#    Updated: 2023/11/20 15:51:26 by npaolett         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ CFLAGS = -g3 -Wall -Wextra -Werror
 INCL = -I -I./libft 
 
 SRC =	src/build/ft_pwd.c \
+		src/build/ft_env.c \
 		src/parsing/parsing_commandes.c 
 
 OBJ = $(SRC:.c=.o)

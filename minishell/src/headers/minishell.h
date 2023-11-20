@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/17 14:31:44 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/20 15:59:54 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,20 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }					t_cmd;
 
+
+typedef struct 	s_envp
+{
+	char			*path;
+	struct s_envp 	*next;
+}					t_envp;
+
 // ----------- ERRORI --------------- //
 void			freeList(t_cmd *head);
 
 
 // ----------- PARSING --------------//
 t_cmd				*add_cmd_list(t_cmd *list, char **commande_split, char *line);
+void				join_found_flag(t_cmd *to_pars);
 			// char		*find_path(char **env);
 			// char		*get_good_path(t_mshell *envp, char **commande, char **env);
 			// char		*cmd_with_good_path(t_mshell *stack, char **cmd);
@@ -64,6 +72,9 @@ void				commande_split_toParse(char **commande_split, char *line);
 
 // ------------ BUILDING ----------- // 
 int					ft_pwd(t_cmd *to_pars);
-
-
+int					ft_envp(t_cmd *to_pars);
+int					found_pipe(t_cmd *cmd);
+void    			found_and_add_env(char **env, t_envp *enviroment);
+char 				*ft_strcpy(char *dest, const char *src, size_t size);
+void				print_list_envp(t_envp *head);
 #endif
