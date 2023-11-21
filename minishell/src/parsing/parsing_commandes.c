@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/20 16:02:25 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/21 15:24:55 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,14 +200,13 @@ int	main(int ac, char **av, char **env)
 		printf("<<<<< ---------printf list avec flag --------------- >>\n");
 		print_list(to_pars);
 		printf("found pipe --> %d\n", found_pipe(to_pars));
-		printf("found pwd --> %d\n", ft_pwd(to_pars));
-		printf("found env --> %d\n", ft_envp(to_pars));
+		printf("found echo --> %d\n", found_echo(to_pars));
+		printf("found cd --> %d\n", ft_cd(to_pars));
+		enviroment = found_and_add_env(env, enviroment);
 		if (ft_envp(to_pars))
-		{
-			// printf("env----<\n");
-			found_and_add_env(env, enviroment);
 			print_list_envp(enviroment);
-		}
+		if (ft_pwd(to_pars))
+			print_pwd(enviroment);
 		// freeList(to_pars); //<<-------
 	}
 }

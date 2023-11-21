@@ -6,15 +6,20 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/16 10:30:16 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/21 15:23:46 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-int	ft_cd(char *prompt)
+int	ft_cd(t_cmd *to_pars)
 {
-	if (ft_strncmp(prompt, "cd", ft_strlen("cd")) == 0)
-		return (printf("cd\n"), 1);
+	while (to_pars != NULL)
+	{
+		if (ft_strncmp(to_pars->cmd, "cd", ft_strlen("cd")) == 0
+			&& ft_strlen(to_pars->cmd) == 2)
+			return (1);
+		to_pars = to_pars->next;
+	}
 	return (0);
 }

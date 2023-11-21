@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/20 15:59:54 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/21 15:24:21 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }					t_cmd;
 
+//--------- double data pour split = dans la variable et utiliser export
+// char *path et char *path_split avec =
 
 typedef struct 	s_envp
 {
@@ -72,9 +74,12 @@ void				commande_split_toParse(char **commande_split, char *line);
 
 // ------------ BUILDING ----------- // 
 int					ft_pwd(t_cmd *to_pars);
+int					ft_cd(t_cmd *to_pars);
+int					print_pwd(t_envp *envp);
+int					found_echo(t_cmd *to_pars);
 int					ft_envp(t_cmd *to_pars);
 int					found_pipe(t_cmd *cmd);
-void    			found_and_add_env(char **env, t_envp *enviroment);
+t_envp				*found_and_add_env(char **env, t_envp *enviroment);
 char 				*ft_strcpy(char *dest, const char *src, size_t size);
 void				print_list_envp(t_envp *head);
 #endif

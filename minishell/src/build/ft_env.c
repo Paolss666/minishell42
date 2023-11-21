@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:27:26 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/20 16:01:44 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/21 15:07:17 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,32 +32,48 @@ char *ft_strcpy(char *dest, const char *src, size_t size)
 	return (dest);
 }
 
-void	init_lst_envp(t_envp *enviroment)
+// void	init_lst_envp(t_envp *enviroment)
+// {
+// 	if (!enviroment)
+// 		return ;
+// 	enviroment = malloc(sizeof(t_envp));
+// 	if (!enviroment)
+// 		ft_putstr_fd("FAIL malloc enviroment\n", 2);
+// 	enviroment->path = NULL;
+// 	enviroment->next = NULL;
+// }
+
+
+
+t_envp	*found_and_add_env(char **env, t_envp *enviroment)
 {
-	if (!enviroment)
-		return ;
-	enviroment = malloc(sizeof(t_envp));
-	if (!enviroment)
-		ft_putstr_fd("FAIL malloc enviroment\n", 2);
-	enviroment->path = NULL;
-	enviroment->next = NULL;
-}
-
-
-
-void    found_and_add_env(char **env, t_envp *enviroment)
-{
-	// char	**env_split;
+	t_envp	*current;
+	t_envp	*envp;
 	int		i;
 
 	i = -1;
-	init_lst_envp(enviroment);
-	while(env[++i] && enviroment != NULL)
+	// printf("test2\n");
+	envp = NULL;
+	while (env[++i])
 	{
-		printf("whileeee\n");
-		enviroment->path = ft_strdup(ft_strcpy(enviroment->path, env[i], ft_strlen(env[i])));
-		enviroment = enviroment->next;
+		current = (t_envp *)malloc(sizeof(t_envp));
+		if (!current)
+			return (perror("FAIL malloc t_envp"), NULL);
+		current->path = ft_strdup(env[i]);
+		if (!current->path)
+			return (perror("ft_strdup"), NULL);
+		current->next = NULL;
+		if (!enviroment)
+			enviroment = current;
+		else
+		{
+			envp = enviroment;
+			while (envp->next)
+				envp = envp->next;
+			envp->next = current;
+		}
 	}
+	return (enviroment);
 }
 
 int	ft_envp(t_cmd *to_pars)
@@ -78,10 +94,12 @@ void	print_list_envp(t_envp *head)
 {
 	t_envp	*current;
 
+	if (!head)
+		printf("env -i\n");
 	current = head;
 	while (current != NULL)
 	{
-		printf("Command-path --> : %s\n", current->path);
+		printf("%s\n", current->path);
 		current = current->next;
 	}
 }
