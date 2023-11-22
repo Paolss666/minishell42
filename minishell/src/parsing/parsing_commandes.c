@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/21 15:24:55 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/22 16:52:19 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	free_cmd_list(t_cmd *head)
 
 // (cmd -lsadasdas) lol lol  <<---- gerer les flags <<====
 /// <<-------- se trovo un flag " - " lo aggiungo alla comanda precedente, anche se ne trovo di piu 
-void	join_found_flag(t_cmd *to_pars)
+void	join_found_flag(t_cmd **to_pars)
 {
 	t_cmd	*current;
 	t_cmd	*prev;
@@ -95,7 +95,9 @@ void	join_found_flag(t_cmd *to_pars)
 
 	prev = NULL;
 	next = NULL;
-	current = to_pars;
+	current = *to_pars;
+	if (!*to_pars)
+		printf("joind flag to_pars null\n");
 	while (current != NULL && current->cmd != NULL)
 	{
 		next = current->next;
@@ -159,12 +161,49 @@ void	print_list(t_cmd *head)
 	t_cmd	*current;
 
 	current = head;
+	if (!head)
+		printf("test2\n");
 	while (current != NULL)
 	{
 		printf("Command --> : %s\n", current->cmd);
 		current = current->next;
 	}
 }
+
+void free_list_to_pars(t_cmd *to_pars)
+{
+    t_cmd *current = to_pars;
+    t_cmd *next;
+
+    if (!to_pars)
+    {
+        printf("test2 to_pars == NULL\n");
+        return;
+    }
+
+    while (current)
+    {
+        next = current->next;
+        free(current->cmd);
+        free(current);
+        current = next;
+    }
+	to_pars = NULL;
+}
+
+
+// void	free_list_to_pars(t_cmd *to_pars)
+// {
+	// if (!to_pars)
+		// printf("test2 to_pars == NULL\n");
+	// while(to_pars)
+	// {
+		// free(to_pars->cmd);
+		// to_pars = to_pars->next;
+	// }
+	// free(to_pars);
+// }
+// 
 
 // ----> devo split le line... in modo tale da creare dei segmenti e prendere tutte le commande possibili...
 //in modo tale da suddividere tutte le commande.
@@ -189,24 +228,30 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		line = display_prompt();
-		printf("--> %s\n", line);
 		commande_split_toParse(commande_split, line);
 		to_pars = add_cmd_list(to_pars, commande_split, line);
 		if (!to_pars)
 			printf("-->to_parse est NULL \n");
 		printf("<<<<< ---------printf list NON JOIN flag --------------- >>\n");
 		print_list(to_pars);
-		join_found_flag(to_pars);
+		join_found_flag(&to_pars);
 		printf("<<<<< ---------printf list avec flag --------------- >>\n");
 		print_list(to_pars);
 		printf("found pipe --> %d\n", found_pipe(to_pars));
 		printf("found echo --> %d\n", found_echo(to_pars));
 		printf("found cd --> %d\n", ft_cd(to_pars));
+		printf("found export --> %d\n", found_export(to_pars));
 		enviroment = found_and_add_env(env, enviroment);
 		if (ft_envp(to_pars))
 			print_list_envp(enviroment);
-		if (ft_pwd(to_pars))
+		if (ft_pwd(to_pars) == 1)
 			print_pwd(enviroment);
-		// freeList(to_pars); //<<-------
+		if (found_export(to_pars))
+			add_export_env(to_pars, &enviroment);
+		// free_list_to_pars(to_pars);
+		// ft_free_tab(commande_split);
+		// if (found_export(to_pars))
+			// printf("FOUND EXPORT");
+		 //<<-------
 	}
 }

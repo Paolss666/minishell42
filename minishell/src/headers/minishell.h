@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/21 15:24:21 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/22 16:57:44 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ typedef struct s_cmd
 typedef struct 	s_envp
 {
 	char			*path;
+	char			*name;
+	char			*value;
 	struct s_envp 	*next;
 }					t_envp;
 
@@ -64,10 +66,7 @@ void			freeList(t_cmd *head);
 
 // ----------- PARSING --------------//
 t_cmd				*add_cmd_list(t_cmd *list, char **commande_split, char *line);
-void				join_found_flag(t_cmd *to_pars);
-			// char		*find_path(char **env);
-			// char		*get_good_path(t_mshell *envp, char **commande, char **env);
-			// char		*cmd_with_good_path(t_mshell *stack, char **cmd);
+void				join_found_flag(t_cmd **to_pars);
 char				*display_prompt(void);
 void				commande_split_toParse(char **commande_split, char *line);
 
@@ -75,11 +74,13 @@ void				commande_split_toParse(char **commande_split, char *line);
 // ------------ BUILDING ----------- // 
 int					ft_pwd(t_cmd *to_pars);
 int					ft_cd(t_cmd *to_pars);
+int     			found_export(t_cmd *to_pars);
 int					print_pwd(t_envp *envp);
 int					found_echo(t_cmd *to_pars);
 int					ft_envp(t_cmd *to_pars);
 int					found_pipe(t_cmd *cmd);
 t_envp				*found_and_add_env(char **env, t_envp *enviroment);
+void				add_export_env(t_cmd *to_pars, t_envp **enviroment);
 char 				*ft_strcpy(char *dest, const char *src, size_t size);
 void				print_list_envp(t_envp *head);
 #endif
