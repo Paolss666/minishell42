@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:27:26 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/21 15:07:17 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/22 21:34:47 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,10 @@
 
 char *ft_strcpy(char *dest, const char *src, size_t size)
 {
-	size_t	srclen;
+	// size_t	srclen;
 	size_t	i;
 
 	i = 0;
-	srclen = ft_strlen(src);
 	if (size == 0)
 		return (NULL);
 	while (src[i] && i < (size - 1))
@@ -68,7 +67,7 @@ t_envp	*found_and_add_env(char **env, t_envp *enviroment)
 		else
 		{
 			envp = enviroment;
-			while (envp->next)
+			while (envp->next != NULL)
 				envp = envp->next;
 			envp->next = current;
 		}
@@ -100,6 +99,7 @@ void	print_list_envp(t_envp *head)
 	while (current != NULL)
 	{
 		printf("%s\n", current->path);
+		free(current->path);
 		current = current->next;
 	}
 }

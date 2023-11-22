@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_commandes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/22 17:40:07 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/22 21:52:19 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,33 @@ int	found_pipe(t_cmd *cmd)
 	return (0);
 }
 
-void	free_cmd_list(t_cmd *head)
+t_cmd	*free_cmds_list(t_cmd *head)
+{
+	t_cmd	*history;
+
+	history = head;
+	if (history)
+	{
+		free(history->cmd);
+		free(history);
+		return NULL;
+	}
+	else
+		return(head);
+
+}
+
+
+
+void free_cmd_list(t_cmd *head)
 {
 	if (head)
 	{
 		free(head->cmd);
 		free(head);
 	}
+	return ((void)0);
+
 }
 
 // (cmd -lsadasdas) lol lol  <<---- gerer les flags <<====
@@ -89,12 +109,11 @@ void	free_cmd_list(t_cmd *head)
 void	join_found_flag(t_cmd **to_pars)
 {
 	t_cmd	*current;
-	t_cmd	*prev;
 	t_cmd	*next;
 	char	*temp_cmd;
 
-	prev = NULL;
 	next = NULL;
+
 	current = *to_pars;
 	if (!*to_pars)
 		printf("joind flag to_pars null\n");
@@ -116,7 +135,6 @@ void	join_found_flag(t_cmd **to_pars)
 			next = current->next;
 		}
 		// Passa al prossimo nodo nella lista
-		prev = current;
 		current = current->next;
 	}
 }
@@ -243,12 +261,14 @@ int	main(int ac, char **av, char **env)
 		printf("found export --> %d\n", found_export(to_pars));
 		enviroment = found_and_add_env(env, enviroment);
 		if (ft_envp(to_pars))
+		{
 			print_list_envp(enviroment);
+		}
 		if (ft_pwd(to_pars) == 1)
 			print_pwd(enviroment);
 		if (found_export(to_pars))
 			add_export_env(to_pars, &enviroment);
-		// free_list_to_pars(to_pars);
+		to_pars = free_cmds_list(to_pars);
 		// ft_free_tab(commande_split);
 		// if (found_export(to_pars))
 			// printf("FOUND EXPORT");
