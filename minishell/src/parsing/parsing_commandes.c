@@ -6,7 +6,7 @@
 /*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/23 13:19:44 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/11/23 14:49:00 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,7 @@ int	main(int ac, char **av, char **env)
 		printf("found cd --> %d\n", ft_cd(to_pars));
 		printf("found export --> %d\n", found_export(to_pars));
 		printf("found unset --> %d\n", found_unset(to_pars));
+		printf("<<<<< ---------printf list BUILDING --------------- >>\n");
 		if (!enviroment)
 			enviroment= found_and_add_env(env, enviroment);
 		if (ft_envp(to_pars))

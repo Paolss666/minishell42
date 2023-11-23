@@ -6,7 +6,7 @@
 /*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:52:57 by npoalett          #+#    #+#             */
-/*   Updated: 2023/11/23 14:33:55 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/11/23 15:04:38 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,25 @@ void    unset_delete_variable(t_cmd *to_pars, t_envp **enviroment)
     t_envp  *current;
     t_envp  *prev;
     t_cmd  *next;
+
     prev = NULL;
     current = *enviroment;
     next = to_pars->next;
 
-    while(current != NULL && ft_strncmp(next->cmd, current->path, ft_strlen(next->cmd))!= 0)
+    while(current != NULL)
     {
-        prev = current;
-        current = current->next;
+        if (ft_strncmp(next->cmd, current->path, ft_strlen(next->cmd))!= 0)
+        {
+            prev = current;
+            current = current->next;
+        }
+        else
+        {
+            ft_putstr_fd("unset: ", 2);
+            ft_putstr_fd(next->cmd, 2);
+            ft_putstr_fd(": invalide parameter name\n", 2);
+            break;
+        }
     }
     if (current != NULL)
     {
