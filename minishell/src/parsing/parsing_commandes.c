@@ -6,7 +6,7 @@
 /*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/22 21:52:19 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/11/23 13:19:44 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,15 +259,17 @@ int	main(int ac, char **av, char **env)
 		printf("found echo --> %d\n", found_echo(to_pars));
 		printf("found cd --> %d\n", ft_cd(to_pars));
 		printf("found export --> %d\n", found_export(to_pars));
-		enviroment = found_and_add_env(env, enviroment);
+		printf("found unset --> %d\n", found_unset(to_pars));
+		if (!enviroment)
+			enviroment= found_and_add_env(env, enviroment);
 		if (ft_envp(to_pars))
-		{
 			print_list_envp(enviroment);
-		}
 		if (ft_pwd(to_pars) == 1)
 			print_pwd(enviroment);
 		if (found_export(to_pars))
 			add_export_env(to_pars, &enviroment);
+		if (found_unset(to_pars))
+			unset_delete_variable(to_pars, &enviroment);
 		to_pars = free_cmds_list(to_pars);
 		// ft_free_tab(commande_split);
 		// if (found_export(to_pars))

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+         #
+#    By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/09 13:55:48 by npaolett          #+#    #+#              #
-#    Updated: 2023/11/22 14:20:56 by npaolett         ###   ########.fr        #
+#    Updated: 2023/11/23 12:56:45 by npoalett         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRC =	src/build/ft_pwd.c\
 		src/build/ft_echo.c \
 		src/build/ft_cd.c 	 \
 		src/build/ft_export.c \
+		src/build/ft_unset.c \
 		src/parsing/parsing_commandes.c 
 
 OBJ = $(SRC:.c=.o)

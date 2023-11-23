@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/22 16:57:44 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/23 13:18:49 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,17 +70,19 @@ void				join_found_flag(t_cmd **to_pars);
 char				*display_prompt(void);
 void				commande_split_toParse(char **commande_split, char *line);
 
-
+char 	*ft_strcpy(char *dest, const char *src, size_t size);
 // ------------ BUILDING ----------- // 
 int					ft_pwd(t_cmd *to_pars);
 int					ft_cd(t_cmd *to_pars);
 int     			found_export(t_cmd *to_pars);
+int					found_unset(t_cmd *to_pars);
 int					print_pwd(t_envp *envp);
 int					found_echo(t_cmd *to_pars);
 int					ft_envp(t_cmd *to_pars);
 int					found_pipe(t_cmd *cmd);
 t_envp				*found_and_add_env(char **env, t_envp *enviroment);
 void				add_export_env(t_cmd *to_pars, t_envp **enviroment);
+void    			unset_delete_variable(t_cmd *to_pars, t_envp **enviroment);
 char 				*ft_strcpy(char *dest, const char *src, size_t size);
 void				print_list_envp(t_envp *head);
 #endif

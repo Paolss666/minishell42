@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 15:40:46 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/15 14:03:20 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/23 14:28:16 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ char				*ft_extract_line(char *line);
 int					ft_check(char *storage);
 char				*ft_line_maker(int fd, char *buf, char *storage);
 char				*get_next_line(int fd);
-
+int					ft_strcmp(const char *s1, const char *s2);
 t_list				*ft_lstnew(void *content);
 t_list				*ft_lstlast(t_list *lst);
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),

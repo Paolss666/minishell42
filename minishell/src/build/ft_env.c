@@ -6,17 +6,15 @@
 /*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:27:26 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/22 21:34:47 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/11/23 12:44:22 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
 // <<------- copier l'env dans des listes chainees ------ >>
-
-char *ft_strcpy(char *dest, const char *src, size_t size)
+char 	*ft_strcpy(char *dest, const char *src, size_t size)
 {
-	// size_t	srclen;
 	size_t	i;
 
 	i = 0;
@@ -51,8 +49,6 @@ t_envp	*found_and_add_env(char **env, t_envp *enviroment)
 	int		i;
 
 	i = -1;
-	// printf("test2\n");
-	envp = NULL;
 	while (env[++i])
 	{
 		current = (t_envp *)malloc(sizeof(t_envp));
@@ -63,9 +59,11 @@ t_envp	*found_and_add_env(char **env, t_envp *enviroment)
 			return (perror("ft_strdup"), NULL);
 		current->next = NULL;
 		if (!enviroment)
+			// Se la lista è vuota, il nuovo nodo diventa la testa della lista
 			enviroment = current;
 		else
 		{
+			// Se la lista non è vuota, aggiungi il nuovo nodo alla fine
 			envp = enviroment;
 			while (envp->next != NULL)
 				envp = envp->next;
@@ -87,8 +85,6 @@ int	ft_envp(t_cmd *to_pars)
 	return (0);
 }
 
-
-
 void	print_list_envp(t_envp *head)
 {
 	t_envp	*current;
@@ -99,7 +95,6 @@ void	print_list_envp(t_envp *head)
 	while (current != NULL)
 	{
 		printf("%s\n", current->path);
-		free(current->path);
 		current = current->next;
 	}
 }
