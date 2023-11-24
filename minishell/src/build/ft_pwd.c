@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:29:14 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/22 12:49:10 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/24 20:14:14 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,7 @@ int	ft_pwd(t_cmd *to_pars)
 	return (0);
 }
 
-// ----- afficher le d'ou nous sommes ------- // 
-// check pouquoi l'history d'erange l 'affichage // 
-
+// ----- afficher le d'ou nous sommes ------- //
 int	print_pwd(t_envp *envp)
 {
 	int		i;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/24 18:40:00 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/24 20:35:38 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,4 +98,6 @@ void    			unset_delete_variable(t_cmd *to_pars, t_envp **enviroment);
 char 				*ft_strcpy(char *dest, const char *src, size_t size);
 void				print_list_envp(t_envp *head);
 void				print_export_list(t_exp *export);
+void 				ft_swap(t_exp *a, t_exp *b);
+void				export_env_sort(t_exp *exp_env);
 #endif

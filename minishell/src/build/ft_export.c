@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/24 18:57:23 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/24 20:59:34 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,44 @@ int	found_export(t_cmd *to_pars)
 	return (0);
 }
 
+// Funzione per lo swap di due nodi nella lista concatenata
+void ft_swap(t_exp *a, t_exp *b) 
+{
+	char *temp;
+
+    temp = a->path;
+    a->path = b->path;
+    b->path = temp;
+}
+
+
+void	export_env_sort(t_exp *exp_env) /* serve a ordinare la lista in ordine ASCII alpha */ 
+{
+	int	swap;
+	t_exp	*next;
+	t_exp	*current;
+
+	swap = 1;
+	if (!exp_env)
+		printf("fail exp_env\n");
+	while(swap)
+	{
+		current = exp_env;
+		swap = 0;
+		while(current->next)
+		{
+			next = current->next;
+			if (ft_strcmp(current->path, next->path) > 0)
+			{
+					ft_swap(current, next);
+					swap = 1;
+			}
+			current = current->next;
+		}
+	}
+}
+
+
 t_exp	*add_env_with_export(t_envp *enviroment)
 {
 	t_exp	*export_list;
@@ -40,13 +78,8 @@ t_exp	*add_env_with_export(t_envp *enviroment)
 			perror("ERROR: malloc t_exp");
 			exit(EXIT_FAILURE);
 		}
-		new_export->path = ft_strjoin("export:", enviroment->path);
-		// printf("path --> %s\n", new_export->path);
-		// printf("before name--> %s\n", new_export->name);
+		new_export->path = ft_strjoin("export ", enviroment->path);
 		new_export->name =  NULL; //ft_strdup(enviroment->name);
-		// if (!new_export)
-		// 	printf("FAIL STRDUP nw_export->name");
-		// printf("name --> %s\n", new_export->name);
 		new_export->value =  NULL; //ft_strdup(enviroment->value);
 		if (!new_export->path)
 		{

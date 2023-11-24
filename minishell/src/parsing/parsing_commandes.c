@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_commandes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/24 19:04:58 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/24 22:16:22 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,13 +269,14 @@ int	main(int ac, char **av, char **env)
 			print_list_envp(enviroment);
 		if (ft_pwd(to_pars) == 1)
 			print_pwd(enviroment);
-		if (found_export(to_pars) && to_pars->next)
-			add_export_env(to_pars, &enviroment);
 		if (!to_pars->next && found_export(to_pars))
 		{
 			export = add_env_with_export(enviroment);
+			export_env_sort(export);
 			print_export_list(export);
 		}
+		if (found_export(to_pars) && to_pars->next)
+			add_export_env(to_pars, &enviroment);
 		if (found_unset(to_pars))
 			unset_delete_variable(to_pars, &enviroment);
 		to_pars = free_cmds_list(to_pars);
