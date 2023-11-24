@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/23 12:42:07 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/11/24 18:57:23 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,75 +24,131 @@ int	found_export(t_cmd *to_pars)
 	return (0);
 }
 
-void add_export_env(t_cmd *to_pars, t_envp **enviroment)
+t_exp	*add_env_with_export(t_envp *enviroment)
 {
-	t_envp	*current;
-	t_envp *new_variable;
-	t_envp *last;
-	unsigned int len;
-	char *name_v;
-    char *value;
- 
+	t_exp	*export_list;
+	t_exp	*current_export;
+	t_exp	*new_export;
+
+	export_list = NULL;
+	current_export = NULL;
+	while (enviroment != NULL)
+	{
+		new_export = (t_exp *)malloc(sizeof(t_exp));
+		if (!new_export)
+		{
+			perror("ERROR: malloc t_exp");
+			exit(EXIT_FAILURE);
+		}
+		new_export->path = ft_strjoin("export:", enviroment->path);
+		// printf("path --> %s\n", new_export->path);
+		// printf("before name--> %s\n", new_export->name);
+		new_export->name =  NULL; //ft_strdup(enviroment->name);
+		// if (!new_export)
+		// 	printf("FAIL STRDUP nw_export->name");
+		// printf("name --> %s\n", new_export->name);
+		new_export->value =  NULL; //ft_strdup(enviroment->value);
+		if (!new_export->path)
+		{
+			perror("ERROR: strdup");
+			exit(EXIT_FAILURE);
+		}
+		new_export->next = NULL;
+		if (export_list == NULL)
+		{
+			export_list = new_export;
+			current_export = export_list;
+		}
+		else
+		{
+			current_export->next = new_export;
+			current_export = new_export;
+		}
+		enviroment = enviroment->next;
+	}
+	return (export_list);
+}
+
+void	print_export_list(t_exp *export)
+{
+	while (export != NULL)
+	{
+		printf("%s\n", export->path);
+		export = export->next;
+	}
+}
+
+void	add_export_env(t_cmd *to_pars, t_envp **enviroment)
+{
+	t_envp			*current;
+	t_envp			*new_variable;
+	t_envp			*last;
+	unsigned int	len;
+	char			*name_v;
+	char			*value;
+	char			*line;
+	char			*found_equal;
+
 	last = NULL;
 	current = NULL;
 	new_variable = NULL;
-    char *line = to_pars->next->cmd;
-    char *found_equal = ft_strchr(line, '=');
-    if (found_equal)
-    {
-        len = found_equal - line;
-        name_v = ft_substr(line, 0, len);
-        value = ft_strdup(found_equal + 1);
-        if (!name_v || !value)
-        {
-            perror("Memory allocation error");
-            free(name_v);
-            free(value);
-            return;
-        }
-        current = *enviroment;
-        while (current != NULL && ft_strncmp(current->path, name_v, ft_strlen(name_v)) != 0)
-            current = current->next;
-
-        if (current != NULL)
-        {
-            free(current->value);
-            current->value = value;
-            free(name_v);
-        }
-        else
-        {
-            new_variable = (t_envp *)malloc(sizeof(t_envp));
-            if (!new_variable)
-            {
-                perror("Memory allocation error");
-                free(name_v);
-                free(value);
-                return;
-            }
-            new_variable->path = ft_strjoin(name_v, ft_strjoin("=", value));
-            new_variable->value = value;
-            new_variable->next = NULL;
-            if (*enviroment == NULL)
-                *enviroment = new_variable; // La lista è vuota, il nuovo nodo diventa la testa
-            else
-            {
-                // Aggiungi il nuovo nodo alla fine della lista
-                last = *enviroment;
-                while (last->next != NULL)
-                    last = last->next;
-                last->next = new_variable;
-            }
-        }
-    }
-    else
-    {
-        ft_putstr_fd("Not valid in this context: ", 2);
-        ft_putstr_fd(line, 2);
-        write(2, "\n", 1);
-    }
+	line = to_pars->next->cmd;
+	found_equal = ft_strchr(line, '=');
+	if (found_equal)
+	{
+		len = found_equal - line;
+		name_v = ft_substr(line, 0, len);
+		value = ft_strdup(found_equal + 1);
+		if (!name_v || !value)
+		{
+			perror("Memory allocation error");
+			free(name_v);
+			free(value);
+			return ;
+		}
+		current = *enviroment;
+		while (current != NULL && ft_strncmp(current->path, name_v,
+				ft_strlen(name_v)) != 0)
+			current = current->next;
+		if (current != NULL)
+		{
+			free(current->value);
+			current->value = value;
+			free(name_v);
+		}
+		else
+		{
+			new_variable = (t_envp *)malloc(sizeof(t_envp));
+			if (!new_variable)
+			{
+				perror("Memory allocation error");
+				free(name_v);
+				free(value);
+				return ;
+			}
+			new_variable->path = ft_strjoin(name_v, ft_strjoin("=", value));
+			new_variable->value = value;
+			new_variable->next = NULL;
+			if (*enviroment == NULL)
+				*enviroment = new_variable;
+					// La lista è vuota,// il nuovo nodo diventa la testa;
+			else
+			{
+				// Aggiungi il nuovo nodo alla fine della lista
+				last = *enviroment;
+				while (last->next != NULL)
+					last = last->next;
+				last->next = new_variable;
+			}
+		}
+	}
+	else
+	{
+		ft_putstr_fd("Not valid in this context: ", 2);
+		ft_putstr_fd(line, 2);
+		write(2, "\n", 1);
+	}
 }
-
 
 // void	add_export_env(t_cmd *to_pars, t_envp **enviroment)
 // {
@@ -103,7 +159,6 @@ void add_export_env(t_cmd *to_pars, t_envp **enviroment)
 // 	unsigned int	len;
 // 	t_envp			*current = NULL;
 // 	t_envp			*new_variable = NULL;
-
 
 // 	line = to_pars->next->cmd;
 // 	found_egual = ft_strchr(line, '=');
@@ -121,7 +176,8 @@ void add_export_env(t_cmd *to_pars, t_envp **enviroment)
 // 		// printf("test3\n");
 // 		current = *enviroment;
 // 		// printf("testw\n");
-// 		while (current != NULL && ft_strncmp(current->path, name_v, ft_strlen(name_v)) != 0)
+// 		while (current != NULL && ft_strncmp(current->path, name_v,
+// ft_strlen(name_v)) != 0)
 // 			current = current->next;
 // 		if (current != NULL)
 // 		{
@@ -142,5 +198,6 @@ void add_export_env(t_cmd *to_pars, t_envp **enviroment)
 // 		}
 // 	}
 // 	else
-// 		return (ft_putstr_fd("Not valid in this context: ", 2), ft_putstr_fd(line, 2), write(2, "\n", 1), (void)0);
+// 		return (ft_putstr_fd("Not valid in this context: ", 2),
+// ft_putstr_fd(line, 2), write(2, "\n", 1), (void)0);
 // }

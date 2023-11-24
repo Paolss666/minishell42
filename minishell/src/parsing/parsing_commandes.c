@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_commandes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/23 14:49:00 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/11/24 19:04:58 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,6 +230,7 @@ void free_list_to_pars(t_cmd *to_pars)
 int	main(int ac, char **av, char **env)
 {
 	t_mshell	*minishell;
+	t_exp		*export;
 	char		*line;
 	t_cmd		*to_pars;
 	char		**commande_split;
@@ -240,6 +241,7 @@ int	main(int ac, char **av, char **env)
 	commande_split = NULL;
 	minishell = NULL;
 	enviroment = NULL;
+	export = NULL;
 	if (ac != 1)
 		return (ft_putstr_fd("Don't need arguments\n", 2), 1);
 	init_struct(minishell);
@@ -267,14 +269,16 @@ int	main(int ac, char **av, char **env)
 			print_list_envp(enviroment);
 		if (ft_pwd(to_pars) == 1)
 			print_pwd(enviroment);
-		if (found_export(to_pars))
+		if (found_export(to_pars) && to_pars->next)
 			add_export_env(to_pars, &enviroment);
+		if (!to_pars->next && found_export(to_pars))
+		{
+			export = add_env_with_export(enviroment);
+			print_export_list(export);
+		}
 		if (found_unset(to_pars))
 			unset_delete_variable(to_pars, &enviroment);
 		to_pars = free_cmds_list(to_pars);
-		// ft_free_tab(commande_split);
-		// if (found_export(to_pars))
-			// printf("FOUND EXPORT");
 		 //<<-------
 	}
 }

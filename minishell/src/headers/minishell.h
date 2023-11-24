@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/23 13:18:49 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/11/24 18:40:00 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
+# define EXIT_FAILURE 1
 
 // readline --> read a line from the terminal and return it , using prompt (char
 		// * prompt<-----
@@ -60,6 +62,15 @@ typedef struct 	s_envp
 	struct s_envp 	*next;
 }					t_envp;
 
+
+typedef struct 	s_exp
+{
+	char			*path;
+	char			*name;
+	char			*value;
+	struct s_exp 	*next;
+}					t_exp;
+
 // ----------- ERRORI --------------- //
 void			freeList(t_cmd *head);
 
@@ -82,7 +93,9 @@ int					ft_envp(t_cmd *to_pars);
 int					found_pipe(t_cmd *cmd);
 t_envp				*found_and_add_env(char **env, t_envp *enviroment);
 void				add_export_env(t_cmd *to_pars, t_envp **enviroment);
+t_exp				*add_env_with_export(t_envp *enviroment);
 void    			unset_delete_variable(t_cmd *to_pars, t_envp **enviroment);
 char 				*ft_strcpy(char *dest, const char *src, size_t size);
 void				print_list_envp(t_envp *head);
+void				print_export_list(t_exp *export);
 #endif
