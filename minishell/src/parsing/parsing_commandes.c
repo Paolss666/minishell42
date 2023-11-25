@@ -6,7 +6,7 @@
 /*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/24 22:16:22 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/11/25 13:05:00 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*display_prompt(void)
 {
 	char	*line;
 
-	line = readline("minishell$ ");
+	line = readline("bbshell$ ");
 	add_history(line); // working history
 	return (line);
 }
@@ -104,7 +104,6 @@ void free_cmd_list(t_cmd *head)
 
 }
 
-// (cmd -lsadasdas) lol lol  <<---- gerer les flags <<====
 /// <<-------- se trovo un flag " - " lo aggiungo alla comanda precedente, anche se ne trovo di piu 
 void	join_found_flag(t_cmd **to_pars)
 {
@@ -210,19 +209,6 @@ void free_list_to_pars(t_cmd *to_pars)
 }
 
 
-// void	free_list_to_pars(t_cmd *to_pars)
-// {
-	// if (!to_pars)
-		// printf("test2 to_pars == NULL\n");
-	// while(to_pars)
-	// {
-		// free(to_pars->cmd);
-		// to_pars = to_pars->next;
-	// }
-	// free(to_pars);
-// }
-// 
-
 // ----> devo split le line... in modo tale da creare dei segmenti e prendere tutte le commande possibili...
 //in modo tale da suddividere tutte le commande.
 // --> applicare l'albero di sintaxxxx -->>> non so come <<--------
@@ -265,18 +251,22 @@ int	main(int ac, char **av, char **env)
 		printf("<<<<< ---------printf list BUILDING --------------- >>\n");
 		if (!enviroment)
 			enviroment= found_and_add_env(env, enviroment);
+		/* non riesco a far aggiornare export
+		 quando aggiungo una variabile ad env o quando aggiungo una variabile a exp non si aggiunge
+		 quindi devo prima scrivere export nico=good e poi export e si aggiunge o 
+		 viceversa */
+		export = add_env_with_export(enviroment);
+		export_env_sort(export);
 		if (ft_envp(to_pars))
 			print_list_envp(enviroment);
 		if (ft_pwd(to_pars) == 1)
 			print_pwd(enviroment);
 		if (!to_pars->next && found_export(to_pars))
 		{
-			export = add_env_with_export(enviroment);
-			export_env_sort(export);
 			print_export_list(export);
 		}
 		if (found_export(to_pars) && to_pars->next)
-			add_export_env(to_pars, &enviroment);
+			add_export_env(to_pars, &enviroment, &export);
 		if (found_unset(to_pars))
 			unset_delete_variable(to_pars, &enviroment);
 		to_pars = free_cmds_list(to_pars);

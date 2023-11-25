@@ -6,7 +6,7 @@
 /*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/24 20:59:34 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/11/25 12:50:22 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ t_exp	*add_env_with_export(t_envp *enviroment)
 			exit(EXIT_FAILURE);
 		}
 		new_export->path = ft_strjoin("export ", enviroment->path);
-		new_export->name =  NULL; //ft_strdup(enviroment->name);
+		new_export->name = NULL; /* ft_strdup(enviroment->name); */
 		new_export->value =  NULL; //ft_strdup(enviroment->value);
 		if (!new_export->path)
 		{
@@ -111,10 +111,12 @@ void	print_export_list(t_exp *export)
 	}
 }
 
-void	add_export_env(t_cmd *to_pars, t_envp **enviroment)
+void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 {
 	t_envp			*current;
 	t_envp			*new_variable;
+	t_exp			*new_export;
+	t_exp			*last_exp;
 	t_envp			*last;
 	unsigned int	len;
 	char			*name_v;
@@ -125,6 +127,7 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment)
 	last = NULL;
 	current = NULL;
 	new_variable = NULL;
+	new_export = NULL;
 	line = to_pars->next->cmd;
 	found_equal = ft_strchr(line, '=');
 	if (found_equal)
@@ -133,34 +136,25 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment)
 		name_v = ft_substr(line, 0, len);
 		value = ft_strdup(found_equal + 1);
 		if (!name_v || !value)
-		{
-			perror("Memory allocation error");
-			free(name_v);
-			free(value);
-			return ;
-		}
+			return (perror("Memory allocation FAIL"), free(name_v), free(value));
 		current = *enviroment;
-		while (current != NULL && ft_strncmp(current->path, name_v,
-				ft_strlen(name_v)) != 0)
+		while (current != NULL && ft_strncmp(current->path, name_v, ft_strlen(name_v))!= 0)
 			current = current->next;
 		if (current != NULL)
 		{
-			free(current->value);
-			current->value = value;
+			free(current->path);
+			current->path = ft_strjoin(name_v,ft_strjoin("=", value));
+			free(value);
 			free(name_v);
 		}
 		else
 		{
 			new_variable = (t_envp *)malloc(sizeof(t_envp));
 			if (!new_variable)
-			{
-				perror("Memory allocation error");
-				free(name_v);
-				free(value);
-				return ;
-			}
+					return (perror("Memory allocation FAIL"), free(name_v), free(value));
 			new_variable->path = ft_strjoin(name_v, ft_strjoin("=", value));
 			new_variable->value = value;
+			new_variable->name = name_v;
 			new_variable->next = NULL;
 			if (*enviroment == NULL)
 				*enviroment = new_variable;
@@ -174,63 +168,34 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment)
 				last->next = new_variable;
 			}
 		}
+/* 		export = add_env_with_export(enviroment);
+		export_env_sort(export); */
 	}
-	else
-	{
-		ft_putstr_fd("Not valid in this context: ", 2);
-		ft_putstr_fd(line, 2);
-		write(2, "\n", 1);
-	}
+	else if (line)
+    {
+        name_v = ft_strdup(line);
+        value = NULL; // Nessun valore assegnato
+
+        if (!name_v)
+            return (perror("Memory allocation FAIL name_v exp"), free(name_v));
+        new_export = (t_exp *)malloc(sizeof(t_exp));
+        if (!new_export)
+            return (perror("Memory allocation FAIL"), free(name_v));
+        new_export->path = ft_strjoin("export ", name_v);
+        new_export->name = NULL;
+        new_export->value = value;
+        new_export->next = NULL;
+        if (*export == NULL)
+            *export = new_export; // La lista è vuota, il nuovo nodo diventa la testa
+        else
+        {
+            // Aggiungi il nuovo nodo alla fine della lista senza valore
+            last_exp = *export;
+            while (last_exp->next != NULL)
+                last_exp = last_exp->next;
+            last_exp->next = new_export;
+        }
+/* 			export = add_env_with_export(enviroment);
+			export_env_sort(export); */
+    }
 }
-
-// void	add_export_env(t_cmd *to_pars, t_envp **enviroment)
-// {
-// 	char			*line;
-// 	char			*found_egual;
-// 	char			*name_v;
-// 	char			*value;
-// 	unsigned int	len;
-// 	t_envp			*current = NULL;
-// 	t_envp			*new_variable = NULL;
-
-// 	line = to_pars->next->cmd;
-// 	found_egual = ft_strchr(line, '=');
-// 	if (found_egual)
-// 	{
-// 		len = found_egual - line;
-// 		name_v = malloc(sizeof(char) * len + 1);
-// 		if (!name_v)
-// 			return (printf("FAIL MALLOC name_v\n"), (void)0);
-// 		value = ft_strdup(found_egual + 1);
-// 		if (!value)
-// 			return (printf("FAIL strdup value\n"), (void)0);
-// 		// printf("test2\n");
-// 		ft_strcpy(name_v, line, len + 1);
-// 		// printf("test3\n");
-// 		current = *enviroment;
-// 		// printf("testw\n");
-// 		while (current != NULL && ft_strncmp(current->path, name_v,
-// ft_strlen(name_v)) != 0)
-// 			current = current->next;
-// 		if (current != NULL)
-// 		{
-// 			free(current->value);
-// 			current->value = value;
-// 			free(name_v);
-// 		}
-// 		else
-// 		{
-// 			new_variable = malloc(sizeof(t_envp));
-// 			if (!new_variable)
-// 				return (perror("FAIL MALLOC NEW_VARIABLE"), (void)0);
-// 			new_variable->path = name_v;// probleme
-// 			new_variable->value = value;// probleme
-// 			new_variable->path = ft_strjoin(name_v, ft_strjoin("=", value));
-// 			new_variable->next = *enviroment;
-// 			*enviroment = new_variable;
-// 		}
-// 	}
-// 	else
-// 		return (ft_putstr_fd("Not valid in this context: ", 2),
-// ft_putstr_fd(line, 2), write(2, "\n", 1), (void)0);
-// }

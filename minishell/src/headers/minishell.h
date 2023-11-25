@@ -6,7 +6,7 @@
 /*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/24 20:35:38 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/11/25 11:12:45 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ int					found_echo(t_cmd *to_pars);
 int					ft_envp(t_cmd *to_pars);
 int					found_pipe(t_cmd *cmd);
 t_envp				*found_and_add_env(char **env, t_envp *enviroment);
-void				add_export_env(t_cmd *to_pars, t_envp **enviroment);
+/* void				add_export_env(t_cmd *to_pars, t_envp **enviroment); */
+void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export);
 t_exp				*add_env_with_export(t_envp *enviroment);
 void    			unset_delete_variable(t_cmd *to_pars, t_envp **enviroment);
 char 				*ft_strcpy(char *dest, const char *src, size_t size);
