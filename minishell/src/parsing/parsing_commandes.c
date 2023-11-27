@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_commandes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/25 13:05:00 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/11/27 18:22:19 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,23 @@ t_cmd	*free_cmds_list(t_cmd *head)
 
 }
 
+t_exp	*free_exp_list(t_exp *head)
+{
+	t_exp	*history;
 
+	history = head;
+	if (history)
+	{
+		free(history->path);
+		free(history->value);
+		free(history->name);
+		free(history);
+		return NULL;
+	}
+	else
+		return(head);
+
+}
 
 void free_cmd_list(t_cmd *head)
 {
@@ -251,24 +267,23 @@ int	main(int ac, char **av, char **env)
 		printf("<<<<< ---------printf list BUILDING --------------- >>\n");
 		if (!enviroment)
 			enviroment= found_and_add_env(env, enviroment);
+		if (!export)
+			export = add_env_with_export(enviroment);
+		export_env_sort(export);
 		/* non riesco a far aggiornare export
 		 quando aggiungo una variabile ad env o quando aggiungo una variabile a exp non si aggiunge
 		 quindi devo prima scrivere export nico=good e poi export e si aggiunge o 
 		 viceversa */
-		export = add_env_with_export(enviroment);
-		export_env_sort(export);
 		if (ft_envp(to_pars))
 			print_list_envp(enviroment);
 		if (ft_pwd(to_pars) == 1)
 			print_pwd(enviroment);
 		if (!to_pars->next && found_export(to_pars))
-		{
 			print_export_list(export);
-		}
 		if (found_export(to_pars) && to_pars->next)
 			add_export_env(to_pars, &enviroment, &export);
 		if (found_unset(to_pars))
-			unset_delete_variable(to_pars, &enviroment);
+			unset_delete_variable(to_pars, &enviroment, &export);
 		to_pars = free_cmds_list(to_pars);
 		 //<<-------
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/25 12:50:22 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/11/27 18:11:16 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,42 +25,41 @@ int	found_export(t_cmd *to_pars)
 }
 
 // Funzione per lo swap di due nodi nella lista concatenata
-void ft_swap(t_exp *a, t_exp *b) 
+void	ft_swap(t_exp *a, t_exp *b)
 {
-	char *temp;
+	char	*temp;
 
-    temp = a->path;
-    a->path = b->path;
-    b->path = temp;
+	temp = a->path;
+	a->path = b->path;
+	b->path = temp;
 }
 
-
-void	export_env_sort(t_exp *exp_env) /* serve a ordinare la lista in ordine ASCII alpha */ 
+/* serve a ordinare la lista in ordine ASCII alpha */
+void	export_env_sort(t_exp *exp_env)
 {
-	int	swap;
+	int		swap;
 	t_exp	*next;
 	t_exp	*current;
 
 	swap = 1;
 	if (!exp_env)
 		printf("fail exp_env\n");
-	while(swap)
+	while (swap)
 	{
 		current = exp_env;
 		swap = 0;
-		while(current->next)
+		while (current->next)
 		{
 			next = current->next;
 			if (ft_strcmp(current->path, next->path) > 0)
 			{
-					ft_swap(current, next);
-					swap = 1;
+				ft_swap(current, next);
+				swap = 1;
 			}
 			current = current->next;
 		}
 	}
 }
-
 
 t_exp	*add_env_with_export(t_envp *enviroment)
 {
@@ -74,18 +73,12 @@ t_exp	*add_env_with_export(t_envp *enviroment)
 	{
 		new_export = (t_exp *)malloc(sizeof(t_exp));
 		if (!new_export)
-		{
-			perror("ERROR: malloc t_exp");
-			exit(EXIT_FAILURE);
-		}
+			return (perror("ERROR: t_exp"), exit(EXIT_FAILURE), NULL);
 		new_export->path = ft_strjoin("export ", enviroment->path);
-		new_export->name = NULL; /* ft_strdup(enviroment->name); */
-		new_export->value =  NULL; //ft_strdup(enviroment->value);
+		new_export->name = NULL;  /* ft_strdup(enviroment->name); */
+		new_export->value = NULL; //ft_strdup(enviroment->value);
 		if (!new_export->path)
-		{
-			perror("ERROR: strdup");
-			exit(EXIT_FAILURE);
-		}
+			return (perror("ERROR: strdup"), exit(EXIT_FAILURE), NULL);
 		new_export->next = NULL;
 		if (export_list == NULL)
 		{
@@ -111,9 +104,13 @@ void	print_export_list(t_exp *export)
 	}
 }
 
+
+
 void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 {
 	t_envp			*current;
+	t_exp			*new_current;
+	t_exp			*new_upgrade_exp;
 	t_envp			*new_variable;
 	t_exp			*new_export;
 	t_exp			*last_exp;
@@ -123,27 +120,39 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	char			*value;
 	char			*line;
 	char			*found_equal;
+	char			*good_path;
 
+	good_path = NULL;
 	last = NULL;
 	current = NULL;
 	new_variable = NULL;
 	new_export = NULL;
 	line = to_pars->next->cmd;
 	found_equal = ft_strchr(line, '=');
-	if (found_equal)
+	if (line && found_equal)
 	{
 		len = found_equal - line;
 		name_v = ft_substr(line, 0, len);
 		value = ft_strdup(found_equal + 1);
 		if (!name_v || !value)
-			return (perror("Memory allocation FAIL"), free(name_v), free(value));
+			return (perror("Memory allocation FAIL"), free(name_v),
+				free(value), (void)0);
 		current = *enviroment;
-		while (current != NULL && ft_strncmp(current->path, name_v, ft_strlen(name_v))!= 0)
+		new_upgrade_exp = *export;
+		good_path = ft_strjoin("export ", name_v);
+		// printf("name --> %s\n", good_path);
+		while (current != NULL && ft_strncmp(current->path, name_v,
+				ft_strlen(name_v)) != 0)
 			current = current->next;
-		if (current != NULL)
+		while (new_upgrade_exp != NULL && ft_strncmp(new_upgrade_exp->path, good_path,
+				ft_strlen(good_path)) != 0)
+			new_upgrade_exp = new_upgrade_exp->next;
+		if (current != NULL && new_upgrade_exp != NULL)
 		{
 			free(current->path);
-			current->path = ft_strjoin(name_v,ft_strjoin("=", value));
+			free(new_upgrade_exp->path);
+			current->path = ft_strjoin(name_v, ft_strjoin("=", value));
+			new_upgrade_exp->path = ft_strjoin(good_path, (ft_strjoin("=", value)));
 			free(value);
 			free(name_v);
 		}
@@ -151,51 +160,67 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 		{
 			new_variable = (t_envp *)malloc(sizeof(t_envp));
 			if (!new_variable)
-					return (perror("Memory allocation FAIL"), free(name_v), free(value));
+				return (perror("Memory allocation FAIL"), free(name_v),
+					free(value), (void)0);
 			new_variable->path = ft_strjoin(name_v, ft_strjoin("=", value));
 			new_variable->value = value;
 			new_variable->name = name_v;
 			new_variable->next = NULL;
 			if (*enviroment == NULL)
 				*enviroment = new_variable;
-					// La lista è vuota,// il nuovo nodo diventa la testa;
 			else
 			{
-				// Aggiungi il nuovo nodo alla fine della lista
 				last = *enviroment;
 				while (last->next != NULL)
 					last = last->next;
 				last->next = new_variable;
 			}
+			new_export = (t_exp *)malloc(sizeof(t_exp));
+			if (!new_export)
+				return (perror("Memory allocation FAIL"), free(name_v),
+					free(value), (void)0);
+			good_path = ft_strjoin(name_v, "=");
+			new_export->path = ft_strjoin("export ", ft_strjoin(good_path,
+						value));
+			new_export->name = name_v;
+			new_export->value = value;
+			new_export->next = NULL;
+			new_current = *export;
+			free(good_path);
+			if (!new_current)
+				new_current = new_export;
+			else
+			{
+				last_exp = new_current;
+				while (last_exp->next  != NULL) /* && ft_strncmp(last_exp->name, name_v, ft_strlen(name_v)) != 0 */
+					last_exp = last_exp->next; 
+				last_exp->next = new_export;
+			}
 		}
-/* 		export = add_env_with_export(enviroment);
-		export_env_sort(export); */
 	}
-	else if (line)
-    {
-        name_v = ft_strdup(line);
-        value = NULL; // Nessun valore assegnato
-
-        if (!name_v)
-            return (perror("Memory allocation FAIL name_v exp"), free(name_v));
-        new_export = (t_exp *)malloc(sizeof(t_exp));
-        if (!new_export)
-            return (perror("Memory allocation FAIL"), free(name_v));
-        new_export->path = ft_strjoin("export ", name_v);
-        new_export->name = NULL;
-        new_export->value = value;
-        new_export->next = NULL;
-        if (*export == NULL)
-            *export = new_export; // La lista è vuota, il nuovo nodo diventa la testa
-        else
-        {
-            // Aggiungi il nuovo nodo alla fine della lista senza valore
-            last_exp = *export;
-            while (last_exp->next != NULL)
-                last_exp = last_exp->next;
-            last_exp->next = new_export;
-        }
-/* 			export = add_env_with_export(enviroment);
-			export_env_sort(export); */
-    }
+	else
+	{
+		name_v = ft_strdup(line);
+		if (!found_equal)
+			found_equal = ft_strdup("");
+		value = found_equal; // Nessun valore assegnato
+		if (!name_v)
+			return (perror("Memory allocation FAIL name_v exp"), free(name_v));
+		new_export = (t_exp *)malloc(sizeof(t_exp));
+		if (!new_export)
+			return (perror("Memory allocation FAIL"), free(name_v));
+		new_export->path = ft_strjoin("export ", ft_strjoin(name_v, value));
+		new_export->name = ft_strdup(name_v);
+		new_export->value = ft_strdup(value); /* ft_strjoin("=",ft_strdup(found_equal+ 1)); */
+		new_export->next = NULL;
+		if (*export == NULL)
+			*export = new_export; // La lista è vuota,//il nuovo nodo diventa la testa
+		else
+		{
+			last_exp = *export;
+			while (last_exp->next != NULL)
+				last_exp = last_exp->next;
+			last_exp->next = new_export;
+		}
+	}
 }
