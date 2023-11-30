@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/28 16:56:10 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/29 01:08:56 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,31 @@ int	found_export(t_cmd *to_pars)
 	}
 	return (0);
 }
+
+/* static char  *ft_strcat(char *dst, const char *src, size_t size)
+{
+	size_t	i;
+	size_t	len_src;
+	size_t	len_dst;
+
+	i = 0;
+	if (!dst && size == 0)
+		return (NULL);
+	len_src = ft_strlen(src);
+	len_dst = ft_strlen(dst);
+	if (size < len_dst + 1)
+		return (NULL);
+	if (size > len_dst + 1)
+	{
+		while (src[i] && (len_dst + 1 + i) < size)
+		{
+			dst[len_dst + i] = src[i];
+			i++;
+		}
+	}
+	dst[len_dst + i] = '\0';
+	return (dst);
+} */
 
 // Funzione per lo swap di due nodi nella lista concatenata
 void	ft_swap(t_exp *a, t_exp *b)
@@ -156,9 +181,11 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	char			*found_equal;
 	char			*good_path;
 	char			*check_equal;
+	char			*check_name_v;
 
 	// unsigned int	len_for_equal;
 	good_path = NULL;
+	check_name_v = NULL;
 	last = NULL;
 	current = NULL;
 	new_variable = NULL;
@@ -208,6 +235,7 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 				return (perror("Memory allocation FAIL"), free(name_v),
 					free(value), (void)0);
 			new_variable->path = ft_strjoin(name_v, ft_strjoin("=", value));
+			/* new_variable->path = ft_strjoin(name_v, ft_strjoin(ft_strcat("=", "\"", ft_strlen("\"")), ft_strcat(value, "\"", ft_strlen("\"")))); */
 			new_variable->value = value;
 			new_variable->name = name_v;
 			new_variable->next = NULL;
@@ -225,8 +253,7 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 				return (perror("Memory allocation FAIL"), free(name_v),
 					free(value), (void)0);
 			good_path = ft_strjoin(name_v, "=");
-			new_export->path = ft_strjoin("export ", ft_strjoin(good_path,
-						value));
+			new_export->path = ft_strjoin("export ", ft_strjoin(good_path, value));
 			new_export->name = name_v;
 			new_export->value = value;
 			new_export->next = NULL;
@@ -247,13 +274,25 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	{
 		name_v = ft_strdup(line);
 		check_equal = ft_strjoin("export ", ft_strjoin(name_v, "="));
+		check_name_v = ft_strjoin("export ", name_v);
+		/* printf("chec_name--> %s\n", check_name_v); */
 		while (check_equal_list)
 		{
 			if (ft_strncmp(check_equal_list->path, check_equal,
 					ft_strlen(check_equal)) == 0)
 				return (free(check_equal), (void)0);
+			if (ft_strncmp(check_equal_list->path, check_name_v,
+					ft_strlen(check_name_v)) == 0)
+				return (free(check_name_v), (void)0);
 			check_equal_list = check_equal_list->next;
 		}
+	/* 	while (check_equal_list)
+		{
+			if (ft_strncmp(check_equal_list->path, check_name_v */
+	/* 				ft_strlen(check_name_v)) == 0)
+				return (free(check_name_v), (void)0); */
+	/* 		check_equal_list = check_equal_list->next;
+		} */
 		if (!found_equal)
 			found_equal = ft_strdup("");
 		value = found_equal; // Nessun valore assegnato
