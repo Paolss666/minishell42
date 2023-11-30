@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/30 16:42:50 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/30 17:02:25 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export);
 t_exp				*add_env_with_export(t_envp *enviroment);
 void    unset_delete_variable(t_cmd *to_pars, t_envp **enviroment, t_exp **export);
 char 				*ft_strcpy(char *dest, const char *src, size_t size);
+void				ft_echo(t_cmd	*to_pars);
 void				print_list_envp(t_envp *head);
 void				print_export_list(t_exp *export);
 void 				ft_swap(t_exp *a, t_exp *b);

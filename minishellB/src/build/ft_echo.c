@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:37 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/21 15:15:34 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/30 17:10:09 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,3 +24,16 @@ int		found_echo(t_cmd *to_pars)
 	return (0);
 }
 
+void	ft_echo(t_cmd	*to_pars)
+{
+	if (!to_pars->next)
+		ft_putstr_fd("\n", 1);
+	else
+		ft_putstr_fd(ft_strjoin(to_pars->next->cmd, "\n"), 1);
+	if (ft_strcmp("echo -n", to_pars->cmd) == 0 && !to_pars->next)
+		ft_putstr_fd("", 2);
+/* 	else /* if (ft_strcmp("echo -n", to_pars->cmd) == 0 && to_pars->next) */
+		printf("found\n"); */
+		// ft_putstr_fd(to_pars->next->cmd, 1);
+
+}

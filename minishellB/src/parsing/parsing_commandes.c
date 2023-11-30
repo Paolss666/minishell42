@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/30 16:44:45 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/30 17:02:45 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,6 +283,8 @@ int	main(int ac, char **av, char **env)
 			unset_delete_variable(to_pars, &enviroment, &export);
 		if (found_exit(to_pars))
 			ft_exit(to_pars);
+		if (found_echo(to_pars))
+			ft_echo(to_pars);
 		to_pars = free_cmds_list(to_pars);
 		 //<<-------
 	}
