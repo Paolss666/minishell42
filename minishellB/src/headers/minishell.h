@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/27 18:22:31 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/11/30 16:42:50 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ typedef struct 	s_exp
 
 // ----------- ERRORI --------------- //
 void			freeList(t_cmd *head);
-
+void 			free_list_to_pars(t_cmd *to_pars);
 
 // ----------- PARSING --------------//
 t_cmd				*add_cmd_list(t_cmd *list, char **commande_split, char *line);
@@ -87,6 +87,7 @@ int					ft_pwd(t_cmd *to_pars);
 int					ft_cd(t_cmd *to_pars);
 int     			found_export(t_cmd *to_pars);
 int					found_unset(t_cmd *to_pars);
+int					found_exit(t_cmd *to_pars);
 int					print_pwd(t_envp *envp);
 int					found_echo(t_cmd *to_pars);
 int					ft_envp(t_cmd *to_pars);
@@ -101,4 +102,5 @@ void				print_list_envp(t_envp *head);
 void				print_export_list(t_exp *export);
 void 				ft_swap(t_exp *a, t_exp *b);
 void				export_env_sort(t_exp *exp_env);
+void    			ft_exit(t_cmd   *to_pars);
 #endif

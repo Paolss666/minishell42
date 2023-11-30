@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/29 01:08:56 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/11/30 16:38:55 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	found_export(t_cmd *to_pars)
 	return (0);
 }
 
-/* static char  *ft_strcat(char *dst, const char *src, size_t size)
+char  *ft_strcat(char *dst, const char *src, size_t size)
 {
 	size_t	i;
 	size_t	len_src;
@@ -47,7 +47,7 @@ int	found_export(t_cmd *to_pars)
 	}
 	dst[len_dst + i] = '\0';
 	return (dst);
-} */
+}
 
 // Funzione per lo swap di due nodi nella lista concatenata
 void	ft_swap(t_exp *a, t_exp *b)
@@ -85,23 +85,35 @@ void	export_env_sort(t_exp *exp_env)
 		}
 	}
 }
-
+/// ajoute export avec env et je le modif export variable="value" // 
 t_exp	*add_env_with_export(t_envp *enviroment)
 {
-	t_exp	*export_list;
-	t_exp	*current_export;
-	t_exp	*new_export;
+	t_exp			*export_list;
+	t_exp			*current_export;
+	t_exp			*new_export;
+	char			*egual_position;
+	char			*name;
+	char			*value;
 
 	export_list = NULL;
 	current_export = NULL;
+	// egual_index = 0;
+	egual_position = NULL;
 	while (enviroment != NULL)
 	{
 		new_export = (t_exp *)malloc(sizeof(t_exp));
 		if (!new_export)
 			return (perror("ERROR: t_exp"), exit(EXIT_FAILURE), NULL);
-		new_export->path = ft_strjoin("export ", enviroment->path);
+		egual_position = ft_strchr(enviroment->path, '=');
+		name = ft_substr(enviroment->path, 0, egual_position - enviroment->path);
+		value = ft_strdup(egual_position + 1);
+		// Costruisci il percorso corretto per il nuovo export
+		new_export->path = ft_strjoin("export ", name);
+		new_export->path = ft_strjoin(new_export->path, "=\"");
+		new_export->path = ft_strjoin(new_export->path, value);
+		new_export->path = ft_strjoin(new_export->path, "\"");
 		new_export->name = NULL;  /* ft_strdup(enviroment->name); */
-		new_export->value = NULL; //ft_strdup(enviroment->value);
+		new_export->value = ft_strdup(ft_strchr(new_export->path, '='));
 		if (!new_export->path)
 			return (perror("ERROR: strdup"), exit(EXIT_FAILURE), NULL);
 		new_export->next = NULL;
@@ -182,6 +194,7 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	char			*good_path;
 	char			*check_equal;
 	char			*check_name_v;
+	char			*found_plus;
 
 	// unsigned int	len_for_equal;
 	good_path = NULL;
@@ -194,6 +207,8 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	line = to_pars->next->cmd;
 	found_equal = ft_strchr(line, '=');
 	check_equal_list = *export;
+	found_plus = ft_strchr(line, '+');
+	printf("found_plus --> %s\n", found_plus);
 	if (line && found_equal)
 	{
 		len = found_equal - line;
@@ -214,17 +229,16 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 		{
 			current->path = ft_strjoin(name_v, ft_strjoin("=", value));
 			free(new_upgrade_exp->path);
-			new_upgrade_exp->path = ft_strjoin(good_path, (ft_strjoin("=",value)));
+			new_upgrade_exp->path = ft_strjoin(good_path, (ft_strjoin("=\"",ft_strjoin(value, "\""))));
 			free(value);
 			free(name_v);
 		}
 		else if (!current && new_upgrade_exp)
 		{
 			current = add_node_to_end(enviroment, name_v, value);
-			// printf("curretn->path --> %s\n", current->path);
 			free(new_upgrade_exp->path);
-			new_upgrade_exp->path = ft_strjoin(good_path, (ft_strjoin("=",
-							value)));
+			new_upgrade_exp->path = ft_strjoin(good_path, (ft_strjoin("=\"",
+							ft_strjoin(value, "\""))));
 			free(value);
 			free(name_v);
 		}
@@ -235,7 +249,6 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 				return (perror("Memory allocation FAIL"), free(name_v),
 					free(value), (void)0);
 			new_variable->path = ft_strjoin(name_v, ft_strjoin("=", value));
-			/* new_variable->path = ft_strjoin(name_v, ft_strjoin(ft_strcat("=", "\"", ft_strlen("\"")), ft_strcat(value, "\"", ft_strlen("\"")))); */
 			new_variable->value = value;
 			new_variable->name = name_v;
 			new_variable->next = NULL;
@@ -252,10 +265,10 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 			if (!new_export)
 				return (perror("Memory allocation FAIL"), free(name_v),
 					free(value), (void)0);
-			good_path = ft_strjoin(name_v, "=");
-			new_export->path = ft_strjoin("export ", ft_strjoin(good_path, value));
-			new_export->name = name_v;
+			good_path = ft_strjoin(name_v, "=\"");
 			new_export->value = value;
+			new_export->path = ft_strjoin("export ", ft_strjoin(good_path, ft_strjoin(value, "\"")));
+			new_export->name = name_v;
 			new_export->next = NULL;
 			new_current = *export;
 			free(good_path);
@@ -273,9 +286,8 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	else
 	{
 		name_v = ft_strdup(line);
-		check_equal = ft_strjoin("export ", ft_strjoin(name_v, "="));
+		check_equal = ft_strjoin("export ", ft_strjoin(name_v, "=\""));
 		check_name_v = ft_strjoin("export ", name_v);
-		/* printf("chec_name--> %s\n", check_name_v); */
 		while (check_equal_list)
 		{
 			if (ft_strncmp(check_equal_list->path, check_equal,
@@ -286,13 +298,6 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 				return (free(check_name_v), (void)0);
 			check_equal_list = check_equal_list->next;
 		}
-	/* 	while (check_equal_list)
-		{
-			if (ft_strncmp(check_equal_list->path, check_name_v */
-	/* 				ft_strlen(check_name_v)) == 0)
-				return (free(check_name_v), (void)0); */
-	/* 		check_equal_list = check_equal_list->next;
-		} */
 		if (!found_equal)
 			found_equal = ft_strdup("");
 		value = found_equal; // Nessun valore assegnato
@@ -307,8 +312,7 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 			/* ft_strjoin("=",ft_strdup(found_equal+ 1)); */
 		new_export->next = NULL;
 		if (*export == NULL)
-			*export = new_export;
-				// La lista è vuota,//il nuovo nodo diventa la testa
+			*export = new_export;// La lista è vuota,//il nuovo nodo diventa la testa
 		else
 		{
 			last_exp = *export;
