@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_commandes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/30 17:02:45 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/01 13:05:07 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,6 +252,7 @@ int	main(int ac, char **av, char **env)
 		line = display_prompt();
 		commande_split_toParse(commande_split, line);
 		to_pars = add_cmd_list(to_pars, commande_split, line);
+		join_found_flag(&to_pars);
 		if (!to_pars)
 			printf("-->to_parse est NULL \n");
 		printf("<<<<< ---------printf list NON JOIN flag --------------- >>\n");
@@ -284,7 +285,11 @@ int	main(int ac, char **av, char **env)
 		if (found_exit(to_pars))
 			ft_exit(to_pars);
 		if (found_echo(to_pars))
+			found_dollar_print_variable(to_pars, enviroment);
+/* 		if (found_echo(to_pars) == 1)
 			ft_echo(to_pars);
+		if (found_echo(to_pars) == 2)
+			ft_echo(to_pars); */
 		to_pars = free_cmds_list(to_pars);
 		 //<<-------
 	}

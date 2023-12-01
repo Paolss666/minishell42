@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/30 16:38:55 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/01 11:36:44 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,30 +24,6 @@ int	found_export(t_cmd *to_pars)
 	return (0);
 }
 
-char  *ft_strcat(char *dst, const char *src, size_t size)
-{
-	size_t	i;
-	size_t	len_src;
-	size_t	len_dst;
-
-	i = 0;
-	if (!dst && size == 0)
-		return (NULL);
-	len_src = ft_strlen(src);
-	len_dst = ft_strlen(dst);
-	if (size < len_dst + 1)
-		return (NULL);
-	if (size > len_dst + 1)
-	{
-		while (src[i] && (len_dst + 1 + i) < size)
-		{
-			dst[len_dst + i] = src[i];
-			i++;
-		}
-	}
-	dst[len_dst + i] = '\0';
-	return (dst);
-}
 
 // Funzione per lo swap di due nodi nella lista concatenata
 void	ft_swap(t_exp *a, t_exp *b)
@@ -146,32 +122,25 @@ t_envp	*add_node_to_end(t_envp **list, const char *name, const char *value)
 	t_envp	*new_node;
 	t_envp	*current;
 
-	// Crea un nuovo nodo
 	new_node = (t_envp *)malloc(sizeof(t_envp));
 	if (!new_node)
 		return (perror("Memory allocation failed"), NULL);
-	// Inizializza i campi del nuovo nodo
 	new_node->name = ft_strdup(name);
 	new_node->value = ft_strdup(value);
 	if (!new_node->name || !new_node->value)
 		return (perror("Memory allocation failed"), free(new_node->name), free(new_node->value), free(new_node), NULL);
-	new_node->path = ft_strjoin(name, ft_strjoin("=", value)); //+2 for '=' and null terminator
+	new_node->path = ft_strjoin(name, ft_strjoin("=", value));
 	if (!new_node->path)
 		return (perror("Memory allocation failed"), free(new_node->name), free(new_node->value), free(new_node), NULL);
-	// Inizializza il campo next del nuovo nodo a NULL
 	new_node->next = NULL;
-	// Se la lista è vuota, il nuovo nodo diventa la testa
 	if (*list == NULL)
 	{
-		// printf("exieeeeeee\n");
 		*list = new_node;
 		return (*list);
 	}
-	// Altrimenti, scorri la lista fino all'ultimo nodo
 	current = *list;
 	while (current->next != NULL)
 		current = current->next;
-	// Aggiungi il nuovo nodo alla fine
 	current->next = new_node;
 	return (*list);
 }
@@ -300,7 +269,7 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 		}
 		if (!found_equal)
 			found_equal = ft_strdup("");
-		value = found_equal; // Nessun valore assegnato
+		value = found_equal;
 		if (!name_v)
 			return (perror("Memory allocation FAIL name_v exp"), free(name_v));
 		new_export = (t_exp *)malloc(sizeof(t_exp));
@@ -309,10 +278,9 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 		new_export->path = ft_strjoin("export ", ft_strjoin(name_v, value));
 		new_export->name = ft_strdup(name_v);
 		new_export->value = ft_strdup(value);
-			/* ft_strjoin("=",ft_strdup(found_equal+ 1)); */
 		new_export->next = NULL;
 		if (*export == NULL)
-			*export = new_export;// La lista è vuota,//il nuovo nodo diventa la testa
+			*export = new_export;
 		else
 		{
 			last_exp = *export;

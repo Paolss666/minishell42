@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/30 17:02:25 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/01 12:14:35 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int					ft_envp(t_cmd *to_pars);
 int					found_pipe(t_cmd *cmd);
 t_envp				*found_and_add_env(char **env, t_envp *enviroment);
 /* void				add_export_env(t_cmd *to_pars, t_envp **enviroment); */
+void	found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment);
 void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export);
 t_exp				*add_env_with_export(t_envp *enviroment);
 void    unset_delete_variable(t_cmd *to_pars, t_envp **enviroment, t_exp **export);
