@@ -6,7 +6,7 @@
 /*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/01 13:05:07 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/03 15:22:11 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	freeList(t_cmd *head)
 	}
 }
 
-// ---> found a pipe <<--- bisogna vedere come adattarlo a  .pipex
+// ---> found a pipe <<--- COMM.pipex
 
 int	found_pipe(t_cmd *cmd)
 {
@@ -247,14 +247,14 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1)
 		return (ft_putstr_fd("Don't need arguments\n", 2), 1);
 	init_struct(minishell);
-	while (1)
+	while (1 && line)
 	{
 		line = display_prompt();
 		commande_split_toParse(commande_split, line);
 		to_pars = add_cmd_list(to_pars, commande_split, line);
-		join_found_flag(&to_pars);
 		if (!to_pars)
-			printf("-->to_parse est NULL \n");
+			line = display_prompt();
+		join_found_flag(&to_pars);
 		printf("<<<<< ---------printf list NON JOIN flag --------------- >>\n");
 		print_list(to_pars);
 		join_found_flag(&to_pars);

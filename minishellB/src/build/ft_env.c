@@ -6,11 +6,13 @@
 /*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:27:26 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/01 12:30:34 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/03 19:55:37 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+/* Il FAUT CREER UN DOSSIER QUE POUR LA COMMANDE ENV*/
 
 // <<------- copier l'env dans des listes chainees ------ >>
 char 	*ft_strcpy(char *dest, const char *src, size_t size)
@@ -47,14 +49,20 @@ t_envp	*found_and_add_env(char **env, t_envp *enviroment)
 	t_envp	*current;
 	t_envp	*envp;
 	int		i;
+	int		len;
 
 	i = -1;
+	len = 0;
 	while (env[++i])
 	{
 		current = (t_envp *)malloc(sizeof(t_envp));
 		if (!current)
 			return (perror("FAIL malloc t_envp"), NULL);
 		current->path = ft_strdup(env[i]);
+		current->value = ft_strdup(ft_strchr(current->path, '=') + 1);
+		len = current->value - current->path;
+		current->name = ft_substr(current->path, 0, len);
+		/* printf("current --> %s\n", current->name); ne marche paassss */
 		if (!current->path)
 			return (perror("ft_strdup"), NULL);
 		current->next = NULL;

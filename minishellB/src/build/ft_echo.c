@@ -6,11 +6,13 @@
 /*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:37 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/01 14:41:13 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/03 19:56:13 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+/* Il FAUT CREER UN DOSSIER QUE POUR LA COMMANDE ECHO  */
 
 int		found_echo(t_cmd *to_pars)
 {
@@ -39,8 +41,10 @@ void	ft_echo(t_cmd	*to_pars)
 }
 static int valid_variable_char(char c)
 {
-    return ft_isalnum(c) || c == '_';
+    return (ft_isascii(c));
 }
+
+/* modif mais ne marche pas strcmp pas bonne etc etc  */
 
 char *find_variable_value(const char *var_name, t_envp *enviroment)
 {
@@ -48,7 +52,7 @@ char *find_variable_value(const char *var_name, t_envp *enviroment)
 	char	*value;
 
 	value = NULL;
-    // Loop attraverso l'ambiente per trovare la variabile
+    // BOUCLE POUR TROUVER PATH DANS ENV	
     while (enviroment != NULL)
     {
         if (ft_strncmp(enviroment->path, var_name, ft_strlen(var_name)) == 0)
@@ -61,15 +65,18 @@ char *find_variable_value(const char *var_name, t_envp *enviroment)
         }
         enviroment = enviroment->next;
     }
-    // Se la variabile non è stata trovata, restituisci una stringa vuota
+    // NOT FOUND 
     return(NULL);
 }
+
+
 /* marche mais il faut reglere des cases particulier comment $ , et echo -n $variable */
 void	found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 {
 	char	*commande;
 	char	*var_name;
 	char	*var_value;
+	char	*var_check;
 	int		i;
 	int		start;
 	int		len;
@@ -79,10 +86,11 @@ void	found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 	len = 0;
 	var_name = NULL;
 	var_value = NULL;
+	var_check = NULL;
 	commande = to_pars->next->cmd;
 	while(commande[++i])
 	{
-		if (commande[0] =='$' && valid_variable_char(commande[i]))
+		if (commande[0] =='$' /* && valid_variable_char(commande[i]) */) /* trouve $ */
 		{
 				start = i;
 				while(valid_variable_char(commande[i]))
@@ -92,6 +100,15 @@ void	found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 				if (!var_name)
 					return(ft_putstr_fd("FAIL MALLOC\n", 2), (void)0);
 				ft_strlcpy(var_name, commande + start, len + 1);
+				var_check = ft_strrchr(var_name, '-');
+				if (!var_check)
+					printf("---> %s\n", var_check);
+				else
+					printf("---> %s\n", var_check);
+				printf("var_name ---> %s\n", var_name);
+/* 				var_check = ft_strrchr(var_name, '-');
+				if (var_check)
+					printf("---> %s\n", var_check); */
 				var_value = find_variable_value(var_name, enviroment);
 				if (!var_value)
 					return (ft_putstr_fd("\n", 1), free(var_name), (void)0);

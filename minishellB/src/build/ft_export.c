@@ -6,11 +6,12 @@
 /*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/01 11:36:44 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/03 15:19:35 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+/* Il FAUT CREER UN DOSSIER QUE POUR LA COMMANDE EXPORT */
 
 int	found_export(t_cmd *to_pars)
 {
@@ -83,7 +84,7 @@ t_exp	*add_env_with_export(t_envp *enviroment)
 		egual_position = ft_strchr(enviroment->path, '=');
 		name = ft_substr(enviroment->path, 0, egual_position - enviroment->path);
 		value = ft_strdup(egual_position + 1);
-		// Costruisci il percorso corretto per il nuovo export
+		// BUILDIN NOUVEAU PARCOURS EXP
 		new_export->path = ft_strjoin("export ", name);
 		new_export->path = ft_strjoin(new_export->path, "=\"");
 		new_export->path = ft_strjoin(new_export->path, value);
@@ -176,9 +177,9 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	line = to_pars->next->cmd;
 	found_equal = ft_strchr(line, '=');
 	check_equal_list = *export;
-	found_plus = ft_strchr(line, '+');
+	found_plus = ft_strchr(line, '+'); /* CA PRT SI ON TROUVE UN + */
 	printf("found_plus --> %s\n", found_plus);
-	if (line && found_equal)
+	if (line && found_equal) /* SI IN TROUVE UN EGALE ET LINE NEXT->CMD  */
 	{
 		len = found_equal - line;
 		name_v = ft_substr(line, 0, len);
@@ -189,12 +190,12 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 		current = *enviroment;
 		good_path = ft_strjoin("export ", name_v);
 		while (current != NULL && ft_strncmp(current->path, name_v,
-				ft_strlen(name_v)) != 0)
+				ft_strlen(name_v)) != 0) /*  */
 			current = current->next;
 		while (new_upgrade_exp != NULL && ft_strncmp(new_upgrade_exp->path,
-				good_path, ft_strlen(good_path)) != 0)
+				good_path, ft_strlen(good_path)) != 0) /*  */
 			new_upgrade_exp = new_upgrade_exp->next;
-		if (current && new_upgrade_exp)
+		if (current && new_upgrade_exp) /* SI ON A TROUVE LA NOM VARIABLE ET EST DANS LES DEUX LIST */
 		{
 			current->path = ft_strjoin(name_v, ft_strjoin("=", value));
 			free(new_upgrade_exp->path);
@@ -202,7 +203,7 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 			free(value);
 			free(name_v);
 		}
-		else if (!current && new_upgrade_exp)
+		else if (!current && new_upgrade_exp) /* SI ON A TROUVE LA NOM VARIABLE ET EST QUE DANS export */
 		{
 			current = add_node_to_end(enviroment, name_v, value);
 			free(new_upgrade_exp->path);
@@ -211,7 +212,7 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 			free(value);
 			free(name_v);
 		}
-		else
+		else 
 		{
 			new_variable = (t_envp *)malloc(sizeof(t_envp));
 			if (!new_variable)
@@ -252,7 +253,7 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 			}
 		}
 	}
-	else
+	else /* AJOUT QUE DANS EXPORT ET CHECK CASES -PRT */
 	{
 		name_v = ft_strdup(line);
 		check_equal = ft_strjoin("export ", ft_strjoin(name_v, "=\""));
@@ -276,8 +277,8 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 		if (!new_export)
 			return (perror("Memory allocation FAIL"), free(name_v));
 		new_export->path = ft_strjoin("export ", ft_strjoin(name_v, value));
-		new_export->name = ft_strdup(name_v);
-		new_export->value = ft_strdup(value);
+		new_export->name = ft_strdup(name_v); /* SECURISE */
+		new_export->value = ft_strdup(value);/* SECURISE */
 		new_export->next = NULL;
 		if (*export == NULL)
 			*export = new_export;

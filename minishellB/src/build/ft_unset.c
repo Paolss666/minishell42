@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:52:57 by npoalett          #+#    #+#             */
-/*   Updated: 2023/11/27 18:33:19 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/03 15:22:54 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+/* Il FAUT CREER UN DOSSIER QUE POUR LA COMMANDE UNSET */
 
 int	found_unset(t_cmd *to_pars)
 {

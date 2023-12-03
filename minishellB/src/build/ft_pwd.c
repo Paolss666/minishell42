@@ -6,11 +6,13 @@
 /*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:29:14 by npaolett          #+#    #+#             */
-/*   Updated: 2023/11/24 20:14:14 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/03 14:58:48 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+/* Il FAUT CREER UN DOSSIER QUE POUR LA COMMANDE PWD */
 
 // PWD NE PRENDES PAS DES ARGUMETNS ---//
 // EX; 	PWD ASDASDAS	-----> MEGGAGE D'ERREUR => pwd: too many arguments
