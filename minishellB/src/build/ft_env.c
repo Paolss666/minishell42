@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:27:26 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/03 19:55:37 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/04 17:01:08 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,6 @@ char 	*ft_strcpy(char *dest, const char *src, size_t size)
 	return (dest);
 }
 
-// void	init_lst_envp(t_envp *enviroment)
-// {
-// 	if (!enviroment)
-// 		return ;
-// 	enviroment = malloc(sizeof(t_envp));
-// 	if (!enviroment)
-// 		ft_putstr_fd("FAIL malloc enviroment\n", 2);
-// 	enviroment->path = NULL;
-// 	enviroment->next = NULL;
-// }
-
-
 
 t_envp	*found_and_add_env(char **env, t_envp *enviroment)
 {
@@ -60,18 +48,15 @@ t_envp	*found_and_add_env(char **env, t_envp *enviroment)
 			return (perror("FAIL malloc t_envp"), NULL);
 		current->path = ft_strdup(env[i]);
 		current->value = ft_strdup(ft_strchr(current->path, '=') + 1);
-		len = current->value - current->path;
+		len = ft_strlen(current->path) - ft_strlen(current->value);
 		current->name = ft_substr(current->path, 0, len);
-		/* printf("current --> %s\n", current->name); ne marche paassss */
 		if (!current->path)
 			return (perror("ft_strdup"), NULL);
 		current->next = NULL;
 		if (!enviroment)
-			// Se la lista è vuota, il nuovo nodo diventa la testa della lista
 			enviroment = current;
 		else
 		{
-			// Se la lista non è vuota, aggiungi il nuovo nodo alla fine
 			envp = enviroment;
 			while (envp->next != NULL)
 				envp = envp->next;
