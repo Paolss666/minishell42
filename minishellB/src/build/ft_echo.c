@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:37 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/04 17:17:36 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/04 17:56:03 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ char	*find_variable_value(const char *var_name, t_envp *enviroment)
 	return (NULL);
 }
 
+
+
 char	*found_chr_forjoin(t_cmd *to_pars)
 {
 	char	*current;
@@ -86,21 +88,23 @@ char	*found_chr_forjoin(t_cmd *to_pars)
 	int		start;
 	char	*found;
 
-	i = 0;
+	i = -1;
 	start = 0;
 	found = NULL;
 	current = to_pars->next->cmd;
-	while (current[i])
+	while (current[++i])
 	{
 		if (current[i] == '-' || current[i] == '[' || current[i] == ']' || current[i] == '='
 			|| current[i] == '{' || current[i] == '}' || current[i] == ':'
 			|| current[i] == '/' || current[i] == '.' || current[i] == '+'
 			|| current[i] == '@' || current[i] == '#' || current[i] == '!'
 			|| current[i] == '?' || current[i] == '~' || current[i] == '^')
+		{
 			start = i;
-		i++;
+			break;
+		}
 	}
-	found = ft_substr(current, start, i + 1);
+	found = ft_substr(current, start, ft_strlen(current));
 	if (found[0] == '$')
 		return (NULL);
 	else
@@ -126,7 +130,7 @@ void	found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 	var_check = NULL;
 	found = NULL;
 	commande = to_pars->next->cmd;
-	if (found_echo(to_pars) == 1 && to_pars->next) // NO -N 
+	if (found_echo(to_pars) == 1) // NO -N 
 	{	
 		while (commande[++i])
 		{
@@ -152,7 +156,7 @@ void	found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 			}
 		}
 	}
-	if (found_echo(to_pars) == 2 && to_pars->next) // AVEC -N ECHO -N LOL
+	if (found_echo(to_pars) == 2) // AVEC -N ECHO -N LOL
 	{
 		while (commande[++i])
 		{

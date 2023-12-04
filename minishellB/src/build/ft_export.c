@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/03 15:19:35 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/04 18:40:46 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,8 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	char			*check_equal;
 	char			*check_name_v;
 	char			*found_plus;
-
+	char			*modif_variable;
+	
 	// unsigned int	len_for_equal;
 	good_path = NULL;
 	check_name_v = NULL;
@@ -178,8 +179,14 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	found_equal = ft_strchr(line, '=');
 	check_equal_list = *export;
 	found_plus = ft_strchr(line, '+'); /* CA PRT SI ON TROUVE UN + */
+	// if (!found_plus)
+	// 	found_plus = NULL;
+	// found_plus = found_plus;
+	modif_variable = ft_substr(found_plus, 2, ft_strlen(found_plus));
 	printf("found_plus --> %s\n", found_plus);
-	if (line && found_equal) /* SI IN TROUVE UN EGALE ET LINE NEXT->CMD  */
+	printf("modif_variable --> %s\n", modif_variable);
+	printf("found_equal --> %s\n", found_equal);
+	if ((line && found_equal)) // SI IN TROUVE UN EGALE ET LINE NEXT->CMD 
 	{
 		len = found_equal - line;
 		name_v = ft_substr(line, 0, len);
@@ -195,15 +202,17 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 		while (new_upgrade_exp != NULL && ft_strncmp(new_upgrade_exp->path,
 				good_path, ft_strlen(good_path)) != 0) /*  */
 			new_upgrade_exp = new_upgrade_exp->next;
-		if (current && new_upgrade_exp) /* SI ON A TROUVE LA NOM VARIABLE ET EST DANS LES DEUX LIST */
+		if (current && new_upgrade_exp) /* SI O A OUVE LA NOM VARIABLE ET EST DANS LES DEUX LIST */
 		{
 			current->path = ft_strjoin(name_v, ft_strjoin("=", value));
 			free(new_upgrade_exp->path);
+			// if (found_plus)
+				// new_upgrade_exp->path = ft_strjoin(good_path, (ft_strjoin("=\"",ft_strjoin(ft_strjoin (value, modif_variable), "\""))));
 			new_upgrade_exp->path = ft_strjoin(good_path, (ft_strjoin("=\"",ft_strjoin(value, "\""))));
 			free(value);
 			free(name_v);
 		}
-		else if (!current && new_upgrade_exp) /* SI ON A TROUVE LA NOM VARIABLE ET EST QUE DANS export */
+		else if (!current && new_upgrade_exp ) /* SI ON A TROUVE LA NOM VARIABLE ET EST QUE DANS export */
 		{
 			current = add_node_to_end(enviroment, name_v, value);
 			free(new_upgrade_exp->path);
