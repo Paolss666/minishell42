@@ -6,7 +6,11 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:37 by npaolett          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/12/04 16:08:37 by npaolett         ###   ########.fr       */
+=======
+/*   Updated: 2023/12/04 17:10:16 by npaolett         ###   ########.fr       */
+>>>>>>> buildingNico
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +20,8 @@
 
 int	found_echo(t_cmd *to_pars)
 {
+	char	**splits = NULL;
+
 	while (to_pars != NULL)
 	{
 		if (ft_strcmp(to_pars->cmd, "echo") == 0
@@ -24,8 +30,12 @@ int	found_echo(t_cmd *to_pars)
 		if (ft_strcmp(to_pars->cmd, "echo -n") == 0
 			&& ft_strlen(to_pars->cmd) == 7)
 			return (2);
-		if (ft_strncmp(to_pars->cmd, "echo -", ft_strlen("echo -"))== 0)
-			return (3);
+		if (ft_strncmp(to_pars->cmd, "echo -", ft_strlen("echo -")) == 0 && !to_pars->next)
+		{
+			splits = ft_split(to_pars->cmd, ' ');
+			printf("%s\n", splits[1]);
+			return (0);
+		}
 		to_pars = to_pars->next;
 	}
 	return (0);
@@ -42,13 +52,9 @@ void	ft_echo(t_cmd *to_pars)
 		ft_putstr_fd("\n", 1);
 	else if (found_echo(to_pars) == 2 && to_pars->next)
 		ft_putstr_fd(to_pars->next->cmd, 1);
-	else if (found_echo(to_pars) == 3)
-	{
-		printf("found\n");
-		splits = ft_split(to_pars->cmd, ' ');
-		printf("%s\n", splits[1]);
-	}
 }
+
+
 static int	valid_variable_char(char c)
 {
 	return (ft_isalpha(c) || c == '_');
@@ -124,7 +130,7 @@ void	found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 	var_check = NULL;
 	found = NULL;
 	commande = to_pars->next->cmd;
-	if (found_echo(to_pars) == 1) // NO -N 
+	if (found_echo(to_pars) == 1 && to_pars->next) // NO -N 
 	{	
 		while (commande[++i])
 		{
@@ -150,7 +156,7 @@ void	found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 			}
 		}
 	}
-	if (found_echo(to_pars) == 2 ) // AVEC -N ECHO -N LOL
+	if (found_echo(to_pars) == 2 && to_pars->next) // AVEC -N ECHO -N LOL
 	{
 		while (commande[++i])
 		{
@@ -179,3 +185,4 @@ void	found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 	return (ft_echo(to_pars), (void)0);
 	/* return ((void)0); QUANDO NON HA PARAMETRI SEGFAULT */
 }
+

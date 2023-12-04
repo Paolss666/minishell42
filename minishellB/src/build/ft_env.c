@@ -6,7 +6,11 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:27:26 by npaolett          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/12/04 11:14:02 by npaolett         ###   ########.fr       */
+=======
+/*   Updated: 2023/12/04 17:01:08 by npaolett         ###   ########.fr       */
+>>>>>>> buildingNico
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +34,6 @@ char 	*ft_strcpy(char *dest, const char *src, size_t size)
 	dest[i] = '\0';
 	return (dest);
 }
-
-// void	init_lst_envp(t_envp *enviroment)
-// {
-// 	if (!enviroment)
-// 		return ;
-// 	enviroment = malloc(sizeof(t_envp));
-// 	if (!enviroment)
-// 		ft_putstr_fd("FAIL malloc enviroment\n", 2);
-// 	enviroment->path = NULL;
-// 	enviroment->next = NULL;
-// }
-
 
 
 t_envp	*found_and_add_env(char **env, t_envp *enviroment)
