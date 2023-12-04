@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:37 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/03 19:56:13 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/04 16:08:37 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,69 +14,104 @@
 
 /* Il FAUT CREER UN DOSSIER QUE POUR LA COMMANDE ECHO  */
 
-int		found_echo(t_cmd *to_pars)
+int	found_echo(t_cmd *to_pars)
 {
 	while (to_pars != NULL)
 	{
-		if (ft_strncmp(to_pars->cmd, "echo", ft_strlen("echo")) == 0
+		if (ft_strcmp(to_pars->cmd, "echo") == 0
 			&& ft_strlen(to_pars->cmd) == 4)
 			return (1);
-		if (ft_strncmp(to_pars->cmd, "echo -n", ft_strlen("echo -n")) == 0
+		if (ft_strcmp(to_pars->cmd, "echo -n") == 0
 			&& ft_strlen(to_pars->cmd) == 7)
 			return (2);
+		if (ft_strncmp(to_pars->cmd, "echo -", ft_strlen("echo -"))== 0)
+			return (3);
 		to_pars = to_pars->next;
 	}
 	return (0);
 }
 
-void	ft_echo(t_cmd	*to_pars)
+void	ft_echo(t_cmd *to_pars)
 {
+	char	**splits;
+
+	splits = NULL;
 	if (found_echo(to_pars) == 1 && to_pars->next)
 		ft_putstr_fd(ft_strjoin(to_pars->next->cmd, "\n"), 1);
 	else if (found_echo(to_pars) == 1 && !to_pars->next)
 		ft_putstr_fd("\n", 1);
-	if (found_echo(to_pars) == 2 && to_pars->next)
+	else if (found_echo(to_pars) == 2 && to_pars->next)
 		ft_putstr_fd(to_pars->next->cmd, 1);
-
+	else if (found_echo(to_pars) == 3)
+	{
+		printf("found\n");
+		splits = ft_split(to_pars->cmd, ' ');
+		printf("%s\n", splits[1]);
+	}
 }
-static int valid_variable_char(char c)
+static int	valid_variable_char(char c)
 {
-    return (ft_isascii(c));
+	return (ft_isalpha(c) || c == '_');
 }
 
 /* modif mais ne marche pas strcmp pas bonne etc etc  */
-
-char *find_variable_value(const char *var_name, t_envp *enviroment)
+char	*find_variable_value(const char *var_name, t_envp *enviroment)
 {
 	char	*found_egual;
 	char	*value;
 
 	value = NULL;
-    // BOUCLE POUR TROUVER PATH DANS ENV	
-    while (enviroment != NULL)
-    {
-        if (ft_strncmp(enviroment->path, var_name, ft_strlen(var_name)) == 0)
-        {
+	while (enviroment != NULL)
+	{
+		if (ft_strcmp(enviroment->name, ft_strjoin(var_name, "=")) == 0)
+		{
 			found_egual = ft_strchr(enviroment->path, '=');
 			value = ft_strdup(found_egual + 1);
-			if(!value)
+			if (!value)
 				return (ft_putstr_fd("Fail malloc strdup\n", 2), NULL);
 			return (value);
-        }
-        enviroment = enviroment->next;
-    }
-    // NOT FOUND 
-    return(NULL);
+		}
+		else
+			enviroment = enviroment->next;
+	}
+	return (NULL);
 }
 
+char	*found_chr_forjoin(t_cmd *to_pars)
+{
+	char	*current;
+	int		i;
+	int		start;
+	char	*found;
 
-/* marche mais il faut reglere des cases particulier comment $ , et echo -n $variable */
+	i = 0;
+	start = 0;
+	found = NULL;
+	current = to_pars->next->cmd;
+	while (current[i])
+	{
+		if (current[i] == '-' || current[i] == '[' || current[i] == ']' || current[i] == '='
+			|| current[i] == '{' || current[i] == '}' || current[i] == ':'
+			|| current[i] == '/' || current[i] == '.' || current[i] == '+'
+			|| current[i] == '@' || current[i] == '#' || current[i] == '!'
+			|| current[i] == '?' || current[i] == '~' || current[i] == '^')
+			start = i;
+		i++;
+	}
+	found = ft_substr(current, start, i + 1);
+	if (found[0] == '$')
+		return (NULL);
+	else
+		return (found);
+}
+
 void	found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 {
 	char	*commande;
 	char	*var_name;
 	char	*var_value;
 	char	*var_check;
+	char	*found;
 	int		i;
 	int		start;
 	int		len;
@@ -87,33 +122,60 @@ void	found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 	var_name = NULL;
 	var_value = NULL;
 	var_check = NULL;
+	found = NULL;
 	commande = to_pars->next->cmd;
-	while(commande[++i])
-	{
-		if (commande[0] =='$' /* && valid_variable_char(commande[i]) */) /* trouve $ */
+	if (found_echo(to_pars) == 1) // NO -N 
+	{	
+		while (commande[++i])
 		{
+			if (commande[0] == '$' && valid_variable_char(commande[i]))
+			{
 				start = i;
-				while(valid_variable_char(commande[i]))
+				while (valid_variable_char(commande[i]))
 					++i;
 				len = i - start;
 				var_name = (char *)malloc(sizeof(char) * len + 1);
 				if (!var_name)
-					return(ft_putstr_fd("FAIL MALLOC\n", 2), (void)0);
+					return (ft_putstr_fd("FAIL MALLOC\n", 2), (void)0);
 				ft_strlcpy(var_name, commande + start, len + 1);
-				var_check = ft_strrchr(var_name, '-');
-				if (!var_check)
-					printf("---> %s\n", var_check);
-				else
-					printf("---> %s\n", var_check);
-				printf("var_name ---> %s\n", var_name);
-/* 				var_check = ft_strrchr(var_name, '-');
-				if (var_check)
-					printf("---> %s\n", var_check); */
 				var_value = find_variable_value(var_name, enviroment);
-				if (!var_value)
-					return (ft_putstr_fd("\n", 1), free(var_name), (void)0);
-				return (printf("%s\n", var_value),free(var_name), (void)0);
+				found = found_chr_forjoin(to_pars);
+				if (var_value && found)
+					return (printf("%s\n", ft_strjoin(var_value, found)), (void)0);
+				if (!var_value && found)
+					return (printf("%s\n", found), (void)0);
+				if (!var_value && !found)
+					return (ft_putstr_fd("\n", 1), (void)0);
+				return (printf("%s\n", var_value), free(var_name), (void)0);
+			}
 		}
-		return (ft_echo(to_pars), (void)0);
 	}
+	if (found_echo(to_pars) == 2 ) // AVEC -N ECHO -N LOL
+	{
+		while (commande[++i])
+		{
+			if (commande[0] == '$' && valid_variable_char(commande[i]))
+			{
+				start = i;
+				while (valid_variable_char(commande[i]))
+					++i;
+				len = i - start;
+				var_name = (char *)malloc(sizeof(char) * len + 1);
+				if (!var_name)
+					return (ft_putstr_fd("FAIL MALLOC\n", 2), (void)0);
+				ft_strlcpy(var_name, commande + start, len + 1);
+				var_value = find_variable_value(var_name, enviroment);
+				found = found_chr_forjoin(to_pars);
+				if (var_value && found)
+					return (printf("%s", ft_strjoin(var_value, found)), (void)0);
+				if (!var_value && found)
+					return (printf("%s", found), (void)0);
+				if (!var_value && !found)
+					return (ft_putstr_fd("", 1), (void)0);
+				return (printf("%s", var_value), free(var_name), (void)0);
+			}
+		}
+	}
+	return (ft_echo(to_pars), (void)0);
+	/* return ((void)0); QUANDO NON HA PARAMETRI SEGFAULT */
 }

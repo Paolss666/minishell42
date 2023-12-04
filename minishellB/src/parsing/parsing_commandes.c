@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_commandes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/03 15:22:11 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/04 15:45:52 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,7 +247,7 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1)
 		return (ft_putstr_fd("Don't need arguments\n", 2), 1);
 	init_struct(minishell);
-	while (1 && line)
+	while (1)
 	{
 		line = display_prompt();
 		commande_split_toParse(commande_split, line);
