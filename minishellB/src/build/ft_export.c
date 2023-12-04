@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/04 18:40:46 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/04 18:49:48 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	char			*check_name_v;
 	char			*found_plus;
 	char			*modif_variable;
-	
+
 	// unsigned int	len_for_equal;
 	good_path = NULL;
 	check_name_v = NULL;
@@ -175,14 +175,13 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	new_variable = NULL;
 	new_export = NULL;
 	new_upgrade_exp = *export;
+	modif_variable = NULL;
 	line = to_pars->next->cmd;
 	found_equal = ft_strchr(line, '=');
 	check_equal_list = *export;
 	found_plus = ft_strchr(line, '+'); /* CA PRT SI ON TROUVE UN + */
-	// if (!found_plus)
-	// 	found_plus = NULL;
-	// found_plus = found_plus;
-	modif_variable = ft_substr(found_plus, 2, ft_strlen(found_plus));
+	if (found_plus)
+		modif_variable = ft_substr(found_plus, 2, ft_strlen(found_plus));
 	printf("found_plus --> %s\n", found_plus);
 	printf("modif_variable --> %s\n", modif_variable);
 	printf("found_equal --> %s\n", found_equal);
