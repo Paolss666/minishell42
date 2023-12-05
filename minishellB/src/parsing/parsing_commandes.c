@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_commandes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armeyer <armeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/04 15:45:52 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/04 17:28:23 by armeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,6 +267,10 @@ int	main(int ac, char **av, char **env)
 		printf("found unset --> %d\n", found_unset(to_pars));
 		printf("found exit --> %d\n", found_exit(to_pars));
 		printf("<<<<< ---------printf list BUILDING --------------- >>\n");
+		if (!error_manager(to_pars))
+		{
+			ft_printf("syntax error detected \n");
+		}
 		if (!enviroment)
 			enviroment= found_and_add_env(env, enviroment);
 		if (!export)
