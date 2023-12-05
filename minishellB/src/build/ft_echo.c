@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:37 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/05 10:35:07 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/05 19:17:48 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ int	found_echo(t_cmd *to_pars)
 
 void	ft_echo(t_cmd *to_pars)
 {
-	char	**splits;
+/* 	char	**splits;
 
-	splits = NULL;
+	splits = NULL; */
 	if (found_echo(to_pars) == 1 && to_pars->next)
 		ft_putstr_fd(ft_strjoin(to_pars->next->cmd, "\n"), 1);
 	if (found_echo(to_pars) == 1 && !to_pars->next)
@@ -122,7 +122,7 @@ void	found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 	char	*commande;
 	char	*var_name;
 	char	*var_value;
-	char	*var_check;
+/* 	char	*var_check; */
 	char	*found;
 	int		i;
 	int		start;
@@ -133,7 +133,7 @@ void	found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 	len = 0;
 	var_name = NULL;
 	var_value = NULL;
-	var_check = NULL;
+/* 	var_check = NULL; */
 	found = NULL;
 	commande = to_pars->next->cmd;
 	if (found_echo(to_pars) == 1) // NO -N 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/05 18:00:00 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/05 19:55:12 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ t_cd	*cpy_cd_list(char **splits, t_cd *commande_cd)
 	t_cd	*current;
 	t_cd	*envp;
 	int		i;
-	int		len;
+/* 	int		len; */
 
 	i = -1;
-	len = 0;
+/* 	len = 0; */
 	while (splits[++i])
 	{
 		current = (t_cd *)malloc(sizeof(t_cmd));
@@ -71,13 +71,13 @@ t_cd	*cpy_cd_list(char **splits, t_cd *commande_cd)
 void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 {
 	char	*current_path_name;
-	char	*pwd;
+/* 	char	*pwd; */
 	char	*home;
-	t_cd	*commande_cd;
+/* 	t_cd	*commande_cd; */
 
 	current_path_name = NULL;
-	commande_cd = NULL;
-	pwd = found_variable_env(enviroment, "PWD");
+/* 	commande_cd = NULL; */
+/* 	pwd = found_variable_env(enviroment, "PWD"); */
 	home = found_variable_env(enviroment, "HOME");
 	home = ft_substr(home, ft_strlen("HOME="), ft_strlen(home));
 	if (!home)
@@ -111,10 +111,33 @@ void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 		}
 		perror("FAIL");
 	}
-	if (ft_cd(to_pars)  && to_pars->next)
+	if (ft_cd(to_pars)  && to_pars->next && !to_pars->next->next)
 	{
 		if (chdir(to_pars->next->cmd) == 0)
+		{
 			printf("%s\n", to_pars->next->cmd);
+			while(enviroment)
+			{
+				if (ft_strcmp(enviroment->name, "PWD") == 0)
+					break ;
+				enviroment = enviroment->next;
+			}
+			free(enviroment->path);
+			free(enviroment->value);
+			enviroment->value = ft_strdup(home);
+			enviroment->path = ft_strjoin(enviroment->name, ft_strjoin("=", to_pars->next->cmd));
+			while(export)
+			{
+				if (ft_strncmp(export->path, "export PWD", ft_strlen("export PWD")) == 0)
+					break ;
+				export = export->next;
+			}
+			free(export->path);
+			export->path =  ft_strjoin(ft_strjoin("export ", enviroment->name), (ft_strjoin("=\"",ft_strjoin(to_pars->next->cmd, "\""))));
+			if (!export->path || !enviroment->name || !home)
+				return(ft_putstr_fd("ERROR FAIL malloc strjoin\n", 2), (void)0);
+			free(home);
+		}	
 		else
 			perror("FAIL");
 	}
