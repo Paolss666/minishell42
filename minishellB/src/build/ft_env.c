@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:27:26 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/04 17:17:56 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/05 09:33:25 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ t_envp	*found_and_add_env(char **env, t_envp *enviroment)
 		current->path = ft_strdup(env[i]);
 		current->value = ft_strdup(ft_strchr(current->path, '=') + 1);
 		len = ft_strlen(current->path) -  ft_strlen(current->value);
-		current->name = ft_substr(current->path, 0, len);
+		current->name = ft_substr(current->path, 0, len - 1);
+		// printf("current->name %s\n", current->name);
 		if (!current->path || !current->name || !current->value)
 			return (perror("ft_strdup found_and_add_env"), NULL);
 		current->next = NULL;

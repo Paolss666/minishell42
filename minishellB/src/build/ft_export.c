@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/04 18:49:48 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/05 15:56:11 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,13 +182,19 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	found_plus = ft_strchr(line, '+'); /* CA PRT SI ON TROUVE UN + */
 	if (found_plus)
 		modif_variable = ft_substr(found_plus, 2, ft_strlen(found_plus));
-	printf("found_plus --> %s\n", found_plus);
-	printf("modif_variable --> %s\n", modif_variable);
-	printf("found_equal --> %s\n", found_equal);
+	// printf("found_plus --> %s\n", found_plus);
+	// printf("modif_variable --> %s\n", modif_variable);
+	// printf("found_equal --> %s\n", found_equal);
 	if ((line && found_equal)) // SI IN TROUVE UN EGALE ET LINE NEXT->CMD 
 	{
 		len = found_equal - line;
 		name_v = ft_substr(line, 0, len);
+		if (modif_variable) // skip + et name_v parfait; 
+		{
+			len = ft_strlen(line) - ft_strlen(modif_variable) - 2;
+			name_v = ft_substr(line, 0, len);
+		}
+		// printf("name_v --> %s\n", name_v);
 		value = ft_strdup(found_equal + 1);
 		if (!name_v || !value)
 			return (perror("Memory allocation FAIL"), free(name_v), free(value),
@@ -204,9 +210,11 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 		if (current && new_upgrade_exp) /* SI O A OUVE LA NOM VARIABLE ET EST DANS LES DEUX LIST */
 		{
 			current->path = ft_strjoin(name_v, ft_strjoin("=", value));
+			if (modif_variable)
+				current->path = ft_strjoin(current->path, modif_variable);
 			free(new_upgrade_exp->path);
-			// if (found_plus)
-				// new_upgrade_exp->path = ft_strjoin(good_path, (ft_strjoin("=\"",ft_strjoin(ft_strjoin (value, modif_variable), "\""))));
+			if (modif_variable)
+				value = ft_strjoin(value, modif_variable);
 			new_upgrade_exp->path = ft_strjoin(good_path, (ft_strjoin("=\"",ft_strjoin(value, "\""))));
 			free(value);
 			free(name_v);

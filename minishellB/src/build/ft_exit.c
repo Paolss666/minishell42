@@ -3,14 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 16:36:54 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/01 13:24:31 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/05 16:10:23 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+t_envp	*free_envp_list(t_envp *head)
+{
+	t_envp	*history;
+
+	history = head;
+	if (history)
+	{
+		free(history->path);
+		free(history->name);
+		free(history->value);
+		free(history);
+		return NULL;
+	}
+	else
+		return(head);
+
+}
 
 int	found_exit(t_cmd *to_pars)
 {
@@ -24,12 +42,14 @@ int	found_exit(t_cmd *to_pars)
 	return (0);
 }
 
-void    ft_exit(t_cmd   *to_pars)
+void    ft_exit(t_cmd   *to_pars/* , t_envp *enviroment */)
 {
     if (!to_pars->next)
     {
         ft_putstr_fd("exit\n", 1);
         free_list_to_pars(to_pars);
+        // if (enviroment)
+            // free_envp_list(enviroment);
         /* il faut bien tout free */
         exit(0);
     }

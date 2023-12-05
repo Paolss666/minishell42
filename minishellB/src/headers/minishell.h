@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/01 12:14:35 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/05 16:10:21 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@
 # include <unistd.h>
 
 # define EXIT_FAILURE 1
+# define RESET_COLOR "\001\033[0m\002"
+# define COLOR_VIOLET "\001\033[0;35m\002"
+# define COLOR_RED "\001\033[1;31m\002"
+
 
 // readline --> read a line from the terminal and return it , using prompt (char
 		// * prompt<-----
@@ -53,6 +57,13 @@ typedef struct s_cmd
 
 //--------- double data pour split = dans la variable et utiliser export
 // char *path et char *path_split avec =
+
+
+typedef struct s_cd
+{
+	char			*path;
+	struct s_cd		*next;
+}					t_cd;
 
 typedef struct 	s_envp
 {
@@ -88,21 +99,22 @@ int					ft_cd(t_cmd *to_pars);
 int     			found_export(t_cmd *to_pars);
 int					found_unset(t_cmd *to_pars);
 int					found_exit(t_cmd *to_pars);
-int					print_pwd(t_envp *envp);
+// int					print_pwd(t_envp *envp);
 int					found_echo(t_cmd *to_pars);
 int					ft_envp(t_cmd *to_pars);
 int					found_pipe(t_cmd *cmd);
 t_envp				*found_and_add_env(char **env, t_envp *enviroment);
+void				found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export);
 /* void				add_export_env(t_cmd *to_pars, t_envp **enviroment); */
-void	found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment);
-void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export);
+void				found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment);
+void				add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export);
 t_exp				*add_env_with_export(t_envp *enviroment);
-void    unset_delete_variable(t_cmd *to_pars, t_envp **enviroment, t_exp **export);
+void    			unset_delete_variable(t_cmd *to_pars, t_envp **enviroment, t_exp **export);
 char 				*ft_strcpy(char *dest, const char *src, size_t size);
 void				ft_echo(t_cmd	*to_pars);
 void				print_list_envp(t_envp *head);
 void				print_export_list(t_exp *export);
 void 				ft_swap(t_exp *a, t_exp *b);
 void				export_env_sort(t_exp *exp_env);
-void    			ft_exit(t_cmd   *to_pars);
+void    			ft_exit(t_cmd   *to_pars/* , t_envp *enviroment */);
 #endif

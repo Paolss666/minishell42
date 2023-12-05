@@ -6,7 +6,7 @@
 #    By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/09 13:55:48 by npaolett          #+#    #+#              #
-#    Updated: 2023/11/30 16:38:53 by npaolett         ###   ########.fr        #
+#    Updated: 2023/12/05 16:40:56 by npaolett         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,10 +23,12 @@ INCL = -I -I./libft
 SRC =	src/build/ft_pwd.c\
 		src/build/ft_env.c \
 		src/build/ft_echo.c \
-		src/build/ft_exit.c \
-		src/build/ft_cd.c 	 \
-		src/build/ft_export.c \
-		src/build/ft_unset.c \
+		src/build/ft_exit.c  \
+		src/build/ft_cd.c 	  \
+		src/build/ft_export.c  \
+		src/build/ft_unset.c    \
+		src/pipe/ft_pipe.c		 \
+		src/execve/ft_exceve.c		 \
 		src/parsing/parsing_commandes.c 
 
 OBJ = $(SRC:.c=.o)

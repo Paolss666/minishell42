@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/04 17:34:50 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/05 15:55:16 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*display_prompt(void)
 {
 	char	*line;
 
-	line = readline("bbshell$ ");
+	line = readline(COLOR_VIOLET"bbshell$ "RESET_COLOR);
 	add_history(line); // working history
 	return (line);
 }
@@ -60,19 +60,6 @@ void	freeList(t_cmd *head)
 		free(current);
 		current = next;
 	}
-}
-
-// ---> found a pipe <<--- COMM.pipex
-
-int	found_pipe(t_cmd *cmd)
-{
-	while (cmd != NULL)
-	{
-		if (ft_strncmp(cmd->cmd, "|", ft_strlen("|")) == 0)
-			return (1);
-		cmd = cmd->next;
-	}
-	return (0);
 }
 
 t_cmd	*free_cmds_list(t_cmd *head)
@@ -272,10 +259,11 @@ int	main(int ac, char **av, char **env)
 		if (!export)
 			export = add_env_with_export(enviroment);
 		export_env_sort(export);
+		if (found_echo(to_pars))
+			found_dollar_print_variable(to_pars, enviroment);
 		if (ft_envp(to_pars))
 			print_list_envp(enviroment);
-		if (ft_pwd(to_pars) == 1)
-			print_pwd(enviroment);
+		ft_pwd(to_pars);
 		if (!to_pars->next && found_export(to_pars))
 			print_export_list(export);
 		if (found_export(to_pars) && to_pars->next)
@@ -284,8 +272,8 @@ int	main(int ac, char **av, char **env)
 			unset_delete_variable(to_pars, &enviroment, &export);
 		if (found_exit(to_pars))
 			ft_exit(to_pars);
-		if (found_echo(to_pars))
-			found_dollar_print_variable(to_pars, enviroment);
+		if (ft_cd(to_pars)  == 1)
+			found_cd_pwd_update(to_pars, enviroment, export);
 /* 		if (found_echo(to_pars) == 1)
 			ft_echo(to_pars);
 		if (found_echo(to_pars) == 2)
