@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/05 15:56:11 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/06 15:28:01 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,23 @@ void	print_export_list(t_exp *export)
 	}
 }
 
+int		check_line_is_alpha(char *line)
+{
+	int	i;
+
+	i = 0;
+	if (!line)
+		return (perror("line null"), 0);
+	while(line[i])
+	{
+		if (ft_isalpha(line[i]) || line[i] == '_')
+			i++;
+		else
+			return (0);
+	}
+	return(1);
+}
+
 t_envp	*add_node_to_end(t_envp **list, const char *name, const char *value)
 {
 	t_envp	*new_node;
@@ -177,6 +194,8 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	new_upgrade_exp = *export;
 	modif_variable = NULL;
 	line = to_pars->next->cmd;
+	if (!check_line_is_alpha(line))
+		return (perror("error il fuat le set"));
 	found_equal = ft_strchr(line, '=');
 	check_equal_list = *export;
 	found_plus = ft_strchr(line, '+'); /* CA PRT SI ON TROUVE UN + */
