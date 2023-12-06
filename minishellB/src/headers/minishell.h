@@ -6,7 +6,7 @@
 /*   By: armeyer <armeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/05 14:05:19 by armeyer          ###   ########.fr       */
+/*   Updated: 2023/12/06 15:09:20 by armeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 // readline --> read a line from the terminal and return it , using prompt (char
 		// * prompt<-----
 //
+
 typedef struct s_mshell
 {
 	char			*commande;
@@ -105,6 +106,10 @@ void				print_export_list(t_exp *export);
 void 				ft_swap(t_exp *a, t_exp *b);
 void				export_env_sort(t_exp *exp_env);
 void    			ft_exit(t_cmd   *to_pars);
-int					error_manager(t_cmd *to_parse);
+int					error_manager(char *str);
 int					ft_error_case_1(char c);
+int					ft_error_blank(char *str);
+int					ft_error_shift_operator(char *str);
+int					ft_error_directory(char *str);
+int					ft_error_pipe(char *str);
 #endif

@@ -1,45 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_manager.c                                    :+:      :+:    :+:   */
+/*   ft_error_blank.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: armeyer <armeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/04 17:05:20 by armeyer           #+#    #+#             */
-/*   Updated: 2023/12/06 15:08:58 by armeyer          ###   ########.fr       */
+/*   Created: 2023/12/06 13:50:12 by armeyer           #+#    #+#             */
+/*   Updated: 2023/12/06 13:56:36 by armeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-int	is_error(char *str)
+int	ft_error_blank(char *str)
 {
-	int			len;
 	extern int	g_exit_status;
+	int			i;
 
-	len = ft_strlen(str);
-	if (len == 1)
+	i = 0;
+	while (str[i] == ' ' || str[i] == '\t')
+		i++;
+	if (str[i] == '\0')
 	{
-		if (ft_error_case_1(str[0]))
-			return (1);
+		g_exit_status = 0;
+		return (1);
 	}
-	if (ft_error_blank(str))
-		return (1);
-	if (ft_error_shift_operator(str))
-		return (1);
-	if (ft_error_directory(str))
-		return (1);
-	if (ft_error_pipe(str))
-		return (1);
 	return (0);
 }
-
-
-int	error_manager(char *str)
-{
-	if (is_error(str))
-		return (1);
-	return (0);
-}
-
-

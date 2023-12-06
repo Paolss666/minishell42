@@ -6,7 +6,7 @@
 #    By: armeyer <armeyer@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/09 13:55:48 by npaolett          #+#    #+#              #
-#    Updated: 2023/12/05 14:05:49 by armeyer          ###   ########.fr        #
+#    Updated: 2023/12/06 15:09:55 by armeyer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,11 @@ SRC =	src/build/ft_pwd.c\
 		src/build/ft_unset.c \
 		src/parsing/parsing_commandes.c \
 		src/error_manager/error_manager.c \
-		src/error_manager/ft_error_case_1.c
+		src/error_manager/ft_error_case_1.c \
+		src/error_manager/ft_error_blank.c   \
+		src/error_manager/ft_error_shift_operator.c\
+		src/error_manager/ft_error_directory.c \
+		src/error_manager/ft_error_pipe.c
 
 OBJ = $(SRC:.c=.o)
 # OBJ_BONUS = $(SRC_BONUS:.c=.o)

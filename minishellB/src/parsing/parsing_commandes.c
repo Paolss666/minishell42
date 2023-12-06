@@ -6,7 +6,7 @@
 /*   By: armeyer <armeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/04 17:28:23 by armeyer          ###   ########.fr       */
+/*   Updated: 2023/12/06 13:45:55 by armeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,8 @@ void free_list_to_pars(t_cmd *to_pars)
 //in modo tale da suddividere tutte le commande.
 // --> applicare l'albero di sintaxxxx -->>> non so come <<--------
 
+int	g_exit_status;
+
 int	main(int ac, char **av, char **env)
 {
 	t_mshell	*minishell;
@@ -267,10 +269,6 @@ int	main(int ac, char **av, char **env)
 		printf("found unset --> %d\n", found_unset(to_pars));
 		printf("found exit --> %d\n", found_exit(to_pars));
 		printf("<<<<< ---------printf list BUILDING --------------- >>\n");
-		if (!error_manager(to_pars))
-		{
-			ft_printf("syntax error detected \n");
-		}
 		if (!enviroment)
 			enviroment= found_and_add_env(env, enviroment);
 		if (!export)
@@ -296,5 +294,6 @@ int	main(int ac, char **av, char **env)
 			ft_echo(to_pars); */
 		to_pars = free_cmds_list(to_pars);
 		 //<<-------
+		error_manager(line);
 	}
 }
