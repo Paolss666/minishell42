@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/05 15:55:16 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/06 14:12:12 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,7 +272,7 @@ int	main(int ac, char **av, char **env)
 			unset_delete_variable(to_pars, &enviroment, &export);
 		if (found_exit(to_pars))
 			ft_exit(to_pars);
-		if (ft_cd(to_pars)  == 1)
+		if (ft_cd(to_pars))
 			found_cd_pwd_update(to_pars, enviroment, export);
 /* 		if (found_echo(to_pars) == 1)
 			ft_echo(to_pars);
