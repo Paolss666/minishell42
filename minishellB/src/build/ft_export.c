@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/06 15:28:01 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/07 12:25:15 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,17 +84,19 @@ t_exp	*add_env_with_export(t_envp *enviroment)
 		egual_position = ft_strchr(enviroment->path, '=');
 		name = ft_substr(enviroment->path, 0, egual_position - enviroment->path);
 		value = ft_strdup(egual_position + 1);
+		if (!name || !value)
+			return (ft_putstr_fd("FAIL mft_sustr ft_strdup", 2), free(name), free(value), NULL);
 		// BUILDIN NOUVEAU PARCOURS EXP
-		new_export->path = ft_strjoin("export ", name);
-		new_export->path = ft_strjoin(new_export->path, "=\"");
-		new_export->path = ft_strjoin(new_export->path, value);
-		new_export->path = ft_strjoin(new_export->path, "\"");
+		new_export->path = ft_strjoin("export ", name);/* SECURISE */
+		new_export->path = ft_strjoin(new_export->path, "=\"");/* SECURISE */
+		new_export->path = ft_strjoin(new_export->path, value); /* SECURISE */
+		new_export->path = ft_strjoin(new_export->path, "\""); /* SECURISE */
 		new_export->name = NULL;  /* ft_strdup(enviroment->name); */
 		new_export->value = ft_strdup(ft_strchr(new_export->path, '='));
 		if (!new_export->path)
 			return (perror("ERROR: strdup"), exit(EXIT_FAILURE), NULL);
 		new_export->next = NULL;
-		if (export_list == NULL)
+		if (export_list == NULL) 
 		{
 			export_list = new_export;
 			current_export = export_list;
@@ -118,7 +120,7 @@ void	print_export_list(t_exp *export)
 	}
 }
 
-int		check_line_is_alpha(char *line)
+/* int		check_line_is_alpha(char *line)
 {
 	int	i;
 
@@ -133,7 +135,7 @@ int		check_line_is_alpha(char *line)
 			return (0);
 	}
 	return(1);
-}
+} */
 
 t_envp	*add_node_to_end(t_envp **list, const char *name, const char *value)
 {
@@ -194,8 +196,10 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	new_upgrade_exp = *export;
 	modif_variable = NULL;
 	line = to_pars->next->cmd;
-	if (!check_line_is_alpha(line))
-		return (perror("error il fuat le set"));
+/* 	if (!ft_isalpha(line[1]) || !(line[1] == '$') || !(line[1] == '_'))
+		return (ft_putstr_fd("export : ", 2), ft_putstr_fd(line, 2), ft_putstr_fd(" identifiant non vaiable\n", 2)); */
+/* 	if (!check_line_is_alpha(line))
+		return (perror("error il fuat le set")); */
 	found_equal = ft_strchr(line, '=');
 	check_equal_list = *export;
 	found_plus = ft_strchr(line, '+'); /* CA PRT SI ON TROUVE UN + */
@@ -208,6 +212,8 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	{
 		len = found_equal - line;
 		name_v = ft_substr(line, 0, len);
+		if (!name_v)
+			return (perror("FAIL substr"), (void)0);
 		if (modif_variable) // skip + et name_v parfait; 
 		{
 			len = ft_strlen(line) - ft_strlen(modif_variable) - 2;
@@ -228,9 +234,13 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 			new_upgrade_exp = new_upgrade_exp->next;
 		if (current && new_upgrade_exp) /* SI O A OUVE LA NOM VARIABLE ET EST DANS LES DEUX LIST */
 		{
-			current->path = ft_strjoin(name_v, ft_strjoin("=", value));
+			current->path = ft_strjoin(name_v, ft_strjoin("=", value)); /* SECURISE */
 			if (modif_variable)
+			{
 				current->path = ft_strjoin(current->path, modif_variable);
+				if (!current->path)
+					return (ft_putstr_fd("current->path join FAIL\n", 2), (void)0);
+			}
 			free(new_upgrade_exp->path);
 			if (modif_variable)
 				value = ft_strjoin(value, modif_variable);
@@ -243,7 +253,7 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 			current = add_node_to_end(enviroment, name_v, value);
 			free(new_upgrade_exp->path);
 			new_upgrade_exp->path = ft_strjoin(good_path, (ft_strjoin("=\"",
-							ft_strjoin(value, "\""))));
+							ft_strjoin(value, "\"")))); /* SECURISE */
 			free(value);
 			free(name_v);
 		}
@@ -253,7 +263,7 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 			if (!new_variable)
 				return (perror("Memory allocation FAIL"), free(name_v),
 					free(value), (void)0);
-			new_variable->path = ft_strjoin(name_v, ft_strjoin("=", value));
+			new_variable->path = ft_strjoin(name_v, ft_strjoin("=", value)); /* SECURISE */
 			new_variable->value = value;
 			new_variable->name = name_v;
 			new_variable->next = NULL;
@@ -272,7 +282,7 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 					free(value), (void)0);
 			good_path = ft_strjoin(name_v, "=\"");
 			new_export->value = value;
-			new_export->path = ft_strjoin("export ", ft_strjoin(good_path, ft_strjoin(value, "\"")));
+			new_export->path = ft_strjoin("export ", ft_strjoin(good_path, ft_strjoin(value, "\""))); /* SECURISE */
 			new_export->name = name_v;
 			new_export->next = NULL;
 			new_current = *export;

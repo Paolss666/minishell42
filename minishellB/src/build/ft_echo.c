@@ -6,7 +6,7 @@
 /*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:37 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/05 19:17:48 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/07 10:09:05 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	found_echo(t_cmd *to_pars)
 		if (ft_strncmp(to_pars->cmd, "echo -", ft_strlen("echo -")) == 0 && !to_pars->next)
 		{
 			splits = ft_split(to_pars->cmd, ' ');
+			if (!splits)
+				return(ft_free_tab(splits), 0);
 			printf("%s\n", splits[1]);
 			return (0);
 		}
@@ -140,7 +142,7 @@ void	found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 	{	
 		while (commande[++i])
 		{
-			if (commande[0] == '$' && valid_variable_char(commande[i]))
+			if (commande[0] == '$' && valid_variable_char(commande[i])) /* commande de echo $? */
 			{
 				start = i;
 				while (valid_variable_char(commande[i]))
@@ -179,7 +181,7 @@ void	found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 				var_value = find_variable_value(var_name, enviroment);
 				found = found_chr_forjoin(to_pars);
 				if (var_value && found)
-					return (printf("%s", ft_strjoin(var_value, found)), (void)0);
+					return (printf("%s", /* securise */ft_strjoin(var_value, found)), (void)0);
 				if (!var_value && found)
 					return (printf("%s", found), (void)0);
 				if (!var_value && !found)

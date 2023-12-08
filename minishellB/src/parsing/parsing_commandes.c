@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_commandes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/06 14:12:12 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/07 10:34:41 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,19 +124,18 @@ void	join_found_flag(t_cmd **to_pars)
 		next = current->next;
 		while (next != NULL && next->cmd != NULL && next->cmd[0] == '-')
 		{
-			// Concatena la stringa corrente con quella successiva
 			temp_cmd = ft_strjoin(current->cmd, ft_strjoin(" ", next->cmd));
-			// Aggiorna la stringa nella struttura corrente
+			if (!temp_cmd)
+				return (ft_putstr_fd("FAIL trjoin\n", 2), (void)0);
 			free(current->cmd);
 			current->cmd = ft_strdup(temp_cmd);
+			if (!current->cmd)
+				return (ft_putstr_fd("FAIL ft_strdup\n", 2), (void)0);
 			free(temp_cmd);
-			// Rimuove il nodo successivo dalla lista
 			current->next = next->next;
 			free_cmd_list(next);
-			// Resetta il puntatore al nodo successivo
 			next = current->next;
 		}
-		// Passa al prossimo nodo nella lista
 		current = current->next;
 	}
 }
@@ -274,10 +273,6 @@ int	main(int ac, char **av, char **env)
 			ft_exit(to_pars);
 		if (ft_cd(to_pars))
 			found_cd_pwd_update(to_pars, enviroment, export);
-/* 		if (found_echo(to_pars) == 1)
-			ft_echo(to_pars);
-		if (found_echo(to_pars) == 2)
-			ft_echo(to_pars); */
 		to_pars = free_cmds_list(to_pars);
 		 //<<-------
 	}

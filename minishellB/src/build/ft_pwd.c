@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:29:14 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/05 10:50:51 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/07 10:16:31 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 // PWD NE PRENDES PAS DES ARGUMETNS ---//
 // EX; 	PWD ASDASDAS	-----> MEGGAGE D'ERREUR => pwd: too many arguments
 // il doit avoir que pwd dans les argv;
+
 int	ft_pwd(t_cmd *to_pars)
 {
 	char	*get_pwd;

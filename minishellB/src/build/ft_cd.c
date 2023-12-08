@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/06 15:21:19 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/07 10:21:16 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ t_cd	*cpy_cd_list(char **splits, t_cd *commande_cd)
 
 void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 {
-	char	*current_path_name;
+/* 	char	*current_path_name; */
 	char	*pwd;
 	char	*home;
 	char	*old_pwd;
@@ -138,7 +138,7 @@ void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 	pwd = NULL;
 	line  = NULL;
 	old_pwd = NULL;
-	current_path_name = NULL;
+/* 	current_path_name = NULL; */
 	pwd = getcwd(NULL, 0);
 	home = found_variable_env(enviroment, "HOME");
 	old_pwd = found_variable_env(enviroment, "OLDPWD");
@@ -154,7 +154,7 @@ void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 			change_env_export_old_pwd(enviroment, export, pwd);
 		}
 		else
-			perror("fail chdir");
+			ft_putstr_fd("FAIL chdir home path not found\n", 2);
 	}
 	if (ft_cd(to_pars) && to_pars->next && !to_pars->next->next)
 	{
@@ -177,6 +177,8 @@ void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 			pwd = getcwd(NULL, 0);
 			change_env_export_pwd(enviroment, export, pwd);
 			line = ft_substr(pwd, ft_strlen(home), ft_strlen(pwd));
+			if (!line)
+				return(perror("FAIL ft_substr cd"), (void)0);
 			line = ft_strjoin("~", line);
 			if (!line)
 				return (perror("FAIL JOIN line"), (void)0);
