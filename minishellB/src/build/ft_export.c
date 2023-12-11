@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/07 12:25:15 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/11 14:06:40 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,144 +195,151 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	new_export = NULL;
 	new_upgrade_exp = *export;
 	modif_variable = NULL;
-	line = to_pars->next->cmd;
-/* 	if (!ft_isalpha(line[1]) || !(line[1] == '$') || !(line[1] == '_'))
-		return (ft_putstr_fd("export : ", 2), ft_putstr_fd(line, 2), ft_putstr_fd(" identifiant non vaiable\n", 2)); */
-/* 	if (!check_line_is_alpha(line))
-		return (perror("error il fuat le set")); */
-	found_equal = ft_strchr(line, '=');
-	check_equal_list = *export;
-	found_plus = ft_strchr(line, '+'); /* CA PRT SI ON TROUVE UN + */
-	if (found_plus)
-		modif_variable = ft_substr(found_plus, 2, ft_strlen(found_plus));
-	// printf("found_plus --> %s\n", found_plus);
-	// printf("modif_variable --> %s\n", modif_variable);
-	// printf("found_equal --> %s\n", found_equal);
-	if ((line && found_equal)) // SI IN TROUVE UN EGALE ET LINE NEXT->CMD 
+	while(to_pars->next)
 	{
-		len = found_equal - line;
-		name_v = ft_substr(line, 0, len);
-		if (!name_v)
-			return (perror("FAIL substr"), (void)0);
-		if (modif_variable) // skip + et name_v parfait; 
+		if	(!valid_variable_char(to_pars->next->cmd[0]))
 		{
-			len = ft_strlen(line) - ft_strlen(modif_variable) - 2;
+			ft_putstr_fd("export : ", 2);
+			ft_putstr_fd(to_pars->next->cmd, 2);
+			ft_putstr_fd(" identifiant non vaiable\n", 2);
+			if (!to_pars->next->next)
+				return ((void)0);
+			line = to_pars->next->next->cmd;
+		}
+		else
+			line = to_pars->next->cmd;
+		found_equal = ft_strchr(line, '=');
+		check_equal_list = *export;
+		found_plus = ft_strchr(line, '+'); /* CA PRT SI ON TROUVE UN + */
+		if (found_plus)
+			modif_variable = ft_substr(found_plus, 2, ft_strlen(found_plus));
+		if ((line && found_equal)) // SI IN TROUVE UN EGALE ET LINE NEXT->CMD 
+		{
+			len = found_equal - line;
 			name_v = ft_substr(line, 0, len);
-		}
-		// printf("name_v --> %s\n", name_v);
-		value = ft_strdup(found_equal + 1);
-		if (!name_v || !value)
-			return (perror("Memory allocation FAIL"), free(name_v), free(value),
-				(void)0);
-		current = *enviroment;
-		good_path = ft_strjoin("export ", name_v);
-		while (current != NULL && ft_strncmp(current->path, name_v,
-				ft_strlen(name_v)) != 0) /*  */
-			current = current->next;
-		while (new_upgrade_exp != NULL && ft_strncmp(new_upgrade_exp->path,
-				good_path, ft_strlen(good_path)) != 0) /*  */
-			new_upgrade_exp = new_upgrade_exp->next;
-		if (current && new_upgrade_exp) /* SI O A OUVE LA NOM VARIABLE ET EST DANS LES DEUX LIST */
-		{
-			current->path = ft_strjoin(name_v, ft_strjoin("=", value)); /* SECURISE */
-			if (modif_variable)
+			if (!name_v)
+				return (perror("FAIL substr"), (void)0);
+			if (modif_variable) // skip + et name_v parfait; 
 			{
-				current->path = ft_strjoin(current->path, modif_variable);
-				if (!current->path)
-					return (ft_putstr_fd("current->path join FAIL\n", 2), (void)0);
+				len = ft_strlen(line) - ft_strlen(modif_variable) - 2;
+				name_v = ft_substr(line, 0, len);
 			}
-			free(new_upgrade_exp->path);
-			if (modif_variable)
-				value = ft_strjoin(value, modif_variable);
-			new_upgrade_exp->path = ft_strjoin(good_path, (ft_strjoin("=\"",ft_strjoin(value, "\""))));
-			free(value);
-			free(name_v);
-		}
-		else if (!current && new_upgrade_exp ) /* SI ON A TROUVE LA NOM VARIABLE ET EST QUE DANS export */
-		{
-			current = add_node_to_end(enviroment, name_v, value);
-			free(new_upgrade_exp->path);
-			new_upgrade_exp->path = ft_strjoin(good_path, (ft_strjoin("=\"",
-							ft_strjoin(value, "\"")))); /* SECURISE */
-			free(value);
-			free(name_v);
-		}
-		else 
-		{
-			new_variable = (t_envp *)malloc(sizeof(t_envp));
-			if (!new_variable)
-				return (perror("Memory allocation FAIL"), free(name_v),
-					free(value), (void)0);
-			new_variable->path = ft_strjoin(name_v, ft_strjoin("=", value)); /* SECURISE */
-			new_variable->value = value;
-			new_variable->name = name_v;
-			new_variable->next = NULL;
-			if (*enviroment == NULL)
-				*enviroment = new_variable;
-			else
+			// printf("name_v --> %s\n", name_v);
+			value = ft_strdup(found_equal + 1);
+			if (!name_v || !value)
+				return (perror("Memory allocation FAIL"), free(name_v), free(value),
+					(void)0);
+			current = *enviroment;
+			good_path = ft_strjoin("export ", name_v);
+			while (current != NULL && ft_strncmp(current->path, name_v,
+					ft_strlen(name_v)) != 0) /*  */
+				current = current->next;
+			while (new_upgrade_exp != NULL && ft_strncmp(new_upgrade_exp->path,
+					good_path, ft_strlen(good_path)) != 0) /*  */
+				new_upgrade_exp = new_upgrade_exp->next;
+			if (current && new_upgrade_exp) /* SI O A TrOUVE LA NOM VARIABLE ET EST DANS LES DEUX LIST */
 			{
-				last = *enviroment;
-				while (last->next != NULL)
-					last = last->next;
-				last->next = new_variable;
+				current->path = ft_strjoin(name_v, ft_strjoin("=", value)); /* SECURISE */
+				if (modif_variable)
+				{
+					current->path = ft_strjoin(current->path, modif_variable);
+					if (!current->path)
+						return (ft_putstr_fd("current->path join FAIL\n", 2), (void)0);
+				}
+				free(new_upgrade_exp->path);
+				if (modif_variable)
+					value = ft_strjoin(value, modif_variable);
+				new_upgrade_exp->path = ft_strjoin(good_path, (ft_strjoin("=\"",ft_strjoin(value, "\""))));
+				free(value);
+				free(name_v);
 			}
+			else if (!current && new_upgrade_exp ) /* SI ON A TROUVE LA NOM VARIABLE ET EST QUE DANS export */
+			{
+				current = add_node_to_end(enviroment, name_v, value);
+				free(new_upgrade_exp->path);
+				new_upgrade_exp->path = ft_strjoin(good_path, (ft_strjoin("=\"",
+								ft_strjoin(value, "\"")))); /* SECURISE */
+				free(value);
+				free(name_v);
+			}
+			else 
+			{
+				new_variable = (t_envp *)malloc(sizeof(t_envp));
+				if (!new_variable)
+					return (perror("Memory allocation FAIL"), free(name_v),
+						free(value), (void)0);
+				new_variable->path = ft_strjoin(name_v, ft_strjoin("=", value)); /* SECURISE */
+				new_variable->value = value;
+				new_variable->name = name_v;
+				new_variable->next = NULL;
+				if (*enviroment == NULL)
+					*enviroment = new_variable;
+				else
+				{
+					last = *enviroment;
+					while (last->next != NULL)
+						last = last->next;
+					last->next = new_variable;
+				}
+				new_export = (t_exp *)malloc(sizeof(t_exp));
+				if (!new_export)
+					return (perror("Memory allocation FAIL"), free(name_v),
+						free(value), (void)0);
+				good_path = ft_strjoin(name_v, "=\"");
+				new_export->value = value;
+				new_export->path = ft_strjoin("export ", ft_strjoin(good_path, ft_strjoin(value, "\""))); /* SECURISE */
+				new_export->name = name_v;
+				new_export->next = NULL;
+				new_current = *export;
+				free(good_path);
+				if (!new_current)
+					new_current = new_export;
+				else
+				{
+					last_exp = new_current;
+					while (last_exp->next != NULL)
+						last_exp = last_exp->next;
+					last_exp->next = new_export;
+				}
+			}
+		}
+		else /* AJOUT QUE DANS EXPORT ET CHECK CASES -PRT */
+		{
+			name_v = ft_strdup(line);
+			check_equal = ft_strjoin("export ", ft_strjoin(name_v, "=\""));
+			check_name_v = ft_strjoin("export ", name_v);
+			while (check_equal_list)
+			{
+				if (ft_strncmp(check_equal_list->path, check_equal,
+						ft_strlen(check_equal)) == 0)
+					return (free(check_equal), (void)0);
+				if (ft_strncmp(check_equal_list->path, check_name_v,
+						ft_strlen(check_name_v)) == 0)
+					return (free(check_name_v), (void)0);
+				check_equal_list = check_equal_list->next;
+			}
+			if (!found_equal)
+				found_equal = ft_strdup("");
+			value = found_equal;
+			if (!name_v)
+				return (perror("Memory allocation FAIL name_v exp"), free(name_v));
 			new_export = (t_exp *)malloc(sizeof(t_exp));
 			if (!new_export)
-				return (perror("Memory allocation FAIL"), free(name_v),
-					free(value), (void)0);
-			good_path = ft_strjoin(name_v, "=\"");
-			new_export->value = value;
-			new_export->path = ft_strjoin("export ", ft_strjoin(good_path, ft_strjoin(value, "\""))); /* SECURISE */
-			new_export->name = name_v;
+				return (perror("Memory allocation FAIL"), free(name_v));
+			new_export->path = ft_strjoin("export ", ft_strjoin(name_v, value));
+			new_export->name = ft_strdup(name_v); /* SECURISE */
+			new_export->value = ft_strdup(value);/* SECURISE */
 			new_export->next = NULL;
-			new_current = *export;
-			free(good_path);
-			if (!new_current)
-				new_current = new_export;
+			if (*export == NULL)
+				*export = new_export;
 			else
 			{
-				last_exp = new_current;
+				last_exp = *export;
 				while (last_exp->next != NULL)
 					last_exp = last_exp->next;
 				last_exp->next = new_export;
 			}
-		}
-	}
-	else /* AJOUT QUE DANS EXPORT ET CHECK CASES -PRT */
-	{
-		name_v = ft_strdup(line);
-		check_equal = ft_strjoin("export ", ft_strjoin(name_v, "=\""));
-		check_name_v = ft_strjoin("export ", name_v);
-		while (check_equal_list)
-		{
-			if (ft_strncmp(check_equal_list->path, check_equal,
-					ft_strlen(check_equal)) == 0)
-				return (free(check_equal), (void)0);
-			if (ft_strncmp(check_equal_list->path, check_name_v,
-					ft_strlen(check_name_v)) == 0)
-				return (free(check_name_v), (void)0);
-			check_equal_list = check_equal_list->next;
-		}
-		if (!found_equal)
-			found_equal = ft_strdup("");
-		value = found_equal;
-		if (!name_v)
-			return (perror("Memory allocation FAIL name_v exp"), free(name_v));
-		new_export = (t_exp *)malloc(sizeof(t_exp));
-		if (!new_export)
-			return (perror("Memory allocation FAIL"), free(name_v));
-		new_export->path = ft_strjoin("export ", ft_strjoin(name_v, value));
-		new_export->name = ft_strdup(name_v); /* SECURISE */
-		new_export->value = ft_strdup(value);/* SECURISE */
-		new_export->next = NULL;
-		if (*export == NULL)
-			*export = new_export;
-		else
-		{
-			last_exp = *export;
-			while (last_exp->next != NULL)
-				last_exp = last_exp->next;
-			last_exp->next = new_export;
-		}
+		}	
+		to_pars = to_pars->next;
 	}
 }

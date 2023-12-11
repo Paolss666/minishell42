@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:52:57 by npoalett          #+#    #+#             */
-/*   Updated: 2023/12/07 12:30:17 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/11 12:20:30 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ void	unset_delete_variable(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	prev = NULL;
 	current = *enviroment;
 	current_exp = *export;
-/* 	while(current->next)
-	{ */
-	    if (!to_pars->next)
-	        return(ft_putstr_fd("unset need arguments\n", 2), (void)0);
-	    else
-		    next = to_pars->next;
+	if (!to_pars->next)
+	    return(ft_putstr_fd("unset need arguments\n", 2), (void)0);
+	else
+	    next = to_pars->next;
+	while(next)
+	{
 		while (current != NULL && (ft_strncmp(next->cmd, current->path,
 					ft_strlen(next->cmd)) != 0))
 		{
@@ -76,6 +76,6 @@ void	unset_delete_variable(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 			free(current->value);
 			free(current);
 		}
-/* 		current = current->next;
-	} */
+		next = next->next;
+	}
 }

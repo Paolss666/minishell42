@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_commandes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/07 10:34:41 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/11 16:51:35 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,15 @@ char	*display_prompt(void)
 	return (line);
 }
 
-void	init_struct(t_mshell *minishell)
-{
-	minishell = malloc(sizeof(t_mshell));
-	if (!minishell)
-		return ;
-	minishell->commande = NULL;
-	minishell->envp = NULL;
-	// minishell->pid = 0;
-}
+// void	init_struct(t_mshell *minishell)
+// {
+// 	minishell = malloc(sizeof(t_mshell));
+// 	if (!minishell)
+// 		return ;
+// 	minishell->commande = NULL;
+// 	minishell->envp = NULL;
+// 	// minishell->pid = 0;
+// }
 
 void	commande_split_toParse(char **commande_split, char *line)
 {
@@ -217,7 +217,7 @@ void free_list_to_pars(t_cmd *to_pars)
 
 int	main(int ac, char **av, char **env)
 {
-	t_mshell	*minishell;
+	// t_mshell	*minishell;
 	t_exp		*export;
 	char		*line;
 	t_cmd		*to_pars;
@@ -227,12 +227,12 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	to_pars = NULL;
 	commande_split = NULL;
-	minishell = NULL;
+	// minishell = NULL;
 	enviroment = NULL;
 	export = NULL;
 	if (ac != 1)
 		return (ft_putstr_fd("Don't need arguments\n", 2), 1);
-	init_struct(minishell);
+	// init_struct(minishell);
 	while (1)
 	{
 		line = display_prompt();
@@ -246,7 +246,8 @@ int	main(int ac, char **av, char **env)
 		join_found_flag(&to_pars);
 		printf("<<<<< ---------printf list avec flag --------------- >>\n");
 		print_list(to_pars);
-		printf("found pipe --> %d\n", found_pipe(to_pars));
+		// printf("found pipe --> %d\n", found_pipe(to_pars));
+		// printf("count to_pars --> %d\n", to_pars->count);
 		printf("found echo --> %d\n", found_echo(to_pars));
 		printf("found cd --> %d\n", ft_cd(to_pars));
 		printf("found export --> %d\n", found_export(to_pars));

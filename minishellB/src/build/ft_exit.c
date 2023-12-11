@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 16:36:54 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/05 16:10:23 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/11 14:07:55 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	found_exit(t_cmd *to_pars)
 	return (0);
 }
 
-void    ft_exit(t_cmd   *to_pars/* , t_envp *enviroment */)
+void    ft_exit(t_cmd   *to_pars)
 {
     if (!to_pars->next)
     {

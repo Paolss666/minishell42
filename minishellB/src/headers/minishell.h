@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/05 16:10:21 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/11 16:12:44 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,35 @@
 # define RESET_COLOR "\001\033[0m\002"
 # define COLOR_VIOLET "\001\033[0;35m\002"
 # define COLOR_RED "\001\033[1;31m\002"
-
+# define STDIN 0
+# define STDOUT 1
+# define INFILE 0
+# define OUTFILE 1
 
 // readline --> read a line from the terminal and return it , using prompt (char
 		// * prompt<-----
 //
-typedef struct s_mshell
+
+typedef struct s_pipex
 {
-	char			*commande;
-	char			**envp;
-	char			*fd_infile;
-	char			*fd_outfile;
-	int				fd[2];
-	pid_t			pid[1024];
-}					t_mshell;
+	char	**envp;
+	char	**cmd;
+	char	*fd_infile;
+	char	*fd_outfile;
+	int		fd[2];
+	int		prev;
+	int		nmbr_mcd;
+	pid_t	pid[1024];
+	int		here_doc;
+}			t_pipex;
+
 
 // ------ commande -- //
 
 typedef struct s_cmd
 {
 	char			*cmd;
+	int				count;
 	struct s_cmd	*next;
 }					t_cmd;
 
@@ -103,6 +112,7 @@ int					found_exit(t_cmd *to_pars);
 int					found_echo(t_cmd *to_pars);
 int					ft_envp(t_cmd *to_pars);
 int					found_pipe(t_cmd *cmd);
+int					valid_variable_char(char c);
 t_envp				*found_and_add_env(char **env, t_envp *enviroment);
 void				found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export);
 /* void				add_export_env(t_cmd *to_pars, t_envp **enviroment); */
