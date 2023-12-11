@@ -6,7 +6,7 @@
 /*   By: armeyer <armeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:53:13 by armeyer           #+#    #+#             */
-/*   Updated: 2023/12/11 16:16:30 by armeyer          ###   ########.fr       */
+/*   Updated: 2023/12/11 17:10:35 by armeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,17 @@ int	ft_error_operand(char *str)
 		g_exit_status = 2;
 		return (1);
 	}
+	while (str[index] != '\0')
+	{
+		if (str[index] == '&')
+			if(str[index + 1] && str[index + 1] == '&')
+				if(str[index + 2] && str[index + 2] == '&')
+				{
+					ft_printf("\nbash syntax error near unexpected token '&&'\n");
+				}
+		index++;
+	}
+	index = 0;
 	while (str[index] != '\0')
 	{
 		if (str[index] == '&' && str[index + 1] && str[index + 1] != '&' && str[index - 1] != '&')
