@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:37 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/11 12:31:21 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/11 18:11:55 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ void found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 	int		len;
 	char 	*found;
 	t_cmd 	*arg_cmd;
+	
 
 	i = 0;
 	start = 0;
@@ -142,6 +143,11 @@ void found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 		if (current_cmd->cmd && ft_strcmp(current_cmd->cmd, "echo") == 0)
 		{
 			arg_cmd = current_cmd->next; // Puntatore al primo argomento
+			if (ft_strcmp(arg_cmd->cmd, "$?") == 0)
+			{	
+				printf("%d\n", g_exit_status);
+				return ;
+			}
 			while (arg_cmd)
 			{
 				start = 0;
@@ -205,6 +211,6 @@ void found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 			}
 		}
 		current_cmd = current_cmd->next; // Passa al comando successivo
-    }
+	}
 }
 

@@ -6,12 +6,15 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/11 17:44:14 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/11 18:09:09 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../headers/minishell.h"
+
+int	g_exit_status = 0;
+
 
 char	*display_prompt(void)
 {
@@ -216,7 +219,9 @@ void free_list_to_pars(t_cmd *to_pars)
 //in modo tale da suddividere tutte le commande.
 // --> applicare l'albero di sintaxxxx -->>> non so come <<--------
 
-int	g_exit_status;
+
+/// VARIABLE GLOBALE //// 
+// --->>>> IL FAUL EMPLEMENTER LA COMMANDE ECHO $? AVEC LE STATUS D'ERROR RENVOYE DEPUIS LA VARIABLE GLOBALE
 
 int	main(int ac, char **av, char **env)
 {

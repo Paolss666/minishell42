@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/11 17:42:44 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/11 18:10:53 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 # define STDOUT 1
 # define INFILE 0
 # define OUTFILE 1
+extern int	g_exit_status;
 
 // readline --> read a line from the terminal and return it , using prompt (char
 		// * prompt<-----

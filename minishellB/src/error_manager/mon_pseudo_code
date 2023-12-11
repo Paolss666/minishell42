@@ -1,3 +1,0 @@
-clean str (sup isspace)
-search problematic symbol (operator, parenthesis, "", '')
-return issue
