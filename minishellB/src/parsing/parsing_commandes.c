@@ -6,7 +6,7 @@
 /*   By: armeyer <armeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/06 13:45:55 by armeyer          ###   ########.fr       */
+/*   Updated: 2023/12/11 14:21:38 by armeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,18 +257,19 @@ int	main(int ac, char **av, char **env)
 		if (!to_pars)
 			line = display_prompt();
 		join_found_flag(&to_pars);
-		printf("<<<<< ---------printf list NON JOIN flag --------------- >>\n");
+//		printf("<<<<< ---------printf list NON JOIN flag --------------- >>\n");
 		print_list(to_pars);
 		join_found_flag(&to_pars);
-		printf("<<<<< ---------printf list avec flag --------------- >>\n");
+//		printf("<<<<< ---------printf list avec flag --------------- >>\n");
 		print_list(to_pars);
-		printf("found pipe --> %d\n", found_pipe(to_pars));
-		printf("found echo --> %d\n", found_echo(to_pars));
-		printf("found cd --> %d\n", ft_cd(to_pars));
-		printf("found export --> %d\n", found_export(to_pars));
-		printf("found unset --> %d\n", found_unset(to_pars));
-		printf("found exit --> %d\n", found_exit(to_pars));
-		printf("<<<<< ---------printf list BUILDING --------------- >>\n");
+		to_pars = free_cmds_list(to_pars);
+//		printf("found pipe --> %d\n", found_pipe(to_pars));
+//		printf("found echo --> %d\n", found_echo(to_pars));
+//		printf("found cd --> %d\n", ft_cd(to_pars));
+//		printf("found export --> %d\n", found_export(to_pars));
+//		printf("found unset --> %d\n", found_unset(to_pars));
+//		printf("found exit --> %d\n", found_exit(to_pars));
+//		printf("<<<<< ---------printf list BUILDING --------------- >>\n");
 		if (!enviroment)
 			enviroment= found_and_add_env(env, enviroment);
 		if (!export)
@@ -278,8 +279,8 @@ int	main(int ac, char **av, char **env)
 			print_list_envp(enviroment);
 		if (ft_pwd(to_pars) == 1)
 			print_pwd(enviroment);
-		if (!to_pars->next && found_export(to_pars))
-			print_export_list(export);
+//bug		if (!to_pars->next && found_export(to_pars))
+//bug			print_export_list(export);
 		if (found_export(to_pars) && to_pars->next)
 			add_export_env(to_pars, &enviroment, &export);
 		if (found_unset(to_pars))
@@ -292,7 +293,6 @@ int	main(int ac, char **av, char **env)
 			ft_echo(to_pars);
 		if (found_echo(to_pars) == 2)
 			ft_echo(to_pars); */
-		to_pars = free_cmds_list(to_pars);
 		 //<<-------
 		error_manager(line);
 	}

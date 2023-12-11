@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_error_blank.c                                   :+:      :+:    :+:   */
+/*   ft_count_sign.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: armeyer <armeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/06 13:50:12 by armeyer           #+#    #+#             */
-/*   Updated: 2023/12/11 12:37:16 by armeyer          ###   ########.fr       */
+/*   Created: 2023/12/11 16:14:56 by armeyer           #+#    #+#             */
+/*   Updated: 2023/12/11 16:15:17 by armeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-int	ft_error_blank(char *str)
+int	ft_count_sign(char *str, char c)
 {
-	extern int	g_exit_status;
-	int			i;
+	int	i;
+	int	count;
 
 	i = 0;
-	while (str[i] == ' ' || str[i] == '\t')
-		i++;
-	if (str[i] == '\0')
+	count = 0;
+	while (str[i] != '\0')
 	{
-		g_exit_status = 0;
-		return (1);
+		if (str[i] == c)
+			count++;
+		i++;
 	}
-	return (0);
+	return (count);
 }

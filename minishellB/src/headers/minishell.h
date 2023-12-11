@@ -6,7 +6,7 @@
 /*   By: armeyer <armeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/06 15:09:20 by armeyer          ###   ########.fr       */
+/*   Updated: 2023/12/11 16:49:06 by armeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,4 +112,10 @@ int					ft_error_blank(char *str);
 int					ft_error_shift_operator(char *str);
 int					ft_error_directory(char *str);
 int					ft_error_pipe(char *str);
+int					ft_error_operand(char *str);
+char*				epur_str(char *to_epur);
+int					ft_count_sign(char *str, char c);
+int					ft_error_parenthesis(char *str);
+int					ft_error_semicol(char *str);
+
 #endif
