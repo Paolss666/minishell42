@@ -5,10 +5,11 @@
 #                                                     +:+ +:+         +:+      #
 #    By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/11/09 13:55:48 by npaolett          #+#    #+#              #
-#    Updated: 2023/12/11 16:15:11 by npaolett         ###   ########.fr        #
+#    Created: 2023/12/11 16:59:44 by npaolett          #+#    #+#              #
+#    Updated: 2023/12/11 17:07:00 by npaolett         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 NAME = minishell
 
@@ -28,7 +29,13 @@ SRC =	src/build/ft_pwd.c\
 		src/build/ft_export.c  \
 		src/build/ft_unset.c    \
 		src/execve/ft_exceve.c		 \
-		src/parsing/parsing_commandes.c 
+		src/parsing/parsing_commandes.c \
+		src/error_manager/error_manager.c \
+		src/error_manager/ft_error_case_1.c \
+		src/error_manager/ft_error_blank.c   \
+		src/error_manager/ft_error_shift_operator.c\
+		src/error_manager/ft_error_directory.c \
+		src/error_manager/ft_error_pipe.c
 
 OBJ = $(SRC:.c=.o)
 # OBJ_BONUS = $(SRC_BONUS:.c=.o)

@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/11 16:12:44 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/11 17:06:56 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,5 +126,11 @@ void				print_list_envp(t_envp *head);
 void				print_export_list(t_exp *export);
 void 				ft_swap(t_exp *a, t_exp *b);
 void				export_env_sort(t_exp *exp_env);
-void    			ft_exit(t_cmd   *to_pars/* , t_envp *enviroment */);
+void    			ft_exit(t_cmd   *to_pars);
+int					error_manager(char *str);
+int					ft_error_case_1(char c);
+int					ft_error_blank(char *str);
+int					ft_error_shift_operator(char *str);
+int					ft_error_directory(char *str);
+int					ft_error_pipe(char *str);
 #endif

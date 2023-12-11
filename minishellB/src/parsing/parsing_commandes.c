@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/11 16:51:35 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/11 17:08:38 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,6 +215,8 @@ void free_list_to_pars(t_cmd *to_pars)
 //in modo tale da suddividere tutte le commande.
 // --> applicare l'albero di sintaxxxx -->>> non so come <<--------
 
+int	g_exit_status;
+
 int	main(int ac, char **av, char **env)
 {
 	// t_mshell	*minishell;
@@ -236,6 +238,7 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		line = display_prompt();
+		error_manager(line);
 		commande_split_toParse(commande_split, line);
 		to_pars = add_cmd_list(to_pars, commande_split, line);
 		if (!to_pars)
