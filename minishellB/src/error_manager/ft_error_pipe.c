@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 15:10:10 by armeyer           #+#    #+#             */
-/*   Updated: 2023/12/11 17:09:30 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/11 17:40:31 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,14 @@ int	ft_error_pipe(char *str)
 		}
 		if (count == 0)
 		{
-			ft_printf("\nbash syntax error near unexpected token '|'\n");
+			printf("\nbash syntax error near unexpected token '|'\n");
 			g_exit_status = 2;
 			return (1);
 		}
 		i++;
 		if (str[i] == '\0')
 		{
-			ft_printf("\nbash syntax error near unexpected token '|'\n");
+			printf("\nbash syntax error near unexpected token '|'\n");
 			g_exit_status = 2;
 			return (1);
 		}
@@ -80,7 +80,7 @@ int	ft_error_pipe(char *str)
 		{
 			if (str[i + 1] == '|')
 			{
-				ft_printf("\nbash syntax error near unexpected token '||'\n");
+				printf("\nbash syntax error near unexpected token '||'\n");
 				g_exit_status = 2;
 				return (1);
 			}
@@ -96,7 +96,7 @@ int	ft_error_pipe(char *str)
 			}
 			if (flag == 0)
 			{
-				ft_printf("\nbash syntax error near unexpected token '|'\n");
+				printf("\nbash syntax error near unexpected token '|'\n");
 				g_exit_status = 2;
 				return (1);
 			}
@@ -111,7 +111,7 @@ int	ft_error_pipe(char *str)
 			}
 			if (flag == 0)
 			{
-				ft_printf("\nbash syntax error near unexpected token '|'\n");
+				printf("\nbash syntax error near unexpected token '|'\n");
 				g_exit_status = 2;
 				return (1);
 			}

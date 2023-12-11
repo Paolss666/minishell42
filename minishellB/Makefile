@@ -6,7 +6,7 @@
 #    By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/11 16:59:44 by npaolett          #+#    #+#              #
-#    Updated: 2023/12/11 17:07:00 by npaolett         ###   ########.fr        #
+#    Updated: 2023/12/11 17:37:03 by npaolett         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,12 @@ SRC =	src/build/ft_pwd.c\
 		src/error_manager/ft_error_blank.c   \
 		src/error_manager/ft_error_shift_operator.c\
 		src/error_manager/ft_error_directory.c \
-		src/error_manager/ft_error_pipe.c
+		src/error_manager/ft_error_pipe.c		\
+		src/error_manager/epur_str.c			\
+		src/error_manager/ft_error_operand.c	\
+		src/error_manager/ft_count_sign.c		\
+		src/error_manager/ft_error_parenthesis.c\
+		src/error_manager/ft_error_semicol.c
 
 OBJ = $(SRC:.c=.o)
 # OBJ_BONUS = $(SRC_BONUS:.c=.o)

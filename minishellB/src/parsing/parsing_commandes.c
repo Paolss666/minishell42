@@ -6,9 +6,10 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/11 17:08:38 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/11 17:44:14 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../headers/minishell.h"
 
@@ -238,46 +239,55 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		line = display_prompt();
-		error_manager(line);
-		commande_split_toParse(commande_split, line);
-		to_pars = add_cmd_list(to_pars, commande_split, line);
-		if (!to_pars)
-			line = display_prompt();
-		join_found_flag(&to_pars);
-		printf("<<<<< ---------printf list NON JOIN flag --------------- >>\n");
-		print_list(to_pars);
-		join_found_flag(&to_pars);
-		printf("<<<<< ---------printf list avec flag --------------- >>\n");
-		print_list(to_pars);
-		// printf("found pipe --> %d\n", found_pipe(to_pars));
-		// printf("count to_pars --> %d\n", to_pars->count);
-		printf("found echo --> %d\n", found_echo(to_pars));
-		printf("found cd --> %d\n", ft_cd(to_pars));
-		printf("found export --> %d\n", found_export(to_pars));
-		printf("found unset --> %d\n", found_unset(to_pars));
-		printf("found exit --> %d\n", found_exit(to_pars));
-		printf("<<<<< ---------printf list BUILDING --------------- >>\n");
-		if (!enviroment)
-			enviroment= found_and_add_env(env, enviroment);
-		if (!export)
-			export = add_env_with_export(enviroment);
-		export_env_sort(export);
-		if (found_echo(to_pars))
-			found_dollar_print_variable(to_pars, enviroment);
-		if (ft_envp(to_pars))
-			print_list_envp(enviroment);
-		ft_pwd(to_pars);
-		if (!to_pars->next && found_export(to_pars))
-			print_export_list(export);
-		if (found_export(to_pars) && to_pars->next)
-			add_export_env(to_pars, &enviroment, &export);
-		if (found_unset(to_pars))
-			unset_delete_variable(to_pars, &enviroment, &export);
-		if (found_exit(to_pars))
-			ft_exit(to_pars);
-		if (ft_cd(to_pars))
-			found_cd_pwd_update(to_pars, enviroment, export);
+		if (!error_manager(line))
+		{
+			commande_split_toParse(commande_split, line);
+			to_pars = add_cmd_list(to_pars, commande_split, line);
+			if (!to_pars)
+				line = display_prompt();
+			join_found_flag(&to_pars);
+//			printf("<<<<< ---------printf list NON JOIN flag --------------- >>\n");
+			print_list(to_pars);
+			join_found_flag(&to_pars);
+//			printf("<<<<< ---------printf list avec flag --------------- >>\n");
+			print_list(to_pars);
+			// printf("found pipe --> %d\n", found_pipe(to_pars));
+			// printf("count to_pars --> %d\n", to_pars->count);
+			printf("found echo --> %d\n", found_echo(to_pars));
+			printf("found cd --> %d\n", ft_cd(to_pars));
+			printf("found export --> %d\n", found_export(to_pars));
+			printf("found unset --> %d\n", found_unset(to_pars));
+			printf("found exit --> %d\n", found_exit(to_pars));
+			printf("<<<<< ---------printf list BUILDING --------------- >>\n");
+			if (!enviroment)
+				enviroment= found_and_add_env(env, enviroment);
+			if (!export)
+				export = add_env_with_export(enviroment);
+			export_env_sort(export);
+			if (found_echo(to_pars))
+				found_dollar_print_variable(to_pars, enviroment);
+			if (ft_envp(to_pars))
+				print_list_envp(enviroment);
+			ft_pwd(to_pars);
+			if (!to_pars->next && found_export(to_pars))
+				print_export_list(export);
+			if (found_export(to_pars) && to_pars->next)
+				add_export_env(to_pars, &enviroment, &export);
+			if (found_unset(to_pars))
+				unset_delete_variable(to_pars, &enviroment, &export);
+			if (found_exit(to_pars))
+				ft_exit(to_pars);
+			if (ft_cd(to_pars))
+				found_cd_pwd_update(to_pars, enviroment, export);
+			to_pars = free_cmds_list(to_pars);
+			if (found_echo(to_pars))
+				found_dollar_print_variable(to_pars, enviroment);
+/* 			if (found_echo(to_pars) == 1)
+				ft_echo(to_pars);
+			if (found_echo(to_pars) == 2)
+				ft_echo(to_pars); */
+			 //<<-------
+		}
 		to_pars = free_cmds_list(to_pars);
-		 //<<-------
 	}
 }
