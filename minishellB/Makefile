@@ -6,7 +6,7 @@
 #    By: armeyer <armeyer@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/09 13:55:48 by npaolett          #+#    #+#              #
-#    Updated: 2023/12/11 16:49:43 by armeyer          ###   ########.fr        #
+#    Updated: 2023/12/12 14:09:01 by armeyer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,8 @@ SRC =	src/build/ft_pwd.c\
 		src/error_manager/ft_error_operand.c	\
 		src/error_manager/ft_count_sign.c		\
 		src/error_manager/ft_error_parenthesis.c\
-		src/error_manager/ft_error_semicol.c
+		src/error_manager/ft_error_semicol.c	\
+		src/error_manager/ft_error_stx.c
 
 OBJ = $(SRC:.c=.o)
 # OBJ_BONUS = $(SRC_BONUS:.c=.o)

@@ -6,7 +6,7 @@
 /*   By: armeyer <armeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 17:05:20 by armeyer           #+#    #+#             */
-/*   Updated: 2023/12/11 16:46:53 by armeyer          ###   ########.fr       */
+/*   Updated: 2023/12/12 14:02:39 by armeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	is_error(char *to_epur)
 		if (ft_error_case_1(str[0]))
 			return (1);
 	}
+	if (ft_error_stx(str))
+		return (1);
 	if (ft_error_blank(str))
 		return (1);
 	if (ft_error_shift_operator(str))
