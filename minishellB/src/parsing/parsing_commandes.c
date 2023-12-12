@@ -6,7 +6,7 @@
 /*   By: armeyer <armeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/11 14:21:38 by armeyer          ###   ########.fr       */
+/*   Updated: 2023/12/12 13:56:35 by armeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,5 +295,6 @@ int	main(int ac, char **av, char **env)
 			ft_echo(to_pars); */
 		 //<<-------
 		error_manager(line);
+		line = epur_str(line);
 	}
 }
