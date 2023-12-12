@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 15:54:16 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/11 16:25:29 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/11 20:58:02 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	exec_pipes(t_pipex *stack, char **envp)
 	return ;
 }
 
-int	ft_pipex(t_cmd *to_pars, t_envp *envp)
+int	ft_pipex(t_cmd *to_pars, int size,  t_envp *envp)
 {
 	t_pipex *stack;
 	
@@ -99,7 +99,7 @@ int	ft_pipex(t_cmd *to_pars, t_envp *envp)
 		// 	ac -= 1;
 		// 	av += 1;
 		// }
-		ft_init_stack(stack, to_pars);
+		ft_init_stack(stack, size, to_pars);
 		exec_pipes(stack, envp);
 		close(stack->fd[0]);
 		free(stack);

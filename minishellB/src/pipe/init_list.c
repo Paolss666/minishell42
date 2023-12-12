@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_list.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 15:18:12 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/11 16:27:23 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/11 21:16:00 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,17 @@ int	ft_strcmpchr(const char *s, int c)
 	return (0);
 }
 
-void	ft_init_stack(t_pipex *stack, t_cmd *to_pars)
+void	ft_init_stack(t_pipex *stack, int size, t_cmd **to_pars)
 {
+	/* je doit fare un boucle.. pour chaque to_pars->cmd */
 	stack->envp = 0;
 	stack->cmd = av + 2;
-	stack->nmbr_mcd = ac - 3;
+	stack->nmbr_mcd = size - 3;
 	if (stack->here_doc)
 		stack->fd_infile = "here_doc";
 	else
 		stack->fd_infile = av[1];
-	stack->fd_outfile = av[ac - 1];
+	stack->fd_outfile = av[size - 1];
 	stack->prev = 0;
 	stack->fd[0] = 0;
 	stack->fd[1] = 0;

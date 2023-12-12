@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_commandes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/11 18:09:09 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/11 21:24:56 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,14 +112,15 @@ void free_cmd_list(t_cmd *head)
 }
 
 /// <<-------- se trovo un flag " - " lo aggiungo alla comanda precedente, anche se ne trovo di piu 
-void	join_found_flag(t_cmd **to_pars)
+int	join_found_flag(t_cmd **to_pars)
 {
 	t_cmd	*current;
 	t_cmd	*next;
+	int		count;
 	char	*temp_cmd;
 
 	next = NULL;
-
+	count = 0;
 	current = *to_pars;
 	if (!*to_pars)
 		printf("joind flag to_pars null\n");
@@ -130,18 +131,20 @@ void	join_found_flag(t_cmd **to_pars)
 		{
 			temp_cmd = ft_strjoin(current->cmd, ft_strjoin(" ", next->cmd));
 			if (!temp_cmd)
-				return (ft_putstr_fd("FAIL trjoin\n", 2), (void)0);
+				return (ft_putstr_fd("FAIL trjoin\n", 2), 0);
 			free(current->cmd);
 			current->cmd = ft_strdup(temp_cmd);
 			if (!current->cmd)
-				return (ft_putstr_fd("FAIL ft_strdup\n", 2), (void)0);
+				return (ft_putstr_fd("FAIL ft_strdup\n", 2), 0);
 			free(temp_cmd);
 			current->next = next->next;
 			free_cmd_list(next);
 			next = current->next;
 		}
+		count++;
 		current = current->next;
 	}
+	return (count);
 }
 
 // --->>>>> toutes les commandes mis dans les listes chainees <<-------- ///
@@ -163,6 +166,7 @@ t_cmd	*add_cmd_list(t_cmd *list, char **commande_split, char *line)
 		cmd->cmd = ft_strdup(commande_split[i]);
 		if (!cmd->cmd)
 			return (perror("strdup FAIL"), free(cmd), NULL);
+		cmd->count = 0;
 		cmd->next = NULL;
 		if (!list)
 			list = cmd; // Se la lista è vuota,il nuovo comando diventa la testa
@@ -231,6 +235,7 @@ int	main(int ac, char **av, char **env)
 	t_cmd		*to_pars;
 	char		**commande_split;
 	t_envp		*enviroment;
+	int			count;
 
 	(void)av;
 	to_pars = NULL;
@@ -244,18 +249,18 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		line = display_prompt();
+		count = 0;
 		if (!error_manager(line))
 		{
 			commande_split_toParse(commande_split, line);
 			to_pars = add_cmd_list(to_pars, commande_split, line);
 			if (!to_pars)
 				line = display_prompt();
-			join_found_flag(&to_pars);
+			count = join_found_flag(&to_pars);
 //			printf("<<<<< ---------printf list NON JOIN flag --------------- >>\n");
 			print_list(to_pars);
-			join_found_flag(&to_pars);
+/* 			join_found_flag(&to_pars); */
 //			printf("<<<<< ---------printf list avec flag --------------- >>\n");
-			print_list(to_pars);
 			// printf("found pipe --> %d\n", found_pipe(to_pars));
 			// printf("count to_pars --> %d\n", to_pars->count);
 			printf("found echo --> %d\n", found_echo(to_pars));
@@ -263,6 +268,7 @@ int	main(int ac, char **av, char **env)
 			printf("found export --> %d\n", found_export(to_pars));
 			printf("found unset --> %d\n", found_unset(to_pars));
 			printf("found exit --> %d\n", found_exit(to_pars));
+			printf("size list --> %d\n", count);
 			printf("<<<<< ---------printf list BUILDING --------------- >>\n");
 			if (!enviroment)
 				enviroment= found_and_add_env(env, enviroment);
@@ -287,10 +293,6 @@ int	main(int ac, char **av, char **env)
 			to_pars = free_cmds_list(to_pars);
 			if (found_echo(to_pars))
 				found_dollar_print_variable(to_pars, enviroment);
-/* 			if (found_echo(to_pars) == 1)
-				ft_echo(to_pars);
-			if (found_echo(to_pars) == 2)
-				ft_echo(to_pars); */
 			 //<<-------
 		}
 		to_pars = free_cmds_list(to_pars);

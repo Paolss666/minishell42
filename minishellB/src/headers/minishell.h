@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/11 18:10:53 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/11 20:48:29 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@
 # define STDOUT 1
 # define INFILE 0
 # define OUTFILE 1
-extern int	g_exit_status;
+
+/* extern int	g_exit_status; */
 
 // readline --> read a line from the terminal and return it , using prompt (char
 		// * prompt<-----
@@ -72,6 +73,7 @@ typedef struct s_cmd
 typedef struct s_cd
 {
 	char			*path;
+	int				index;
 	struct s_cd		*next;
 }					t_cd;
 
@@ -98,7 +100,7 @@ void 			free_list_to_pars(t_cmd *to_pars);
 
 // ----------- PARSING --------------//
 t_cmd				*add_cmd_list(t_cmd *list, char **commande_split, char *line);
-void				join_found_flag(t_cmd **to_pars);
+int					join_found_flag(t_cmd **to_pars);
 char				*display_prompt(void);
 void				commande_split_toParse(char **commande_split, char *line);
 
