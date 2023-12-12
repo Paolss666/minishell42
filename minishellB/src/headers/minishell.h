@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/11 20:48:29 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/12 13:43:45 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../../libft/libft.h"
+# include "pipex.h"
 # include <errno.h>
 # include <math.h>
 # include <readline/history.h>
@@ -37,24 +38,24 @@
 # define INFILE 0
 # define OUTFILE 1
 
-/* extern int	g_exit_status; */
+extern int	g_exit_status; 
 
 // readline --> read a line from the terminal and return it , using prompt (char
 		// * prompt<-----
 //
 
-typedef struct s_pipex
-{
-	char	**envp;
-	char	**cmd;
-	char	*fd_infile;
-	char	*fd_outfile;
-	int		fd[2];
-	int		prev;
-	int		nmbr_mcd;
-	pid_t	pid[1024];
-	int		here_doc;
-}			t_pipex;
+// typedef struct s_pipex
+// {
+// 	char	**envp;
+// 	char	**cmd;
+// 	char	*fd_infile;
+// 	char	*fd_outfile;
+// 	int		fd[2];
+// 	int		prev;
+// 	int		nmbr_mcd;
+// 	pid_t	pid[1024];
+// 	int		here_doc;
+// }			t_pipex;
 
 
 // ------ commande -- //
@@ -104,7 +105,15 @@ int					join_found_flag(t_cmd **to_pars);
 char				*display_prompt(void);
 void				commande_split_toParse(char **commande_split, char *line);
 
-char 	*ft_strcpy(char *dest, const char *src, size_t size);
+
+// ----------- PIPE--------------//
+// 
+// void	ft_init_stack(t_pipex *stack, int size, t_cmd *to_pars);
+int					ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_split);
+void				ft_init_stack(t_pipex *stack, int size, t_cmd *to_pars, char **commande_split);
+
+
+// void		ft_init_stack(stack, size, &to_pars, commande_split);
 // ------------ BUILDING ----------- // 
 int					ft_pwd(t_cmd *to_pars);
 int					ft_cd(t_cmd *to_pars);
@@ -134,7 +143,7 @@ int					error_manager(char *str);
 int					ft_error_case_1(char c);
 int					ft_error_blank(char *str);
 int					ft_error_shift_operator(char *str);
-int					ft_error_directory(char *str);
+int					ft_error_directory3(char *str);
 int					ft_error_pipe(char *str);
 int					ft_error_operand(char *str);
 char*				epur_str(char *to_epur);

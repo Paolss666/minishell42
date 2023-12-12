@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_commandes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/11 21:24:56 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/12 14:22:41 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,10 +271,12 @@ int	main(int ac, char **av, char **env)
 			printf("size list --> %d\n", count);
 			printf("<<<<< ---------printf list BUILDING --------------- >>\n");
 			if (!enviroment)
-				enviroment= found_and_add_env(env, enviroment);
+				enviroment = found_and_add_env(env, enviroment);
 			if (!export)
 				export = add_env_with_export(enviroment);
 			export_env_sort(export);
+			if (found_pipe(to_pars))
+				ft_pipex(to_pars, count, enviroment, commande_split);
 			if (found_echo(to_pars))
 				found_dollar_print_variable(to_pars, enviroment);
 			if (ft_envp(to_pars))

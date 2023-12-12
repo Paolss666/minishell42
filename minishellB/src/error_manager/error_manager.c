@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_manager.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 17:05:20 by armeyer           #+#    #+#             */
-/*   Updated: 2023/12/11 20:39:29 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/12 11:56:29 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	is_error(char *to_epur)
 		return (1);
 	if (ft_error_shift_operator(str))
 		return (1);
-	if (ft_error_directory(str))
+	if (ft_error_directory3(str))
 		return (1);
 	if (ft_error_pipe(str))
 		return (1);

@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 15:54:16 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/11 20:58:02 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/12 14:21:07 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+#include "../headers/pipex.h"
 
 int	found_pipe(t_cmd *cmd)
 {
@@ -23,7 +24,7 @@ int	found_pipe(t_cmd *cmd)
 	return (0);
 }
 
-void	ft_child_process(t_pipex *stack, int i, t_envp *enviromet)
+void	ft_child_process(t_pipex *stack, int i, char **enviromet)
 {
 	char	*good_path;
 	char	**s_cmd;
@@ -81,10 +82,34 @@ void	exec_pipes(t_pipex *stack, char **envp)
 	return ;
 }
 
-int	ft_pipex(t_cmd *to_pars, int size,  t_envp *envp)
+char **cpy_enviroment_char(char **cpy_enviroment, t_envp *enviroment)
+{
+	int	i;
+
+	i = 0;
+	if (!enviroment)
+		return (printf("FAILLLLLLL cpy_enviro\n"), free(enviroment), NULL);
+	while(enviroment->next && cpy_enviroment[i])
+	{
+		cpy_enviroment[i++] = ft_strdup(enviroment->path);
+		printf("cpy_enviroment[i] -->%s\n", cpy_enviroment[i]);
+		printf(" enviroment->path %s\n", enviroment->path);
+		if (!cpy_enviroment[i])
+			return (printf("FAIL StrDUP CPY ENVIRO\n"), NULL);
+		enviroment = enviroment->next;
+	}
+	return (cpy_enviroment);
+}
+
+int	ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_split)
 {
 	t_pipex *stack;
-	
+	char **enviroment_cpy;
+
+	enviroment_cpy = (char **)malloc(sizeof(char *) * size + 1);
+	enviroment_cpy = cpy_enviroment_char(enviroment_cpy, enviroment);
+	if (!enviroment_cpy)
+			printf("shittttttttt\n");
 	if (found_pipe(to_pars))
 	{	
 		stack = (t_pipex *)malloc(sizeof(t_pipex));
@@ -99,11 +124,11 @@ int	ft_pipex(t_cmd *to_pars, int size,  t_envp *envp)
 		// 	ac -= 1;
 		// 	av += 1;
 		// }
-		ft_init_stack(stack, size, to_pars);
-		exec_pipes(stack, envp);
+		ft_init_stack(stack, size, to_pars, commande_split);
+		exec_pipes(stack, enviroment_cpy);
 		close(stack->fd[0]);
 		free(stack);
-		unlink("/tmp/here_doc");
+		// unlink("/tmp/here_doc");
 		return (1);
 	}
 	return (0);

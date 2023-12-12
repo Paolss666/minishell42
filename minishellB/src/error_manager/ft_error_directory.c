@@ -6,13 +6,13 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:36:57 by armeyer           #+#    #+#             */
-/*   Updated: 2023/12/11 17:09:28 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/12 11:56:55 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-int	ft_error_directory(char *str)
+int	ft_error_directory3(char *str)
 {
 	extern int	g_exit_status;
 	int			i;
