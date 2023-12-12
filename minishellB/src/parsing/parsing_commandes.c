@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/12 18:22:34 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/12 18:25:02 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -398,12 +398,13 @@ int	main(int ac, char **av, char **env)
 			printf("enviroment->path-pwd %s\n", found_path_envp_list(enviroment));
 			printf("good path --> access axec %s\n",good_path_access( to_pars, enviroment));
 			new_enviroment = envp_list_to_new_env(enviroment);
-			if (!found_token(to_pars))
-			{
-				execve(good_path_access(to_pars, enviroment), ft_split(to_pars->cmd, ' '), new_enviroment);
-				perror("execve");
-				ft_free_tab(new_enviroment);
-			}
+			// FUNZIONA MA EXIT LE PROGRAM ???? <==================
+			// if (!found_token(to_pars))
+			// {
+			// 	execve(good_path_access(to_pars, enviroment), ft_split(to_pars->cmd, ' '), new_enviroment);
+			// 	perror("execve");
+			// 	ft_free_tab(new_enviroment);
+			// }
 			if (found_pipe(to_pars) && found_token(to_pars))
 				ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, commande_split);
 			if (found_echo(to_pars) && found_token(to_pars))
