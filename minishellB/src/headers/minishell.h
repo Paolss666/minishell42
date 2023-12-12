@@ -5,10 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/12 13:43:45 by npaolett         ###   ########.fr       */
+/*   Created: 2023/12/12 14:58:13 by npaolett          #+#    #+#             */
+/*   Updated: 2023/12/12 14:58:13 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -150,5 +152,7 @@ char*				epur_str(char *to_epur);
 int					ft_count_sign(char *str, char c);
 int					ft_error_parenthesis(char *str);
 int					ft_error_semicol(char *str);
+int					ft_error_stx(char *str);
+
 
 #endif

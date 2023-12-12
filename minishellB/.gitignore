@@ -1,1 +1,4 @@
 .*
+src/.o
+parsiong/.o
+pipe/.o

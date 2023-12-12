@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/12 14:22:41 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/12 14:56:28 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,6 +250,7 @@ int	main(int ac, char **av, char **env)
 	{
 		line = display_prompt();
 		count = 0;
+		line = epur_str(line);
 		if (!error_manager(line))
 		{
 			commande_split_toParse(commande_split, line);
