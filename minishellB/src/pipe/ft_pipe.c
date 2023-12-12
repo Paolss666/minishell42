@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 15:54:16 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/12 14:21:07 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/12 16:54:17 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,32 +82,32 @@ void	exec_pipes(t_pipex *stack, char **envp)
 	return ;
 }
 
-char **cpy_enviroment_char(char **cpy_enviroment, t_envp *enviroment)
+char **cpy_enviroment_char(char **cpy_enviroment, t_envp *enviroment, int size)
 {
 	int	i;
 
-	i = 0;
-	if (!enviroment)
+	i = -1;
+	if (!enviroment || !cpy_enviroment)
 		return (printf("FAILLLLLLL cpy_enviro\n"), free(enviroment), NULL);
-	while(enviroment->next && cpy_enviroment[i])
+	// printf("je suis ici\n");
+	while(enviroment &&  ++i < size - 1)
 	{
-		cpy_enviroment[i++] = ft_strdup(enviroment->path);
-		printf("cpy_enviroment[i] -->%s\n", cpy_enviroment[i]);
-		printf(" enviroment->path %s\n", enviroment->path);
+		cpy_enviroment[i] = ft_strdup(enviroment->path);
 		if (!cpy_enviroment[i])
 			return (printf("FAIL StrDUP CPY ENVIRO\n"), NULL);
 		enviroment = enviroment->next;
 	}
+	cpy_enviroment[size + 1] = NULL;
 	return (cpy_enviroment);
 }
 
 int	ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_split)
 {
 	t_pipex *stack;
-	char **enviroment_cpy;
+	char 	**enviroment_cpy;
 
 	enviroment_cpy = (char **)malloc(sizeof(char *) * size + 1);
-	enviroment_cpy = cpy_enviroment_char(enviroment_cpy, enviroment);
+	enviroment_cpy = cpy_enviroment_char(enviroment_cpy, enviroment, size);
 	if (!enviroment_cpy)
 			printf("shittttttttt\n");
 	if (found_pipe(to_pars))
@@ -115,7 +115,7 @@ int	ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_spli
 		stack = (t_pipex *)malloc(sizeof(t_pipex));
 		if (!stack)
 			return (free(stack), 0);
-		stack->here_doc = 0;
+		// stack->here_doc = 0;
 		// if (ft_strncmp(av[1], "here_doc", ft_strlen("here_doc")) == 0
 		// 	&& ac >= 6)
 		// {
@@ -124,6 +124,7 @@ int	ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_spli
 		// 	ac -= 1;
 		// 	av += 1;
 		// }
+		// printf("commande_split --> %s\n", commande_split[i]);
 		ft_init_stack(stack, size, to_pars, commande_split);
 		exec_pipes(stack, enviroment_cpy);
 		close(stack->fd[0]);

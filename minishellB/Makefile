@@ -3,17 +3,12 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: armeyer <armeyer@student.42.fr>            +#+  +:+       +#+         #
+#    By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/12/11 16:59:44 by npaolett          #+#    #+#              #
-<<<<<<< HEAD
-#    Updated: 2023/12/12 13:35:19 by npaolett         ###   ########.fr        #
-=======
-#    Updated: 2023/12/12 14:28:38 by armeyer          ###   ########.fr        #
->>>>>>> origin/ju2branch
+#    Created: 2023/12/12 14:58:37 by npaolett          #+#    #+#              #
+#    Updated: 2023/12/12 15:03:23 by npaolett         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
 
 NAME = minishell
 
@@ -32,11 +27,11 @@ SRC =	src/build/ft_pwd.c\
 		src/build/ft_cd.c 	  \
 		src/build/ft_export.c  \
 		src/build/ft_unset.c    \
-		src/execve/ft_exceve.c		 \
+		src/execve/ft_exceve.c	 \
 		src/parsing/parsing_commandes.c \
 		src/error_manager/error_manager.c \
 		src/error_manager/ft_error_case_1.c \
-		src/error_manager/ft_error_blank.c   \
+		src/error_manager/ft_error_blank.c    \
 		src/error_manager/ft_error_shift_operator.c\
 		src/error_manager/ft_error_directory.c \
 		src/error_manager/ft_error_pipe.c		\
@@ -44,16 +39,12 @@ SRC =	src/build/ft_pwd.c\
 		src/error_manager/ft_error_operand.c	\
 		src/error_manager/ft_count_sign.c		\
 		src/error_manager/ft_error_parenthesis.c\
-<<<<<<< HEAD
 		src/error_manager/ft_error_semicol.c \
+		src/error_manager/ft_error_stx.c   \
 		src/pipe/error.c \
 		src/pipe/ft_pipe.c \
 		src/pipe/init_list.c\
 		src/pipe/pipe_utils.c \
-=======
-		src/error_manager/ft_error_semicol.c	\
-		src/error_manager/ft_error_stx.c
->>>>>>> origin/ju2branch
 
 OBJ = $(SRC:.c=.o)
 # OBJ_BONUS = $(SRC_BONUS:.c=.o)

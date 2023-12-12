@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 15:18:12 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/12 12:05:37 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/12 17:00:49 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_cmd	*scrolling_list_last(t_cmd *to_pars)
 {
 	if (!to_pars)
 		return (free_list_to_pars(to_pars), NULL);
-	while(to_pars)
+	while(to_pars->next)
 		to_pars = to_pars->next;
 	return (to_pars);
 }
@@ -46,16 +46,23 @@ t_cmd	*scrolling_list_last(t_cmd *to_pars)
 void	ft_init_stack(t_pipex *stack, int size, t_cmd *to_pars, char **commande_split)
 {
 	t_cmd	*last_cmd;
-
-	 last_cmd = scrolling_list_last(to_pars);
+	// int	i = -1;
+	
+	// // while(commande_split[++i])
+	if (!commande_split)
+		printf("commande_split est null\n");
+	// printf("commande split[i] --> %s\n", commande_split[1]);
+	
+	last_cmd = scrolling_list_last(to_pars);
+	if (!last_cmd)
+	 	printf("fail last_cmd\n");
 	/* je doit fare un boucle.. pour chaque to_pars->cmd */
 	stack->envp = 0;
 	stack->cmd = commande_split + 2;
 	stack->nmbr_mcd = size - 3;
-	if (stack->here_doc)
-		stack->fd_infile = "here_doc";
-	else
-		stack->fd_infile = to_pars->cmd;// 
+	stack->fd_infile = to_pars->cmd;// 
+	// printf("last->cmd %s\n", last_cmd->cmd);
+	// printf("to_pars->cmd infile %s\n", to_pars->cmd);
 	stack->fd_outfile = last_cmd->cmd;
 	stack->prev = 0;
 	stack->fd[0] = 0;

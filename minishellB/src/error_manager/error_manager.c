@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   error_manager.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/04 17:05:20 by armeyer           #+#    #+#             */
-/*   Updated: 2023/12/12 11:56:29 by npaolett         ###   ########.fr       */
-=======
-/*   By: armeyer <armeyer@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/04 17:05:20 by armeyer           #+#    #+#             */
-/*   Updated: 2023/12/12 14:02:39 by armeyer          ###   ########.fr       */
->>>>>>> origin/ju2branch
+/*   Created: 2023/12/12 15:02:33 by npaolett          #+#    #+#             */
+/*   Updated: 2023/12/12 15:02:34 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
 
 #include "../headers/minishell.h"
 

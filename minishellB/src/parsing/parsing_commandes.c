@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/12 14:56:28 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/12 18:22:34 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ t_cmd	*add_cmd_list(t_cmd *list, char **commande_split, char *line)
 			current->next = cmd;
 			// Aggiungi il nuovo comando alla fine della lista
 		}
-		free(commande_split[i]);
+		// free(commande_split[i]);
 	}
 	return (list);
 }
@@ -224,8 +224,120 @@ void free_list_to_pars(t_cmd *to_pars)
 // --> applicare l'albero di sintaxxxx -->>> non so come <<--------
 
 
+int	len_liste_envp(t_envp *enviromet)
+{
+	int	index;
+
+	index = 0;
+	if (!enviromet)
+		return (0);
+	while(enviromet)
+	{
+		index++;
+		enviromet = enviromet->next;
+	}
+	return (index + 1);
+}
+
+int		to_pars_to_commande_split(t_cmd *to_pars, char **commande_split)
+{
+	int	i;
+
+	i = 0;
+	if (!to_pars)
+		return (0);
+	while(to_pars)
+	{
+		commande_split[++i] = ft_strdup(to_pars->cmd);
+		to_pars = to_pars->next;
+	}
+	commande_split[i + 1] = NULL;
+	return (1);
+}
+
+int	found_token(t_cmd *to_pars)
+{
+	if (!to_pars)
+		return (printf("to_pars not found\n"), 0);
+	while(to_pars)
+	{
+		if (ft_strcmp(to_pars->cmd, "export") == 0)
+			return (1);
+		if (ft_strcmp(to_pars->cmd, "unset") == 0)
+			return (1);
+		if (ft_strcmp(to_pars->cmd, "echo") == 0)
+			return (1);
+		if (ft_strcmp(to_pars->cmd, "echo -n") == 0)
+			return (1);
+		if (ft_strcmp(to_pars->cmd, "env") == 0)
+			return (1);
+		if (ft_strcmp(to_pars->cmd, "cd") == 0)
+			return (1);
+		to_pars = to_pars->next;
+	}
+	return (0);
+}
+
 /// VARIABLE GLOBALE //// 
 // --->>>> IL FAUL EMPLEMENTER LA COMMANDE ECHO $? AVEC LE STATUS D'ERROR RENVOYE DEPUIS LA VARIABLE GLOBALE
+
+char	*found_path_envp_list(t_envp *enviroment)
+{
+	if (!enviroment)
+		return (NULL);
+	while(enviroment)
+	{
+		if (ft_strcmp(enviroment->name, "PATH") == 0)
+			return (enviroment->path);
+		enviroment = enviroment->next;
+	}
+	return (NULL);
+}
+
+char	*good_path_access(t_cmd	*to_pars, t_envp *enviroment)
+{
+	char	*exec;
+	char	*try_line;
+	char	**env_split;
+	int		i;
+
+	i = 0;
+	env_split = ft_split(found_path_envp_list(enviroment), ':');
+	while(to_pars)
+	{
+		try_line = ft_strjoin(env_split[i], "/");
+		exec = ft_strjoin(try_line, to_pars->cmd);
+		free(try_line);
+		if (access(exec, F_OK | X_OK) == 0)
+			return (exec);
+		free(exec);
+		i++;
+	}
+	return (NULL);
+}
+
+char 	**envp_list_to_new_env(t_envp *enviroment)
+{
+	char	**new_enviroment;
+	int		i;
+
+	i = 0;
+	new_enviroment = (char **)malloc(sizeof(char *) * len_liste_envp(enviroment) + 1);
+	if (!new_enviroment)
+		return (NULL);
+	if (!enviroment  || len_liste_envp(enviroment) <= 0)
+		return (printf("ENV ??? \n"), NULL);
+	while(enviroment)
+	{
+		new_enviroment[i] = ft_strdup(enviroment->path);
+		if (!new_enviroment[i])
+			return (free(new_enviroment[i]), NULL);
+		enviroment = enviroment->next;
+		i++;
+	}
+	new_enviroment[i] = NULL;
+	return (new_enviroment);
+} 
 
 int	main(int ac, char **av, char **env)
 {
@@ -236,16 +348,17 @@ int	main(int ac, char **av, char **env)
 	char		**commande_split;
 	t_envp		*enviroment;
 	int			count;
+	char		**new_enviroment;
 
 	(void)av;
 	to_pars = NULL;
 	commande_split = NULL;
 	// minishell = NULL;
 	enviroment = NULL;
+	new_enviroment = NULL;
 	export = NULL;
 	if (ac != 1)
 		return (ft_putstr_fd("Don't need arguments\n", 2), 1);
-	// init_struct(minishell);
 	while (1)
 	{
 		line = display_prompt();
@@ -276,27 +389,41 @@ int	main(int ac, char **av, char **env)
 			if (!export)
 				export = add_env_with_export(enviroment);
 			export_env_sort(export);
-			if (found_pipe(to_pars))
-				ft_pipex(to_pars, count, enviroment, commande_split);
-			if (found_echo(to_pars))
+			// printf("size envp pour pipex -> %d\n", len_liste_envp(enviroment));
+			// if (!commande_split)
+			// 	if (to_pars_to_commande_split(to_pars, commande_split))
+			// 		return (printf("fat\n"));
+			// while (to_pars)
+			// {
+			printf("enviroment->path-pwd %s\n", found_path_envp_list(enviroment));
+			printf("good path --> access axec %s\n",good_path_access( to_pars, enviroment));
+			new_enviroment = envp_list_to_new_env(enviroment);
+			if (!found_token(to_pars))
+			{
+				execve(good_path_access(to_pars, enviroment), ft_split(to_pars->cmd, ' '), new_enviroment);
+				perror("execve");
+				ft_free_tab(new_enviroment);
+			}
+			if (found_pipe(to_pars) && found_token(to_pars))
+				ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, commande_split);
+			if (found_echo(to_pars) && found_token(to_pars))
 				found_dollar_print_variable(to_pars, enviroment);
-			if (ft_envp(to_pars))
+			if (ft_envp(to_pars) && found_token(to_pars) )
 				print_list_envp(enviroment);
 			ft_pwd(to_pars);
-			if (!to_pars->next && found_export(to_pars))
+			if (!to_pars->next && found_export(to_pars) && found_token(to_pars))
 				print_export_list(export);
-			if (found_export(to_pars) && to_pars->next)
+			if (found_export(to_pars) && to_pars->next && found_token(to_pars))
 				add_export_env(to_pars, &enviroment, &export);
-			if (found_unset(to_pars))
+			if (found_unset(to_pars) && found_token(to_pars) )
 				unset_delete_variable(to_pars, &enviroment, &export);
-			if (found_exit(to_pars))
+			if (found_exit(to_pars)&& found_token(to_pars) )
 				ft_exit(to_pars);
-			if (ft_cd(to_pars))
+			if (ft_cd(to_pars) && found_token(to_pars) )
 				found_cd_pwd_update(to_pars, enviroment, export);
 			to_pars = free_cmds_list(to_pars);
-			if (found_echo(to_pars))
+			if (found_echo(to_pars)&& found_token(to_pars))
 				found_dollar_print_variable(to_pars, enviroment);
-			 //<<-------
 		}
 		to_pars = free_cmds_list(to_pars);
 	}
