@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armeyer <armeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 13:56:10 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/11 20:48:29 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/12 14:28:59 by armeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 # define INFILE 0
 # define OUTFILE 1
 
-/* extern int	g_exit_status; */
+extern int	g_exit_status;
 
 // readline --> read a line from the terminal and return it , using prompt (char
 		// * prompt<-----
@@ -141,5 +141,6 @@ char*				epur_str(char *to_epur);
 int					ft_count_sign(char *str, char c);
 int					ft_error_parenthesis(char *str);
 int					ft_error_semicol(char *str);
+int					ft_error_stx(char *str);
 
 #endif
