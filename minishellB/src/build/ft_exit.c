@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 16:36:54 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/11 21:51:40 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/13 15:43:06 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,7 @@ void    ft_exit(t_cmd   *to_pars)
     {
         ft_putstr_fd("exit\n", 1);
         free_list_to_pars(to_pars);
-        // if (enviroment)
-            // free_envp_list(enviroment);
+		/* IL FAUT AJOUTER LE BONNE CODE D"ERREUR POUR ECHO $? */
         /* il faut bien tout free */
         exit(0);
     }

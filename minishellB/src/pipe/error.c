@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 15:17:32 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/13 14:32:20 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/13 14:43:54 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	ft_error_directory(t_pipex *stack)
 void	ft_error_commande_not_to_pars(t_cmd *to_pars)
 {
 	ft_putstr_fd("bash : ", 2);
-	ft_putstr_fd(" commande not found+: ", 2);
+	ft_putstr_fd(" commande not found: ", 2);
 	ft_putstr_fd(to_pars->cmd, 2);
 	ft_putstr_fd("\n", 2);
 	// perror(" ");

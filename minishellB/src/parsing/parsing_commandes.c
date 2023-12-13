@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/13 14:32:12 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/13 16:30:07 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,6 +257,8 @@ int	found_token(t_cmd *to_pars)
 			return (1);
 		if (ft_strcmp(to_pars->cmd, "cd") == 0)
 			return (1);
+		if (ft_strcmp(to_pars->cmd, "exit") == 0)
+			return (1);
 		to_pars = to_pars->next;
 	}
 	return (0);
@@ -287,6 +289,8 @@ char	*ft_good_path_access(t_cmd	*to_pars, t_envp *enviroment)
 
 	i = 0;
 	env_split = ft_split(found_path_envp_list(enviroment), ':');
+	if (access(to_pars->cmd, F_OK | X_OK) == 0)
+		return (to_pars->cmd);
 	while(env_split[i])
 	{
 		try_line = ft_strjoin(env_split[i], "/");
@@ -339,6 +343,7 @@ int	main(int ac, char **av, char **env)
 
 	(void)av;
 	to_pars = NULL;
+	pid = 0;
 	commande_split = NULL;
 	// minishell = NULL;
 	enviroment = NULL;
@@ -358,7 +363,6 @@ int	main(int ac, char **av, char **env)
 			if (!to_pars)
 				line = display_prompt();
 			count = join_found_flag(&to_pars);
-//			printf("<<<<< ---------printf list NON JOIN flag --------------- >>\n");
 			print_list(to_pars);
 /* 			join_found_flag(&to_pars); */
 //			printf("<<<<< ---------printf list avec flag --------------- >>\n");
@@ -391,30 +395,32 @@ int	main(int ac, char **av, char **env)
 					ft_free_tab(new_enviroment);
 				}
 			}
-			if (waitpid(pid, &status, 0) == -1)
-				perror("waitpid error");
+			if (pid)
+				if (waitpid(pid, &status, 0) == -1)
+					perror("waitpid error");
 			if (found_pipe(to_pars) && found_token(to_pars))
 				ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, commande_split);
-			if (found_echo(to_pars) && found_token(to_pars))
+			if (found_echo(to_pars))
 				found_dollar_print_variable(to_pars, enviroment);
-			if (ft_envp(to_pars) && found_token(to_pars) )
+			if (ft_envp(to_pars))
 				print_list_envp(enviroment);
 			if (found_token(to_pars))
 				ft_pwd(to_pars);
-			if (!to_pars->next && found_export(to_pars) && found_token(to_pars))
+			if (!to_pars->next && found_export(to_pars))
 				print_export_list(export);
-			if (found_export(to_pars) && to_pars->next && found_token(to_pars))
+			if (found_export(to_pars) && to_pars->next)
 				add_export_env(to_pars, &enviroment, &export);
-			if (found_unset(to_pars) && found_token(to_pars) )
+			if (found_unset(to_pars))
 				unset_delete_variable(to_pars, &enviroment, &export);
-			if (found_exit(to_pars)&& found_token(to_pars) )
+			if (found_exit(to_pars))
 				ft_exit(to_pars);
 			if (ft_cd(to_pars))
 				found_cd_pwd_update(to_pars, enviroment, export);
 			to_pars = free_cmds_list(to_pars);
-			if (found_echo(to_pars)&& found_token(to_pars))
+			if (found_echo(to_pars))
 				found_dollar_print_variable(to_pars, enviroment);
 		}
 		to_pars = free_cmds_list(to_pars);
+		// free_exp_list(export);
 	}
 }

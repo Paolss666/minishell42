@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:02:33 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/12 15:02:34 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/13 16:11:47 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,15 @@ int	is_error(char *to_epur)
 {
 	int			len;
 	char		*str;
-	extern int	g_exit_status;
+	// extern int	g_exit_status;
 
 	str = epur_str(to_epur);
 	if (str == NULL || str[0] == '\0')
-	{
-		ft_printf("\n");
 		return (1);
-	}
 	len = ft_strlen(str);
 	if (len == 1)
-	{
 		if (ft_error_case_1(str[0]))
 			return (1);
-	}
 	if (ft_error_stx(str))
 		return (1);
 	if (ft_error_blank(str))
