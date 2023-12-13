@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 14:58:13 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/12 15:27:48 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/13 14:32:23 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ typedef struct 	s_exp
 // ----------- ERRORI --------------- //
 void			freeList(t_cmd *head);
 void 			free_list_to_pars(t_cmd *to_pars);
-
+void			ft_error_commande_not_to_pars(t_cmd *to_pars);
 // ----------- PARSING --------------//
 t_cmd				*add_cmd_list(t_cmd *list, char **commande_split, char *line);
 int					join_found_flag(t_cmd **to_pars);

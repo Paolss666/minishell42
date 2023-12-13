@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/12 18:25:02 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/13 14:32:12 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*display_prompt(void)
 {
 	char	*line;
 
-	line = readline(COLOR_VIOLET"bbshell$ "RESET_COLOR);
+	line = readline(COLOR_VIOLET"ADOshell$ "RESET_COLOR);
 	add_history(line); // working history
 	return (line);
 }
@@ -239,22 +239,6 @@ int	len_liste_envp(t_envp *enviromet)
 	return (index + 1);
 }
 
-int		to_pars_to_commande_split(t_cmd *to_pars, char **commande_split)
-{
-	int	i;
-
-	i = 0;
-	if (!to_pars)
-		return (0);
-	while(to_pars)
-	{
-		commande_split[++i] = ft_strdup(to_pars->cmd);
-		to_pars = to_pars->next;
-	}
-	commande_split[i + 1] = NULL;
-	return (1);
-}
-
 int	found_token(t_cmd *to_pars)
 {
 	if (!to_pars)
@@ -294,7 +278,7 @@ char	*found_path_envp_list(t_envp *enviroment)
 	return (NULL);
 }
 
-char	*good_path_access(t_cmd	*to_pars, t_envp *enviroment)
+char	*ft_good_path_access(t_cmd	*to_pars, t_envp *enviroment)
 {
 	char	*exec;
 	char	*try_line;
@@ -303,7 +287,7 @@ char	*good_path_access(t_cmd	*to_pars, t_envp *enviroment)
 
 	i = 0;
 	env_split = ft_split(found_path_envp_list(enviroment), ':');
-	while(to_pars)
+	while(env_split[i])
 	{
 		try_line = ft_strjoin(env_split[i], "/");
 		exec = ft_strjoin(try_line, to_pars->cmd);
@@ -347,8 +331,11 @@ int	main(int ac, char **av, char **env)
 	t_cmd		*to_pars;
 	char		**commande_split;
 	t_envp		*enviroment;
+	int			status;
+	pid_t		pid;
 	int			count;
 	char		**new_enviroment;
+	char		*good_path_access;
 
 	(void)av;
 	to_pars = NULL;
@@ -390,28 +377,30 @@ int	main(int ac, char **av, char **env)
 				export = add_env_with_export(enviroment);
 			export_env_sort(export);
 			// printf("size envp pour pipex -> %d\n", len_liste_envp(enviroment));
-			// if (!commande_split)
-			// 	if (to_pars_to_commande_split(to_pars, commande_split))
-			// 		return (printf("fat\n"));
-			// while (to_pars)
-			// {
-			printf("enviroment->path-pwd %s\n", found_path_envp_list(enviroment));
-			printf("good path --> access axec %s\n",good_path_access( to_pars, enviroment));
-			new_enviroment = envp_list_to_new_env(enviroment);
-			// FUNZIONA MA EXIT LE PROGRAM ???? <==================
-			// if (!found_token(to_pars))
-			// {
-			// 	execve(good_path_access(to_pars, enviroment), ft_split(to_pars->cmd, ' '), new_enviroment);
-			// 	perror("execve");
-			// 	ft_free_tab(new_enviroment);
-			// }
+			if (!found_token(to_pars))
+			{
+				pid = fork();
+				if (pid == 0)
+				{
+					new_enviroment = envp_list_to_new_env(enviroment);
+					good_path_access = ft_good_path_access(to_pars, enviroment);
+					if (!good_path_access)
+						return (ft_error_commande_not_to_pars(to_pars), 0);
+					execve(good_path_access, ft_split(line, ' '), new_enviroment);
+					perror("execve");
+					ft_free_tab(new_enviroment);
+				}
+			}
+			if (waitpid(pid, &status, 0) == -1)
+				perror("waitpid error");
 			if (found_pipe(to_pars) && found_token(to_pars))
 				ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, commande_split);
 			if (found_echo(to_pars) && found_token(to_pars))
 				found_dollar_print_variable(to_pars, enviroment);
 			if (ft_envp(to_pars) && found_token(to_pars) )
 				print_list_envp(enviroment);
-			ft_pwd(to_pars);
+			if (found_token(to_pars))
+				ft_pwd(to_pars);
 			if (!to_pars->next && found_export(to_pars) && found_token(to_pars))
 				print_export_list(export);
 			if (found_export(to_pars) && to_pars->next && found_token(to_pars))
@@ -420,7 +409,7 @@ int	main(int ac, char **av, char **env)
 				unset_delete_variable(to_pars, &enviroment, &export);
 			if (found_exit(to_pars)&& found_token(to_pars) )
 				ft_exit(to_pars);
-			if (ft_cd(to_pars) && found_token(to_pars) )
+			if (ft_cd(to_pars))
 				found_cd_pwd_update(to_pars, enviroment, export);
 			to_pars = free_cmds_list(to_pars);
 			if (found_echo(to_pars)&& found_token(to_pars))
