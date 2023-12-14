@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/13 16:30:07 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/14 14:59:45 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -402,16 +402,16 @@ int	main(int ac, char **av, char **env)
 				ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, commande_split);
 			if (found_echo(to_pars))
 				found_dollar_print_variable(to_pars, enviroment);
-			if (ft_envp(to_pars))
-				print_list_envp(enviroment);
 			if (found_token(to_pars))
 				ft_pwd(to_pars);
-			if (!to_pars->next && found_export(to_pars))
-				print_export_list(export);
-			if (found_export(to_pars) && to_pars->next)
-				add_export_env(to_pars, &enviroment, &export);
 			if (found_unset(to_pars))
 				unset_delete_variable(to_pars, &enviroment, &export);
+			if (!to_pars->next && found_export(to_pars))
+				print_export_list(export);
+			if (ft_envp(to_pars))
+				print_list_envp(enviroment);
+			if (found_export(to_pars) && to_pars->next)
+				add_export_env(to_pars, &enviroment, &export);
 			if (found_exit(to_pars))
 				ft_exit(to_pars);
 			if (ft_cd(to_pars))

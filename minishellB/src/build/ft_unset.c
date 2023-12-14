@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:52:57 by npoalett          #+#    #+#             */
-/*   Updated: 2023/12/13 16:35:24 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/14 15:05:31 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void	unset_delete_variable(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	    next = to_pars->next;
 	while(next)
 	{
+		// if (!next->cmd)
+			// return(printf("lol\n"), (void)0);
 		while (current != NULL && (ft_strncmp(next->cmd, current->path,
 					ft_strlen(next->cmd)) != 0))
 		{
@@ -64,6 +66,7 @@ void	unset_delete_variable(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 				prev_exp->next = current_exp->next;
 			free(current_exp->path);
 			free(current_exp);
+			current_exp = *export;
 		}
 		if (current != NULL)
 		{
@@ -75,6 +78,7 @@ void	unset_delete_variable(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 			free(current->path);
 			free(current->value);
 			free(current);
+			current = *enviroment;
 		}
 		next = next->next;
 	}
