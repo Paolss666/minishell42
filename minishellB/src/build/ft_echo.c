@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:37 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/12 11:21:13 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/14 16:39:13 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ void	ft_echo(t_cmd *to_pars)
 		ft_putstr_fd("\n", 1);
 	if (found_echo(to_pars) == 2 && to_pars->next)
 		ft_putstr_fd(to_pars->next->cmd, 1);
-	// else
-	// 	ft_putstr_fd("\n", 1);
 }
 
 
@@ -143,6 +141,8 @@ void found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 		if (current_cmd->cmd && ft_strcmp(current_cmd->cmd, "echo") == 0)
 		{
 			arg_cmd = current_cmd->next; // Puntatore al primo argomento
+			if (!arg_cmd)
+				return (printf("\n"), (void)0);
 			if (ft_strcmp(arg_cmd->cmd, "$?") == 0)
 			{	
 				printf("%d\n", g_exit_status);

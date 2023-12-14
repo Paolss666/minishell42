@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/13 14:36:03 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/14 18:13:20 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,25 @@ char	*found_variable_env(t_envp *enviroment, char *name_v)
 void	change_env_export_old_pwd(t_envp *enviroment, t_exp *export, char *old_pwd)
 {
 	if (!enviroment || !export)
-		return (ft_putstr_fd("ENV ou EXPO not\n", 2));
+		return (ft_putstr_fd("ENV ou EXPO not\n", 2), (void)0);
+	if (!old_pwd)
+		return ((void)0);
 	while (enviroment)
 	{
 		if (ft_strcmp(enviroment->name, "OLDPWD") == 0)
 			break ;
 		enviroment = enviroment->next;
 	}
+	if (!enviroment->next)
+		return ((void)0);
 	free(enviroment->path);
 	free(enviroment->value);
 	enviroment->value = ft_strdup(old_pwd);
+	if (!enviroment->value)
+		return (printf("ft_strdup FAIL\n"),  (void)0);
 	enviroment->path = ft_strjoin(enviroment->name, ft_strjoin("=", old_pwd));
+	if (!enviroment->path)
+		return (printf("ft_strjoin FAIL\n"), (void)0);
 	while (export)
 	{
 		if (ft_strncmp(export->path, "export OLDPWD",
@@ -57,6 +65,8 @@ void	change_env_export_old_pwd(t_envp *enviroment, t_exp *export, char *old_pwd)
 			break ;
 		export = export->next;
 	}
+	// if (export->next == NULL)
+	// 	return ((void)0);
 	free(export->path);
 	export->path = ft_strjoin(ft_strjoin("export ", enviroment->name),
 								(ft_strjoin("=\"", ft_strjoin(old_pwd, "\""))));
@@ -85,6 +95,8 @@ void	change_env_export_pwd(t_envp *enviroment, t_exp *export, char *new_pwd)
 		if (ft_strncmp(export->path, "export PWD",
 				ft_strlen("export PWD")) == 0)
 			break ;
+		// if (!export->next)
+			// return ((void)0);
 		export = export->next;
 	}
 	free(export->path);
@@ -148,6 +160,7 @@ void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 		return (perror("fail ft_substr"));
 	if (ft_cd(to_pars) == 1 && !to_pars->next && home)
 	{
+		// printf("on est ici\n");
 		if (chdir(home) == 0) /* COMMANDE CD SANS ARGV */
 		{
 			change_env_export_pwd(enviroment, export, home);
@@ -190,5 +203,6 @@ void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 		else
 			perror("fail chdir ");
 	}
+	// printf("nous sommes ici\n");
 }
 

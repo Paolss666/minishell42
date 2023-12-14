@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/14 14:59:45 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/14 18:23:43 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,26 +280,62 @@ char	*found_path_envp_list(t_envp *enviroment)
 	return (NULL);
 }
 
+void	found_SHLVL(t_envp *enviroment, t_exp *export)
+{
+	if (!enviroment || !export)
+		return ((void)0);
+	while(enviroment && export)
+	{
+		if (ft_strcmp(enviroment->name, "SHLVL") == 0 && ft_strncmp(export->path, "export SHLVL", ft_strlen("export SHLVL")) == 0)
+			{
+				printf("je suis IN\n");
+				enviroment->value = ft_strdup("2");
+				printf("enviroment->value %s\n", enviroment->value);
+				// printf("export->value --> %s\n", export->value);
+				export->value = ft_strdup("2");
+				printf("export->value --> %s\n", export->value);
+			}
+		enviroment = enviroment->next;
+		export = export->next;
+	}
+	return ((void)0);
+}
+
 char	*ft_good_path_access(t_cmd	*to_pars, t_envp *enviroment)
 {
 	char	*exec;
 	char	*try_line;
 	char	**env_split;
+	char 	**with_flag;
 	int		i;
 
 	i = 0;
+	with_flag= ft_split(to_pars->cmd, ' '); 
 	env_split = ft_split(found_path_envp_list(enviroment), ':');
-	if (access(to_pars->cmd, F_OK | X_OK) == 0)
-		return (to_pars->cmd);
+	if (access(with_flag[0], F_OK | X_OK) == 0)
+		return (with_flag[0]);
 	while(env_split[i])
 	{
-		try_line = ft_strjoin(env_split[i], "/");
-		exec = ft_strjoin(try_line, to_pars->cmd);
-		free(try_line);
-		if (access(exec, F_OK | X_OK) == 0)
-			return (exec);
-		free(exec);
-		i++;
+		if (with_flag)
+		{
+			try_line = ft_strjoin(env_split[i], "/");
+			exec = ft_strjoin(try_line, with_flag[0]);
+			free(try_line);
+			if (access(exec, F_OK | X_OK) == 0)
+				return (exec);
+			free(exec);
+			i++;
+		}
+		else
+		{	
+			try_line = ft_strjoin(env_split[i], "/");
+			exec = ft_strjoin(try_line, to_pars->cmd);
+			free(try_line);
+			if (access(exec, F_OK | X_OK) == 0)
+				return (exec);
+			free(exec);
+			i++;
+		}
 	}
 	return (NULL);
 }
@@ -325,7 +361,7 @@ char 	**envp_list_to_new_env(t_envp *enviroment)
 	}
 	new_enviroment[i] = NULL;
 	return (new_enviroment);
-} 
+}
 
 int	main(int ac, char **av, char **env)
 {
@@ -380,6 +416,11 @@ int	main(int ac, char **av, char **env)
 			if (!export)
 				export = add_env_with_export(enviroment);
 			export_env_sort(export);
+			// if (ft_strcmp(to_pars->cmd, "./minishell") == 0)
+			// {
+			// 	printf("je suis la\n");
+			// 	found_SHLVL(enviroment, export);
+			// }
 			// printf("size envp pour pipex -> %d\n", len_liste_envp(enviroment));
 			if (!found_token(to_pars))
 			{

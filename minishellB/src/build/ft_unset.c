@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:52:57 by npoalett          #+#    #+#             */
-/*   Updated: 2023/12/14 15:05:31 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/14 16:09:41 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ void	unset_delete_variable(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	    next = to_pars->next;
 	while(next)
 	{
-		// if (!next->cmd)
-			// return(printf("lol\n"), (void)0);
 		while (current != NULL && (ft_strncmp(next->cmd, current->path,
 					ft_strlen(next->cmd)) != 0))
 		{
