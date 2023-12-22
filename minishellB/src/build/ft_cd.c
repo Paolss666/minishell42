@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/14 18:13:20 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/18 06:42:36 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	change_env_export_old_pwd(t_envp *enviroment, t_exp *export, char *old_pwd)
 			break ;
 		enviroment = enviroment->next;
 	}
-	if (!enviroment->next)
-		return ((void)0);
+/* 	if (!enviroment->next)
+		return ((void)0); */
 	free(enviroment->path);
 	free(enviroment->value);
 	enviroment->value = ft_strdup(old_pwd);
@@ -141,7 +141,7 @@ t_cd	*cpy_cd_list(char **splits, t_cd *commande_cd)
 
 void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 {
-	char	*current_path_name;
+/* 	char	*current_path_name; */
 	char	*pwd;
 	char	*home;
 	char	*old_pwd;
@@ -150,13 +150,13 @@ void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 	pwd = NULL;
 	line  = NULL;
 	old_pwd = NULL;
-	current_path_name = NULL;
+/* 	current_path_name = NULL; */
 	pwd = getcwd(NULL, 0);
 	home = found_variable_env(enviroment, "HOME");
 	old_pwd = found_variable_env(enviroment, "OLDPWD");
 	old_pwd = ft_substr(old_pwd, ft_strlen("OLDPWD="), ft_strlen(old_pwd));
 	home = ft_substr(home, ft_strlen("HOME="), ft_strlen(home));
-	if (!home)
+	if (!home) 
 		return (perror("fail ft_substr"));
 	if (ft_cd(to_pars) == 1 && !to_pars->next && home)
 	{
@@ -164,12 +164,12 @@ void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 		if (chdir(home) == 0) /* COMMANDE CD SANS ARGV */
 		{
 			change_env_export_pwd(enviroment, export, home);
-			change_env_export_old_pwd(enviroment, export, pwd);
+			change_env_export_old_pwd(enviroment, export, pwd);/*  	PROBLEM IN THIS FUNCITO */
 		}
 		else
 			ft_putstr_fd("FAIL chdir home path not found\n", 2);
 	}
-	if (ft_cd(to_pars) && to_pars->next && !to_pars->next->next)
+	if ((ft_cd(to_pars) && to_pars->next && !to_pars->next->next) /* || (ft_cd(to_pars) && !to_pars->next) */)
 	{
 		if (chdir(to_pars->next->cmd) == 0)
 		{
@@ -181,7 +181,7 @@ void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 		else
 		{
 			ft_putstr_fd(to_pars->next->cmd, 2);
-			ft_putstr_fd("  is not a directory\n", 2);
+			ft_putstr_fd(": is not a directory\n", 2);
 		}
 	}
 	if (ft_cd(to_pars) == 2 && !to_pars->next)
@@ -201,7 +201,10 @@ void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 			printf("%s\n", line);
 		}
 		else
-			perror("fail chdir ");
+		{
+			ft_putstr_fd(to_pars->next->cmd, 2);
+			ft_putstr_fd(": is not a directory\n", 2);
+		}
 	}
 	// printf("nous sommes ici\n");
 }

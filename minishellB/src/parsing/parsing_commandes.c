@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_commandes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/14 18:23:43 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/18 06:53:43 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -391,7 +391,7 @@ int	main(int ac, char **av, char **env)
 	{
 		line = display_prompt();
 		count = 0;
-		line = epur_str(line);
+/* 		line = epur_str(line); */
 		if (!error_manager(line))
 		{
 			commande_split_toParse(commande_split, line);
@@ -439,13 +439,14 @@ int	main(int ac, char **av, char **env)
 			if (pid)
 				if (waitpid(pid, &status, 0) == -1)
 					perror("waitpid error");
-			if (found_pipe(to_pars) && found_token(to_pars))
-				ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, commande_split);
-			if (found_echo(to_pars))
+	/* 		if (found_pipe(to_pars) && found_token(to_pars))
+				ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, commande_split); */
+				printf("je suis la1\n");
+			if (found_echo(to_pars) && found_token(to_pars))
 				found_dollar_print_variable(to_pars, enviroment);
 			if (found_token(to_pars))
 				ft_pwd(to_pars);
-			if (found_unset(to_pars))
+			if (found_unset(to_pars) && found_token(to_pars))
 				unset_delete_variable(to_pars, &enviroment, &export);
 			if (!to_pars->next && found_export(to_pars))
 				print_export_list(export);
@@ -455,13 +456,14 @@ int	main(int ac, char **av, char **env)
 				add_export_env(to_pars, &enviroment, &export);
 			if (found_exit(to_pars))
 				ft_exit(to_pars);
-			if (ft_cd(to_pars))
+			printf("je suis la2\n");
+			if (ft_cd(to_pars) /* && found_token(to_pars) */)
 				found_cd_pwd_update(to_pars, enviroment, export);
 			to_pars = free_cmds_list(to_pars);
 			if (found_echo(to_pars))
 				found_dollar_print_variable(to_pars, enviroment);
 		}
-		to_pars = free_cmds_list(to_pars);
+		to_pars = free_cmds_list(to_pars );
 		// free_exp_list(export);
 	}
 }

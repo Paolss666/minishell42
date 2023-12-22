@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:29:14 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/14 17:42:26 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/16 13:25:55 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	ft_pwd(t_cmd *to_pars)
 				printf("%s\n", get_pwd);
 			break;
 		}
-		to_pars = to_pars->next; //<<== non serve
+		/* to_pars = to_pars->next; */ //<<== non serve
 	}
 	return (0);
 }
