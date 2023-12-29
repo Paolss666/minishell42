@@ -6,7 +6,7 @@
 /*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/29 12:22:46 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/29 15:20:00 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 		return (perror("fail ft_substr"));
 	if (ft_cd(to_pars) == 1 && !to_pars->next && home)
 	{
-		// printf("on est ici\n");
+		/* printf("on est ici\n"); */
 		if (chdir(home) == 0) /* COMMANDE CD SANS ARGV */
 		{
 			change_env_export_pwd(enviroment, export, home);
@@ -203,6 +203,8 @@ void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 		else
 			perror("fail chdir ");
 	}
+	if (ft_cd(to_pars) == 1 && ft_strcmp(to_pars->next->cmd, "..") == 0)
+		printf("found\n");
 	// printf("nous sommes ici\n");
 }
 
