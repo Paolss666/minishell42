@@ -6,7 +6,7 @@
 /*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/29 15:20:00 by npoalett         ###   ########.fr       */
+/*   Updated: 2023/12/29 16:05:22 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,9 @@ void	change_env_export_old_pwd(t_envp *enviroment, t_exp *export, char *old_pwd)
 void	change_env_export_pwd(t_envp *enviroment, t_exp *export, char *new_pwd)
 {
 	if (!enviroment || !export)
-		return (ft_putstr_fd("ENV ou EXPO not\n", 2));
+		return (ft_putstr_fd("ENV ou EXPO\n", 2));
+	if (!new_pwd)
+		return (perror(""));
 	while (enviroment)
 	{
 		if (ft_strcmp(enviroment->name, "PWD") == 0)
@@ -95,8 +97,6 @@ void	change_env_export_pwd(t_envp *enviroment, t_exp *export, char *new_pwd)
 		if (ft_strncmp(export->path, "export PWD",
 				ft_strlen("export PWD")) == 0)
 			break ;
-		// if (!export->next)
-			// return ((void)0);
 		export = export->next;
 	}
 	free(export->path);
@@ -105,7 +105,6 @@ void	change_env_export_pwd(t_envp *enviroment, t_exp *export, char *new_pwd)
 	if (!export->path || !enviroment->name || !new_pwd)
 		return (ft_putstr_fd("ERROR FAIL malloc strjoin\n", 2),
 				(void)0);
-	// free(new_pwd);
 }
 
 t_cd	*cpy_cd_list(char **splits, t_cd *commande_cd)
@@ -201,10 +200,10 @@ void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 			printf("%s\n", line);
 		}
 		else
-			perror("fail chdir ");
+			perror("fail chdir cd -");
 	}
-	if (ft_cd(to_pars) == 1 && ft_strcmp(to_pars->next->cmd, "..") == 0)
-		printf("found\n");
+/* 	if (ft_cd(to_pars) == 1 && !to_pars->next)
+		printf("found\n"); */
 	// printf("nous sommes ici\n");
 }
 

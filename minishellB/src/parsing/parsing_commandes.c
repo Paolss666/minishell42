@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_commandes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/14 18:23:43 by npaolett         ###   ########.fr       */
+/*   Updated: 2023/12/29 15:56:36 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,6 +259,8 @@ int	found_token(t_cmd *to_pars)
 			return (1);
 		if (ft_strcmp(to_pars->cmd, "exit") == 0)
 			return (1);
+		if (ft_strcmp(to_pars->cmd, "pwd") == 0)
+			return (1);
 		to_pars = to_pars->next;
 	}
 	return (0);
@@ -443,8 +445,7 @@ int	main(int ac, char **av, char **env)
 				ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, commande_split);
 			if (found_echo(to_pars))
 				found_dollar_print_variable(to_pars, enviroment);
-			if (found_token(to_pars))
-				ft_pwd(to_pars);
+			ft_pwd(to_pars);
 			if (found_unset(to_pars))
 				unset_delete_variable(to_pars, &enviroment, &export);
 			if (!to_pars->next && found_export(to_pars))
