@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:52:57 by npoalett          #+#    #+#             */
-/*   Updated: 2023/12/14 16:09:41 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/02 17:43:54 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,58 +26,69 @@ int	found_unset(t_cmd *to_pars)
 	return (0);
 }
 
-void	unset_delete_variable(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
+void	found_in_env_and_delete(t_envp	**enviroment, t_cmd *to_pars)
 {
-	t_envp	*current;
-	t_envp	*prev;
+	t_envp	*current = NULL;
+	t_envp	*prev = NULL;
+
+	current = *enviroment;
+	while (current != NULL && (ft_strncmp(to_pars->cmd, current->path,
+				ft_strlen(to_pars->cmd)) != 0))
+	{
+		prev = current;
+		current = current->next;
+	}
+	if (current != NULL)
+	{
+		if (prev == NULL)
+			*enviroment = current->next;
+		else
+			prev->next = current->next;
+		free(current->name);
+		free(current->path);
+		free(current->value);
+		free(current);
+		current = *enviroment;
+	}
+}
+
+void	found_in_export_and_delete(t_exp	**export, t_cmd *to_pars)
+{
 	t_exp	*current_exp;
 	t_exp	*prev_exp;
+
+	current_exp = *export;
+	while (current_exp != NULL && (ft_strncmp(ft_strjoin("export ", to_pars->cmd),
+				current_exp->path, ft_strlen(ft_strjoin("export ",
+						to_pars->cmd))) != 0))
+	{
+		prev_exp = current_exp;
+		current_exp = current_exp->next;
+	}
+	if (current_exp != NULL)
+	{
+		if (prev_exp == NULL)
+			*export = current_exp->next;
+		else
+			prev_exp->next = current_exp->next;
+		free(current_exp->path);
+		free(current_exp);
+		current_exp = *export;
+	}
+}
+
+void	unset_delete_variable(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
+{
 	t_cmd	*next;
 
-	prev = NULL;
-	current = *enviroment;
-	current_exp = *export;
 	if (!to_pars->next)
 	    return(ft_putstr_fd("unset need arguments\n", 2), (void)0);
 	else
 	    next = to_pars->next;
 	while(next)
 	{
-		while (current != NULL && (ft_strncmp(next->cmd, current->path,
-					ft_strlen(next->cmd)) != 0))
-		{
-			prev = current;
-			current = current->next;
-		}
-		while (current_exp != NULL && (ft_strncmp(ft_strjoin("export ", next->cmd),
-					current_exp->path, ft_strlen(ft_strjoin("export ",
-							next->cmd))) != 0))
-		{
-			prev_exp = current_exp;
-			current_exp = current_exp->next;
-		}
-		if (current_exp != NULL)
-		{
-			if (prev_exp == NULL)
-				*export = current_exp->next;
-			else
-				prev_exp->next = current_exp->next;
-			free(current_exp->path);
-			free(current_exp);
-			current_exp = *export;
-		}
-		if (current != NULL)
-		{
-			if (prev == NULL)
-				*enviroment = current->next;
-			else
-				prev->next = current->next;
-			free(current->name);
-			free(current->path);
-			free(current->value);
-			free(current);
-			current = *enviroment;
-		}
+		found_in_env_and_delete(enviroment, next);
+		found_in_export_and_delete(export, next);
 		next = next->next;
 	}
 }

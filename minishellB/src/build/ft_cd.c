@@ -6,7 +6,7 @@
 /*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/29 16:05:22 by npoalett         ###   ########.fr       */
+/*   Updated: 2024/01/02 18:57:56 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,24 @@ char	*found_variable_env(t_envp *enviroment, char *name_v)
 	return (NULL);
 }
 
+char	*found_variable_exp(t_exp *export, char *name_v)
+{
+	while (export!= NULL)
+	{
+		if (ft_strcmp(export->name, name_v) == 0)
+			return (export->path);
+		export = export->next;
+	}
+	return (NULL);
+}
+
 void	change_env_export_old_pwd(t_envp *enviroment, t_exp *export, char *old_pwd)
 {
 	if (!enviroment || !export)
 		return (ft_putstr_fd("ENV ou EXPO not\n", 2), (void)0);
 	if (!old_pwd)
 		return ((void)0);
-	while (enviroment)
-	{
-		if (ft_strcmp(enviroment->name, "OLDPWD") == 0)
-			break ;
-		enviroment = enviroment->next;
-	}
+	found_variable_env(enviroment, "OLDPWD");
 	if (!enviroment->next)
 		return ((void)0);
 	free(enviroment->path);
@@ -58,15 +64,7 @@ void	change_env_export_old_pwd(t_envp *enviroment, t_exp *export, char *old_pwd)
 	enviroment->path = ft_strjoin(enviroment->name, ft_strjoin("=", old_pwd));
 	if (!enviroment->path)
 		return (printf("ft_strjoin FAIL\n"), (void)0);
-	while (export)
-	{
-		if (ft_strncmp(export->path, "export OLDPWD",
-				ft_strlen("export OLDPWD")) == 0)
-			break ;
-		export = export->next;
-	}
-	// if (export->next == NULL)
-	// 	return ((void)0);
+	found_variable_exp(export, "export OLDPWD");
 	free(export->path);
 	export->path = ft_strjoin(ft_strjoin("export ", enviroment->name),
 								(ft_strjoin("=\"", ft_strjoin(old_pwd, "\""))));
@@ -80,8 +78,6 @@ void	change_env_export_pwd(t_envp *enviroment, t_exp *export, char *new_pwd)
 {
 	if (!enviroment || !export)
 		return (ft_putstr_fd("ENV ou EXPO\n", 2));
-	if (!new_pwd)
-		return (perror(""));
 	while (enviroment)
 	{
 		if (ft_strcmp(enviroment->name, "PWD") == 0)
@@ -137,7 +133,7 @@ t_cd	*cpy_cd_list(char **splits, t_cd *commande_cd)
 }
 
 /* JE DOIT IMPLEMENTER D'ABORD LE PIPE E LE PARSING */
-
+/* OLD PWD PAS MODIF QUAND J'EXEC CD .. */
 void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 {
 /* 	char	*current_path_name; */
@@ -175,7 +171,10 @@ void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 			old_pwd = pwd;
 			change_env_export_old_pwd(enviroment, export, old_pwd);
 			pwd = getcwd(NULL, 0);
+			if (!pwd)
+				return (ft_putstr_fd(to_pars->next->cmd, 2), perror(" :"), (void)0);
 			change_env_export_pwd(enviroment, export, pwd);
+/* 			change_env_export_old_pwd(enviroment, export, old_pwd); */
 		}
 		else
 		{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:37 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/14 16:39:13 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/02 12:20:30 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,6 @@ int	found_echo(t_cmd *to_pars)
 
 void	ft_echo(t_cmd *to_pars)
 {
-/* 	char	**splits;
-
-	splits = NULL; */
 	if (found_echo(to_pars) == 1 && to_pars->next)
 		ft_putstr_fd(ft_strjoin(to_pars->next->cmd, "\n"), 1);
 	if (found_echo(to_pars) == 1 && !to_pars->next)
@@ -68,13 +65,9 @@ char	*find_variable_value(const char *var_name, t_envp *enviroment)
 	value = NULL;
 	while (enviroment != NULL)
 	{
-		// printf("var_name --> %s\n", var_name);
-		// printf("enviroment --> %s\n", enviroment->name);
 		if (ft_strcmp(enviroment->name, var_name) == 0)
 		{
-			// printf("enviroment->path--> %s\n", enviroment->path);
 			found_egual = ft_strchr(enviroment->path, '=');
-			// printf("enviroment->path--> %s\n", enviroment->path);
 			value = ft_strdup(found_egual + 1);
 			if (!value)
 				return (ft_putstr_fd("Fail malloc strdup\n", 2), NULL);

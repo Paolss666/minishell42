@@ -6,7 +6,7 @@
 /*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/29 15:56:36 by npoalett         ###   ########.fr       */
+/*   Updated: 2024/01/02 16:58:06 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -312,7 +312,9 @@ char	*ft_good_path_access(t_cmd	*to_pars, t_envp *enviroment)
 	int		i;
 
 	i = 0;
-	with_flag= ft_split(to_pars->cmd, ' '); 
+	with_flag= ft_split(to_pars->cmd, ' ');
+	if (!with_flag)
+		return (ft_free_tab(with_flag), NULL);
 	env_split = ft_split(found_path_envp_list(enviroment), ':');
 	if (access(with_flag[0], F_OK | X_OK) == 0)
 		return (with_flag[0]);

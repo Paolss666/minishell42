@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/14 14:41:01 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/02 19:14:38 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ t_exp	*add_env_with_export(t_envp *enviroment)
 		new_export->path = ft_strjoin(new_export->path, "\""); /* SECURISE */
 		new_export->name = NULL;  /* ft_strdup(enviroment->name); */
 		new_export->value = ft_strdup(ft_strchr(new_export->path, '='));
-		if (!new_export->path)
+		if (!new_export->path || !new_export->path)
 			return (perror("ERROR: strdup"), exit(EXIT_FAILURE), NULL);
 		new_export->next = NULL;
 		if (export_list == NULL) 
@@ -185,6 +185,8 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	char			*check_name_v;
 	char			*found_plus;
 	char			*modif_variable;
+	char			*join_name_value;
+	char			*name_join_guimet;
 
 	// unsigned int	len_for_equal;
 	good_path = NULL;
@@ -195,6 +197,8 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	new_export = NULL;
 	new_upgrade_exp = *export;
 	modif_variable = NULL;
+	join_name_value = NULL;
+	name_join_guimet = NULL;
 	while(to_pars->next)
 	{
 		if	(!valid_variable_char(to_pars->next->cmd[0]))
@@ -286,6 +290,8 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 					return (perror("Memory allocation FAIL"), free(name_v),
 						free(value), (void)0);
 				good_path = ft_strjoin(name_v, "=\"");
+				if (!good_path)
+					return((void)0);
 				new_export->value = value;
 				new_export->path = ft_strjoin("export ", ft_strjoin(good_path, ft_strjoin(value, "\""))); /* SECURISE */
 				new_export->name = name_v;
@@ -306,8 +312,17 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 		else /* AJOUT QUE DANS EXPORT ET CHECK CASES -PRT */
 		{
 			name_v = ft_strdup(line);
-			check_equal = ft_strjoin("export ", ft_strjoin(name_v, "=\""));
+			if (!name_v)
+				return ((void)0);
+			name_join_guimet = ft_strjoin(name_v, "=\"");
+			if (!name_join_guimet)
+				return (free(name_v), (void)0);
+			check_equal = ft_strjoin("export ", name_join_guimet);
+			if (!check_equal)
+				return (free(name_v), free(name_join_guimet), (void)0);
 			check_name_v = ft_strjoin("export ", name_v);
+			if (!check_name_v)
+				return (free(name_join_guimet), free(name_v), free(check_equal), (void)0);
 			while (check_equal_list)
 			{
 				if (ft_strncmp(check_equal_list->path, check_equal,
@@ -326,9 +341,18 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 			new_export = (t_exp *)malloc(sizeof(t_exp));
 			if (!new_export)
 				return (perror("Memory allocation FAIL"), free(name_v));
-			new_export->path = ft_strjoin("export ", ft_strjoin(name_v, value));
-			new_export->name = ft_strdup(name_v); /* SECURISE */
-			new_export->value = ft_strdup(value);/* SECURISE */
+			join_name_value = ft_strjoin(name_v, value);
+			if (!join_name_value)
+				return ((void)0);
+			new_export->path = ft_strjoin("export ", join_name_value);
+			if (!new_export->path)
+				return ((void)0);
+			new_export->name = ft_strdup(name_v);
+			if (!new_export->name)
+				return (free(new_export->path),(void)0);
+			new_export->value = ft_strdup(value);
+			if (!new_export->value)
+				return (free(new_export->path), free(new_export->name), (void)0);
 			new_export->next = NULL;
 			if (*export == NULL)
 				*export = new_export;
