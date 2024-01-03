@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/14 18:23:43 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/03 11:36:41 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -439,8 +439,8 @@ int	main(int ac, char **av, char **env)
 			if (pid)
 				if (waitpid(pid, &status, 0) == -1)
 					perror("waitpid error");
-			if (found_pipe(to_pars) && found_token(to_pars))
-				ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, commande_split);
+			// if (found_pipe(to_pars) && found_token(to_pars))
+			// 	ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, commande_split);
 			if (found_echo(to_pars))
 				found_dollar_print_variable(to_pars, enviroment);
 			if (found_token(to_pars))
