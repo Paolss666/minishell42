@@ -6,11 +6,11 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:27:26 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/12 15:27:38 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/03 16:50:21 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minishell.h"
+#include "../../headers/minishell.h"
 
 /* Il FAUT CREER UN DOSSIER QUE POUR LA COMMANDE ENV*/
 

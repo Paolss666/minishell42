@@ -6,7 +6,7 @@
 #    By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/12 14:58:37 by npaolett          #+#    #+#              #
-#    Updated: 2023/12/12 15:03:23 by npaolett         ###   ########.fr        #
+#    Updated: 2024/01/03 16:49:51 by npaolett         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,11 +21,11 @@ CFLAGS = -g3 -Wall -Wextra -Werror
 INCL = -I -I./libft 
 
 SRC =	src/build/ft_pwd.c\
-		src/build/ft_env.c \
-		src/build/ft_echo.c \
+		src/build/env/ft_env.c \
+		src/build/echo/ft_echo.c \
 		src/build/ft_exit.c  \
-		src/build/ft_cd.c 	  \
-		src/build/ft_export.c  \
+		src/build/cd/ft_cd.c 	  \
+		src/build/export/ft_export.c  \
 		src/build/ft_unset.c    \
 		src/execve/ft_exceve.c	 \
 		src/parsing/parsing_commandes.c \

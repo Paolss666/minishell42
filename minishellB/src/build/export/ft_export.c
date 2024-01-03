@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/02 19:14:38 by npoalett         ###   ########.fr       */
+/*   Updated: 2024/01/03 16:50:44 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minishell.h"
+#include "../../headers/minishell.h"
 /* Il FAUT CREER UN DOSSIER QUE POUR LA COMMANDE EXPORT */
 
 int	found_export(t_cmd *to_pars)
@@ -24,7 +24,6 @@ int	found_export(t_cmd *to_pars)
 	}
 	return (0);
 }
-
 
 // Funzione per lo swap di due nodi nella lista concatenata
 void	ft_swap(t_exp *a, t_exp *b)

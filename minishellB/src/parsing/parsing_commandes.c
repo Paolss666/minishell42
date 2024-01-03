@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_commandes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/02 16:58:06 by npoalett         ###   ########.fr       */
+/*   Updated: 2024/01/03 16:45:08 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -369,7 +369,6 @@ char 	**envp_list_to_new_env(t_envp *enviroment)
 
 int	main(int ac, char **av, char **env)
 {
-	// t_mshell	*minishell;
 	t_exp		*export;
 	char		*line;
 	t_cmd		*to_pars;
@@ -385,7 +384,6 @@ int	main(int ac, char **av, char **env)
 	to_pars = NULL;
 	pid = 0;
 	commande_split = NULL;
-	// minishell = NULL;
 	enviroment = NULL;
 	new_enviroment = NULL;
 	export = NULL;
@@ -406,7 +404,7 @@ int	main(int ac, char **av, char **env)
 			print_list(to_pars);
 /* 			join_found_flag(&to_pars); */
 //			printf("<<<<< ---------printf list avec flag --------------- >>\n");
-			// printf("found pipe --> %d\n", found_pipe(to_pars));
+			printf("found pipe --> %d\n", found_pipe(to_pars));
 			// printf("count to_pars --> %d\n", to_pars->count);
 			printf("found echo --> %d\n", found_echo(to_pars));
 			printf("found cd --> %d\n", ft_cd(to_pars));
@@ -440,11 +438,11 @@ int	main(int ac, char **av, char **env)
 					ft_free_tab(new_enviroment);
 				}
 			}
-			if (pid)
+			if (pid && !found_token(to_pars))
 				if (waitpid(pid, &status, 0) == -1)
 					perror("waitpid error");
-			if (found_pipe(to_pars) && found_token(to_pars))
-				ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, commande_split);
+			// if (found_pipe(to_pars) && found_token(to_pars))
+			// 	ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, commande_split);
 			if (found_echo(to_pars))
 				found_dollar_print_variable(to_pars, enviroment);
 			ft_pwd(to_pars);
@@ -465,6 +463,5 @@ int	main(int ac, char **av, char **env)
 				found_dollar_print_variable(to_pars, enviroment);
 		}
 		to_pars = free_cmds_list(to_pars);
-		// free_exp_list(export);
 	}
 }
