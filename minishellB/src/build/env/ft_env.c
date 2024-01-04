@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:27:26 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/03 16:50:21 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/04 14:43:40 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /* Il FAUT CREER UN DOSSIER QUE POUR LA COMMANDE ENV*/
 
 // <<------- copier l'env dans des listes chainees ------ >>
-char 	*ft_strcpy(char *dest, const char *src, size_t size)
+char	*ft_strcpy(char *dest, const char *src, size_t size)
 {
 	size_t	i;
 
@@ -31,31 +31,37 @@ char 	*ft_strcpy(char *dest, const char *src, size_t size)
 	return (dest);
 }
 
+void	create_enviroment(char **env, t_envp *current, int i)
+{
+	int	len;
+
+	len = 0;
+	current->path = ft_strdup(env[i]);
+	if (!current->path)
+		return (perror("FAIL current->path"), (void)0);
+	current->value = ft_strdup(ft_strchr(current->path, '=') + 1);
+	if (!current->value)
+		return (perror("FAIL current->value"), (void)0);
+	len = ft_strlen(current->path) - ft_strlen(current->value);
+	current->name = ft_substr(current->path, 0, len - 1);
+	if (!current->name)
+		return (perror("FAIL"), (void)0);
+	current->next = NULL;
+}
 
 t_envp	*found_and_add_env(char **env, t_envp *enviroment)
 {
 	t_envp	*current;
 	t_envp	*envp;
 	int		i;
-	int		len;
 
 	i = -1;
-	len = 0;
 	while (env[++i])
 	{
 		current = (t_envp *)malloc(sizeof(t_envp));
 		if (!current)
 			return (perror("FAIL malloc t_envp"), NULL);
-		current->path = ft_strdup(env[i]);
-		current->value = ft_strdup(ft_strchr(current->path, '=') + 1);
-		len = ft_strlen(current->path) -  ft_strlen(current->value);
-		current->name = ft_substr(current->path, 0, len - 1);
-		if (!current->name)
-			return (perror("FAIL"), NULL);
-		// printf("current->name %s\n", current->name);
-		if (!current->path || !current->name || !current->value)
-			return (perror("ft_strdup found_and_add_env"), NULL);
-		current->next = NULL;
+		create_enviroment(env, current, i);
 		if (!enviroment)
 			enviroment = current;
 		else

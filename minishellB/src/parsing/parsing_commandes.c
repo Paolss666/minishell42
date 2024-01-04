@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/03 16:45:08 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/04 17:13:47 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -402,7 +402,6 @@ int	main(int ac, char **av, char **env)
 				line = display_prompt();
 			count = join_found_flag(&to_pars);
 			print_list(to_pars);
-/* 			join_found_flag(&to_pars); */
 //			printf("<<<<< ---------printf list avec flag --------------- >>\n");
 			printf("found pipe --> %d\n", found_pipe(to_pars));
 			// printf("count to_pars --> %d\n", to_pars->count);
@@ -429,6 +428,7 @@ int	main(int ac, char **av, char **env)
 				pid = fork();
 				if (pid == 0)
 				{
+					// ft_execve(to_pars, enviroment, line);
 					new_enviroment = envp_list_to_new_env(enviroment);
 					good_path_access = ft_good_path_access(to_pars, enviroment);
 					if (!good_path_access)
@@ -441,8 +441,8 @@ int	main(int ac, char **av, char **env)
 			if (pid && !found_token(to_pars))
 				if (waitpid(pid, &status, 0) == -1)
 					perror("waitpid error");
-			// if (found_pipe(to_pars) && found_token(to_pars))
-			// 	ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, commande_split);
+			if (found_pipe(to_pars) && !found_token(to_pars))
+					ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, ft_split(line, ' '));
 			if (found_echo(to_pars))
 				found_dollar_print_variable(to_pars, enviroment);
 			ft_pwd(to_pars);

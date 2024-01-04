@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:37 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/03 16:50:39 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/04 14:35:30 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@
 
 int	found_echo(t_cmd *to_pars)
 {
-	char	**splits = NULL;
+	char	**splits;
 
+	splits = NULL;
 	while (to_pars != NULL)
 	{
 		if (ft_strcmp(to_pars->cmd, "echo") == 0
@@ -30,7 +31,7 @@ int	found_echo(t_cmd *to_pars)
 		{
 			splits = ft_split(to_pars->cmd, ' ');
 			if (!splits)
-				return(ft_free_tab(splits), 0);
+				return (ft_free_tab(splits), 0);
 			printf("%s\n", splits[1]);
 			return (0);
 		}
@@ -111,99 +112,107 @@ char	*found_chr_forjoin(t_cmd *to_pars)
 		return (found);
 }
 
-void found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
+void	found_echo_with_flag(t_cmd	*arg_cmd, int i, int start, t_envp *enviroment)
 {
-    t_cmd 	*current_cmd;
+	int	len;
+	char *arg_value;
+	char *var_value;
+	char *var_name;
+
+
+	len = 0;
+	var_value = NULL;
+	var_name  = NULL;
+	while (arg_cmd)
+	{
+		start = 0;
+		i = 1;
+		arg_value = arg_cmd->cmd;
+		if (arg_value[0] == '$' && valid_variable_char(arg_value[1]))
+			logic_print_variable(start, i, enviroment, arg_cmd);
+		else
+			printf("%s ", arg_value); // Stampa l'argomento
+		arg_cmd = arg_cmd->next; // Passa all'argomento successivo
+	}
+}
+
+void	logic_print_variable(int start, int	i, t_envp *enviroment, t_cmd *arg_cmd)
+{
 	char	*var_name;
 	char	*var_value;
+	char	*found;
+	int		len;
+	char 	*arg_value;
+
+	len = 0;
+	start = i;
+	arg_value = arg_cmd->cmd;
+	while (valid_variable_char(arg_value[i]))
+		++i;
+	len = i - start;
+	var_name = (char *)malloc(sizeof(char) * len + 1);
+	if (!var_name)
+		return (ft_putstr_fd("FAIL MALLOC\n", 2), (void)0);
+	ft_strlcpy(var_name, arg_value + start, len + 1);
+	var_value = find_variable_value(var_name, enviroment);
+	found = found_chr_forjoin(arg_cmd);
+	if (var_value && found) 
+		printf("%s ", ft_strjoin(var_value, found));
+	if (!var_value && found)
+		printf("%s ", found);
+	if (var_value && !found)
+		printf("%s ", var_value);
+}
+
+void	found_echo_not_flag(t_cmd *arg_cmd, int i, int start, t_envp *enviroment)
+{
+	char	*var_name;
+	char	*var_value;
+	int		len;
+
+	len = 0;
+	var_name = NULL;
+	var_value = NULL;
+	if (!arg_cmd)
+		return (printf("\n"), (void)0);
+	while (arg_cmd)
+	{
+		start = 0;
+		i = 1;
+		if (arg_cmd->cmd[0] == '$' && valid_variable_char(arg_cmd->cmd[1]))
+			logic_print_variable(start, i, enviroment, arg_cmd);
+		else
+			printf("%s ", arg_cmd->cmd);
+		arg_cmd = arg_cmd->next;
+	}
+	printf("\n");
+}
+
+void found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
+{
 	int		i;
 	int		start;
 	int		len;
-	char 	*found;
-	t_cmd 	*arg_cmd;
-	
+	t_cmd	*arg_cmd;
 
 	i = 0;
 	start = 0;
 	len = 0;
-	current_cmd = to_pars;
-	var_name = NULL;
-	var_value = NULL;
-	while (current_cmd)
+	while (to_pars)
 	{
-		if (current_cmd->cmd && ft_strcmp(current_cmd->cmd, "echo") == 0)
+		if (to_pars->cmd && ft_strcmp(to_pars->cmd, "echo") == 0)
 		{
-			arg_cmd = current_cmd->next; // Puntatore al primo argomento
-			if (!arg_cmd)
-				return (printf("\n"), (void)0);
+			arg_cmd = to_pars->next;
 			if (ft_strcmp(arg_cmd->cmd, "$?") == 0)
-			{	
-				printf("%d\n", g_exit_status);
-				return ;
-			}
-			while (arg_cmd)
-			{
-				start = 0;
-				i = 1;
-				char *arg_value = arg_cmd->cmd;
-				if (arg_value[0] == '$' && valid_variable_char(arg_value[1]))
-				{
-					start = i;
-					while (valid_variable_char(arg_value[i]))
-						++i;
-					len = i - start;
-					var_name = (char *)malloc(sizeof(char) * len + 1);
-					if (!var_name)
-						return (ft_putstr_fd("FAIL MALLOC\n", 2), (void)0);
-					ft_strlcpy(var_name, arg_value + start, len + 1);
-					var_value = find_variable_value(var_name, enviroment);
-					found = found_chr_forjoin(arg_cmd);
-					if (var_value && found) 
-						printf("%s ", ft_strjoin(var_value, found));
-					if (!var_value && found)
-						printf("%s ", found);
-					if (var_value && !found)
-						printf("%s ", var_value);
-				}
-				else
-					printf("%s ", arg_value); // Stampa l'argomento
-				arg_cmd = arg_cmd->next; // Passa all'argomento successivo
-			}
-			printf("\n");
+				return (printf("%d\n", g_exit_status), (void)0);
+			found_echo_not_flag(arg_cmd, i, start, enviroment);
 		}
-		if (current_cmd->cmd && ft_strcmp(current_cmd->cmd, "echo -n") == 0)
+		if (to_pars->cmd && ft_strcmp(to_pars->cmd, "echo -n") == 0)
 		{
-			arg_cmd = current_cmd->next; // Puntatore al primo argomento
-			while (arg_cmd)
-			{
-				start = 0;
-				i = 1;
-				char *arg_value = arg_cmd->cmd;
-				if (arg_value[0] == '$' && valid_variable_char(arg_value[1]))
-				{
-					start = i;
-					while (valid_variable_char(arg_value[i]))
-						++i;
-					len = i - start;
-					var_name = (char *)malloc(sizeof(char) * len + 1);
-					if (!var_name)
-						return (ft_putstr_fd("FAIL MALLOC\n", 2), (void)0);
-					ft_strlcpy(var_name, arg_value + start, len + 1);
-					var_value = find_variable_value(var_name, enviroment);
-					found = found_chr_forjoin(arg_cmd);
-					if (var_value && found) 
-						printf("%s ", ft_strjoin(var_value, found));
-					if (!var_value && found)
-						printf("%s ", found);
-					if (var_value && !found)
-						printf("%s ", var_value);
-				}
-				else
-					printf("%s ", arg_value); // Stampa l'argomento
-				arg_cmd = arg_cmd->next; // Passa all'argomento successivo
-			}
+			arg_cmd = to_pars->next;
+			found_echo_with_flag(arg_cmd, i, start, enviroment);
 		}
-		current_cmd = current_cmd->next; // Passa al comando successivo
+		to_pars = to_pars->next;
 	}
 }
 

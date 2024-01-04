@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 15:54:16 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/13 13:49:47 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/04 17:08:34 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_child_process(t_pipex *stack, int i, char **enviromet)
 	ft_free_tab(s_cmd);
 	free(good_path);
 	free(stack);
-	exit(1);
+	// exit(1);
 }
 
 void	parent_process(t_pipex *stack, int i)
@@ -89,7 +89,6 @@ char **cpy_enviroment_char(char **cpy_enviroment, t_envp *enviroment, int size)
 	i = -1;
 	if (!enviroment || !cpy_enviroment)
 		return (printf("FAILLLLLLL cpy_enviro\n"), free(enviroment), NULL);
-	// printf("je suis ici\n");
 	while(enviroment &&  ++i < size - 1)
 	{
 		cpy_enviroment[i] = ft_strdup(enviroment->path);
@@ -125,7 +124,7 @@ int	ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_spli
 		// 	av += 1;
 		// }
 		// printf("commande_split --> %s\n", commande_split[i]);
-		ft_init_stack(stack, size, to_pars, commande_split);
+		ft_init_stack(stack, size, commande_split);
 		exec_pipes(stack, enviroment_cpy);
 		close(stack->fd[0]);
 		free(stack);

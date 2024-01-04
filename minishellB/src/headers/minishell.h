@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 14:58:13 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/13 14:32:23 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/04 17:09:49 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,10 @@ void				commande_split_toParse(char **commande_split, char *line);
 // 
 // void	ft_init_stack(t_pipex *stack, int size, t_cmd *to_pars);
 int					ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_split);
-void				ft_init_stack(t_pipex *stack, int size, t_cmd *to_pars, char **commande_split);
-
-
+void				ft_init_stack(t_pipex *stack, int ac, char **av);
+void    			ft_execve(t_cmd *to_pars, t_envp *enviroment, char *line);
+char 				**envp_list_to_new_env(t_envp *enviroment);
+char				*ft_good_path_access(t_cmd	*to_pars, t_envp *enviroment);
 // void		ft_init_stack(stack, size, &to_pars, commande_split);
 // ------------ BUILDING ----------- // 
 int					ft_pwd(t_cmd *to_pars);
@@ -131,6 +132,7 @@ t_envp				*found_and_add_env(char **env, t_envp *enviroment);
 void				found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export);
 /* void				add_export_env(t_cmd *to_pars, t_envp **enviroment); */
 void				found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment);
+void				logic_print_variable(int start, int	i, t_envp *enviroment, t_cmd *arg_cmd);
 void				add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export);
 t_exp				*add_env_with_export(t_envp *enviroment);
 void    			unset_delete_variable(t_cmd *to_pars, t_envp **enviroment, t_exp **export);

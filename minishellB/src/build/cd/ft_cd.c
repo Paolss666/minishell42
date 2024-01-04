@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:47 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/03 16:50:52 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/04 15:30:47 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,4 +260,3 @@ void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 	if (ft_cd(to_pars) == 2 && !to_pars->next)
 		found_cd_oldpwd(export, enviroment, old_pwd, home);
 }
-

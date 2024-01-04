@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/03 16:50:44 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/04 14:48:58 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,22 +119,6 @@ void	print_export_list(t_exp *export)
 	}
 }
 
-/* int		check_line_is_alpha(char *line)
-{
-	int	i;
-
-	i = 0;
-	if (!line)
-		return (perror("line null"), 0);
-	while(line[i])
-	{
-		if (ft_isalpha(line[i]) || line[i] == '_')
-			i++;
-		else
-			return (0);
-	}
-	return(1);
-} */
 
 t_envp	*add_node_to_end(t_envp **list, const char *name, const char *value)
 {
@@ -227,7 +211,6 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 				len = ft_strlen(line) - ft_strlen(modif_variable) - 2;
 				name_v = ft_substr(line, 0, len);
 			}
-			// printf("name_v --> %s\n", name_v);
 			value = ft_strdup(found_equal + 1);
 			if (!name_v || !value)
 				return (perror("Memory allocation FAIL"), free(name_v), free(value),
@@ -235,10 +218,10 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 			current = *enviroment;
 			good_path = ft_strjoin("export ", name_v);
 			while (current != NULL && ft_strncmp(current->path, name_v,
-					ft_strlen(name_v)) != 0) /*  */
+					ft_strlen(name_v)) != 0)
 				current = current->next;
 			while (new_upgrade_exp != NULL && ft_strncmp(new_upgrade_exp->path,
-					good_path, ft_strlen(good_path)) != 0) /*  */
+					good_path, ft_strlen(good_path)) != 0) 
 				new_upgrade_exp = new_upgrade_exp->next;
 			if (current && new_upgrade_exp) /* SI O A TrOUVE LA NOM VARIABLE ET EST DANS LES DEUX LIST */
 			{
