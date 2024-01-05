@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 15:54:16 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/04 17:08:34 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/05 17:36:05 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,23 @@ int	found_pipe(t_cmd *cmd)
 	return (0);
 }
 
+int		count_n_pipe(t_cmd *to_pars)
+{
+	int	i;
+
+	i = 0;
+	if(!to_pars)
+		return (0);
+	while(to_pars)
+	{
+		if(ft_strcmp(to_pars->cmd, "|") == 0)
+			i++;
+		to_pars = to_pars->next;
+	}
+	return(i);
+}
+
+
 void	ft_child_process(t_pipex *stack, int i, char **enviromet)
 {
 	char	*good_path;
@@ -36,6 +53,7 @@ void	ft_child_process(t_pipex *stack, int i, char **enviromet)
 		s_cmd = ft_split(stack->cmd[i], ' ');
 	if (!s_cmd[0] || !s_cmd)
 		ft_error_split(stack, s_cmd);
+	// printf("--->%s\n", s_cmd[i]);
 	good_path = get_good_path(stack, s_cmd, enviromet);
 	if (!good_path)
 		ft_error_path(stack, s_cmd, good_path, i);
@@ -54,6 +72,7 @@ void	parent_process(t_pipex *stack, int i)
 		close(stack->prev);
 	stack->prev = stack->fd[0];
 }
+
 
 void	exec_pipes(t_pipex *stack, char **envp)
 {
@@ -100,6 +119,60 @@ char **cpy_enviroment_char(char **cpy_enviroment, t_envp *enviroment, int size)
 	return (cpy_enviroment);
 }
 
+
+// void	ft_redirect(t_pipex *stack, int i)
+// {
+// 	int	fd;
+
+// 	fd = 0;
+// 	if (i == 0)
+// 	{
+// 		// fd = open_file(stack, i);
+// 		dup2(fd, 0);
+// 		close(fd);
+// 	}
+// 	if (i == stack->nmbr_mcd - 1)
+// 	{
+// 		// fd = open_file(stack, i);
+// 		dup2(fd, 1);
+// 		close(fd);
+// 	}
+// 	if (i != 0)
+// 	{
+// 		dup2(stack->prev, 0);
+// 		close(stack->prev);
+// 	}
+// 	if (i != stack->nmbr_mcd - 1)
+// 		dup2(stack->fd[1], 1);
+// 	close(stack->fd[0]);
+// 	close(stack->fd[1]);
+// }
+
+/* 
+	creation pipe... cat | ls | cat
+	
+	cat --> mot
+	| --- > pipe
+	ls ---> mot
+	| ---> pipe
+	cat --> mot
+*/
+
+// int	pipe_modif(t_cmd *to_pars, )
+// {
+// 	t_cmd	*current;
+	
+// 	while(to_pars->next)
+// 	{
+// 		if (ft_strcmp(to_pars->next->cmd, "|") == 0)
+// 			break;
+// 		to_pars =to_pars->next; 
+// 	}
+// 	current = to_pars; // la on est AVANT la pipe
+// 	printf("%s\n", current->cmd);
+// 	return (0);
+// }
+
 int	ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_split)
 {
 	t_pipex *stack;
@@ -114,17 +187,7 @@ int	ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_spli
 		stack = (t_pipex *)malloc(sizeof(t_pipex));
 		if (!stack)
 			return (free(stack), 0);
-		// stack->here_doc = 0;
-		// if (ft_strncmp(av[1], "here_doc", ft_strlen("here_doc")) == 0
-		// 	&& ac >= 6)
-		// {
-		// 	ft_here_doc(stack, av[2]);
-		// 	stack->here_doc = 1;
-		// 	ac -= 1;
-		// 	av += 1;
-		// }
-		// printf("commande_split --> %s\n", commande_split[i]);
-		ft_init_stack(stack, size, commande_split);
+		ft_init_stack(stack, size, commande_split, count_n_pipe(to_pars));
 		exec_pipes(stack, enviroment_cpy);
 		close(stack->fd[0]);
 		free(stack);

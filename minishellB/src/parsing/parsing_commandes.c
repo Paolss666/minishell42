@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/04 17:13:47 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/05 19:35:51 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,6 @@ char	*display_prompt(void)
 	return (line);
 }
 
-// void	init_struct(t_mshell *minishell)
-// {
-// 	minishell = malloc(sizeof(t_mshell));
-// 	if (!minishell)
-// 		return ;
-// 	minishell->commande = NULL;
-// 	minishell->envp = NULL;
-// 	// minishell->pid = 0;
-// }
 
 void	commande_split_toParse(char **commande_split, char *line)
 {
@@ -374,6 +365,7 @@ int	main(int ac, char **av, char **env)
 	t_cmd		*to_pars;
 	char		**commande_split;
 	t_envp		*enviroment;
+	// t_pipe		*pipe;
 	int			status;
 	pid_t		pid;
 	int			count;
@@ -404,6 +396,7 @@ int	main(int ac, char **av, char **env)
 			print_list(to_pars);
 //			printf("<<<<< ---------printf list avec flag --------------- >>\n");
 			printf("found pipe --> %d\n", found_pipe(to_pars));
+			printf("count pipe --> %d\n", count_n_pipe(to_pars));
 			// printf("count to_pars --> %d\n", to_pars->count);
 			printf("found echo --> %d\n", found_echo(to_pars));
 			printf("found cd --> %d\n", ft_cd(to_pars));
@@ -417,6 +410,9 @@ int	main(int ac, char **av, char **env)
 			if (!export)
 				export = add_env_with_export(enviroment);
 			export_env_sort(export);
+			// t_minishell *minishell = NULL;
+			// minishell->to_pars = to_pars;
+			// pipe_modif(to_pars);
 			// if (ft_strcmp(to_pars->cmd, "./minishell") == 0)
 			// {
 			// 	printf("je suis la\n");
@@ -441,8 +437,8 @@ int	main(int ac, char **av, char **env)
 			if (pid && !found_token(to_pars))
 				if (waitpid(pid, &status, 0) == -1)
 					perror("waitpid error");
-			if (found_pipe(to_pars) && !found_token(to_pars))
-					ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, ft_split(line, ' '));
+			// if (found_pipe(to_pars) /* && !found_token(to_pars) */)
+				// /	ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, ft_split(line, ' '));
 			if (found_echo(to_pars))
 				found_dollar_print_variable(to_pars, enviroment);
 			ft_pwd(to_pars);

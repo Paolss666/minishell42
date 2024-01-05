@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:52:41 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/04 14:48:58 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/05 19:52:22 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,9 +129,11 @@ t_envp	*add_node_to_end(t_envp **list, const char *name, const char *value)
 	if (!new_node)
 		return (perror("Memory allocation failed"), NULL);
 	new_node->name = ft_strdup(name);
+	if (!new_node->name)
+		return (free(new_node), NULL);
 	new_node->value = ft_strdup(value);
-	if (!new_node->name || !new_node->value)
-		return (perror("Memory allocation failed"), free(new_node->name), free(new_node->value), free(new_node), NULL);
+	if (!new_node->value)
+		return (free(new_node->name),free(new_node), NULL);
 	new_node->path = ft_strjoin(name, ft_strjoin("=", value));
 	if (!new_node->path)
 		return (perror("Memory allocation failed"), free(new_node->name), free(new_node->value), free(new_node), NULL);
@@ -171,7 +173,7 @@ void	add_export_env(t_cmd *to_pars, t_envp **enviroment, t_exp **export)
 	char			*join_name_value;
 	char			*name_join_guimet;
 
-	// unsigned int	len_for_equal;
+
 	good_path = NULL;
 	check_name_v = NULL;
 	last = NULL;

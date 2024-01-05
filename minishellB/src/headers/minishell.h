@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 14:58:13 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/04 17:09:49 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/05 18:43:01 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,30 @@ typedef struct s_cmd
 // char *path et char *path_split avec =
 
 
+// typedef struct 	s_pipe
+// {
+// 	char		*path;
+// 	int			fd[2];
+// 	pid_t		pid[1024];
+// 	char		*cmd;
+// 	int			pipe;
+// 	int			size;
+// 	char		*commande_split;
+// 	s_cmd		*to_pars;
+// }				t_pipe;
+
+
+typedef struct s_minishell
+{
+	char	*line;
+	int		fd[2];
+	pid_t	pid[1024];
+	struct s_envp	*enviroment;
+	struct s_cmd	*to_pars;
+	struct s_exp	*export;
+}			t_minishell;
+
+
 typedef struct s_cd
 {
 	char			*path;
@@ -110,13 +134,18 @@ void				commande_split_toParse(char **commande_split, char *line);
 
 // ----------- PIPE--------------//
 // 
+// int	pipe_modif(t_cmd *to_pars);
+// int	pipe_modif(t_minishell *minishell);
 // void	ft_init_stack(t_pipex *stack, int size, t_cmd *to_pars);
 int					ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_split);
-void				ft_init_stack(t_pipex *stack, int ac, char **av);
+int					count_n_pipe(t_cmd *to_pars);
+// void				ft_init_stack(t_pipex *stack, int ac, char **av);
+void				ft_init_stack(t_pipex *stack, int ac, char **av, int count_n_pipe);
 void    			ft_execve(t_cmd *to_pars, t_envp *enviroment, char *line);
 char 				**envp_list_to_new_env(t_envp *enviroment);
 char				*ft_good_path_access(t_cmd	*to_pars, t_envp *enviroment);
 // void		ft_init_stack(stack, size, &to_pars, commande_split);
+
 // ------------ BUILDING ----------- // 
 int					ft_pwd(t_cmd *to_pars);
 int					ft_cd(t_cmd *to_pars);
@@ -142,6 +171,7 @@ void				print_list_envp(t_envp *head);
 void				print_export_list(t_exp *export);
 void 				ft_swap(t_exp *a, t_exp *b);
 void				export_env_sort(t_exp *exp_env);
+// ------------ ERROR SYNTAX ----------- // 
 void    			ft_exit(t_cmd   *to_pars);
 int					error_manager(char *str);
 int					ft_error_case_1(char c);
