@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:37 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/04 14:35:30 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/07 12:28:46 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,15 +114,15 @@ char	*found_chr_forjoin(t_cmd *to_pars)
 
 void	found_echo_with_flag(t_cmd	*arg_cmd, int i, int start, t_envp *enviroment)
 {
-	int	len;
+/* 	int	len; */
 	char *arg_value;
-	char *var_value;
-	char *var_name;
+/* 	char *var_value;
+	char *var_name; */
 
 
-	len = 0;
-	var_value = NULL;
-	var_name  = NULL;
+/* 	len = 0; */
+/* 	var_value = NULL;
+	var_name  = NULL; */
 	while (arg_cmd)
 	{
 		start = 0;
@@ -166,13 +166,13 @@ void	logic_print_variable(int start, int	i, t_envp *enviroment, t_cmd *arg_cmd)
 
 void	found_echo_not_flag(t_cmd *arg_cmd, int i, int start, t_envp *enviroment)
 {
-	char	*var_name;
+/* 	char	*var_name;
 	char	*var_value;
 	int		len;
 
 	len = 0;
 	var_name = NULL;
-	var_value = NULL;
+	var_value = NULL; */
 	if (!arg_cmd)
 		return (printf("\n"), (void)0);
 	while (arg_cmd)
@@ -192,12 +192,12 @@ void found_dollar_print_variable(t_cmd *to_pars, t_envp *enviroment)
 {
 	int		i;
 	int		start;
-	int		len;
+/* 	int		len; */
 	t_cmd	*arg_cmd;
 
 	i = 0;
 	start = 0;
-	len = 0;
+/* 	len = 0; */
 	while (to_pars)
 	{
 		if (to_pars->cmd && ft_strcmp(to_pars->cmd, "echo") == 0)

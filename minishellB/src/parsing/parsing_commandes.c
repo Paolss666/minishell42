@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_commandes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/05 19:35:51 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/07 14:15:44 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,7 +305,7 @@ char	*ft_good_path_access(t_cmd	*to_pars, t_envp *enviroment)
 	i = 0;
 	with_flag= ft_split(to_pars->cmd, ' ');
 	if (!with_flag)
-		return (ft_free_tab(with_flag), NULL);
+		return (ft_free_tab(with_flag),NULL);
 	env_split = ft_split(found_path_envp_list(enviroment), ':');
 	if (access(with_flag[0], F_OK | X_OK) == 0)
 		return (with_flag[0]);
@@ -366,18 +366,18 @@ int	main(int ac, char **av, char **env)
 	char		**commande_split;
 	t_envp		*enviroment;
 	// t_pipe		*pipe;
-	int			status;
-	pid_t		pid;
+/* 	int			status; */
+/* 	pid_t		pid; */
 	int			count;
-	char		**new_enviroment;
-	char		*good_path_access;
+/* 	char		**new_enviroment; */
+/* 	char		*good_path_access; */
 
 	(void)av;
 	to_pars = NULL;
-	pid = 0;
+/* 	pid = 0; */
 	commande_split = NULL;
 	enviroment = NULL;
-	new_enviroment = NULL;
+/* 	new_enviroment = NULL; */
 	export = NULL;
 	if (ac != 1)
 		return (ft_putstr_fd("Don't need arguments\n", 2), 1);
@@ -395,8 +395,7 @@ int	main(int ac, char **av, char **env)
 			count = join_found_flag(&to_pars);
 			print_list(to_pars);
 //			printf("<<<<< ---------printf list avec flag --------------- >>\n");
-			printf("found pipe --> %d\n", found_pipe(to_pars));
-			printf("count pipe --> %d\n", count_n_pipe(to_pars));
+			printf("found count_pipe --> %d\n", found_count_pipe(to_pars));
 			// printf("count to_pars --> %d\n", to_pars->count);
 			printf("found echo --> %d\n", found_echo(to_pars));
 			printf("found cd --> %d\n", ft_cd(to_pars));
@@ -419,24 +418,8 @@ int	main(int ac, char **av, char **env)
 			// 	found_SHLVL(enviroment, export);
 			// }
 			// printf("size envp pour pipex -> %d\n", len_liste_envp(enviroment));
-			if (!found_token(to_pars))
-			{
-				pid = fork();
-				if (pid == 0)
-				{
-					// ft_execve(to_pars, enviroment, line);
-					new_enviroment = envp_list_to_new_env(enviroment);
-					good_path_access = ft_good_path_access(to_pars, enviroment);
-					if (!good_path_access)
-						return (ft_error_commande_not_to_pars(to_pars), 0);
-					execve(good_path_access, ft_split(line, ' '), new_enviroment);
-					perror("execve");
-					ft_free_tab(new_enviroment);
-				}
-			}
-			if (pid && !found_token(to_pars))
-				if (waitpid(pid, &status, 0) == -1)
-					perror("waitpid error");
+			if (!found_token(to_pars)/*  && found_count_pipe(to_pars) */)
+				ft_execve(to_pars, enviroment, line);
 			// if (found_pipe(to_pars) /* && !found_token(to_pars) */)
 				// /	ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, ft_split(line, ' '));
 			if (found_echo(to_pars))

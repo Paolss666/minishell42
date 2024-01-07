@@ -3,42 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 15:54:16 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/05 17:36:05 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/07 12:30:48 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 #include "../headers/pipex.h"
 
-int	found_pipe(t_cmd *cmd)
+int	found_count_pipe(t_cmd *cmd)
 {
+	int	pipe;
+
+	pipe = 0;
 	while (cmd != NULL)
 	{
 		if (ft_strncmp(cmd->cmd, "|", ft_strlen("|")) == 0)
-			return (1);
+			pipe++;
 		cmd = cmd->next;
 	}
-	return (0);
+	return (pipe);
 }
 
-int		count_n_pipe(t_cmd *to_pars)
-{
-	int	i;
-
-	i = 0;
-	if(!to_pars)
-		return (0);
-	while(to_pars)
-	{
-		if(ft_strcmp(to_pars->cmd, "|") == 0)
-			i++;
-		to_pars = to_pars->next;
-	}
-	return(i);
-}
 
 
 void	ft_child_process(t_pipex *stack, int i, char **enviromet)
@@ -182,12 +170,12 @@ int	ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_spli
 	enviroment_cpy = cpy_enviroment_char(enviroment_cpy, enviroment, size);
 	if (!enviroment_cpy)
 			printf("shittttttttt\n");
-	if (found_pipe(to_pars))
+	if (found_count_pipe(to_pars))
 	{	
 		stack = (t_pipex *)malloc(sizeof(t_pipex));
 		if (!stack)
 			return (free(stack), 0);
-		ft_init_stack(stack, size, commande_split, count_n_pipe(to_pars));
+		ft_init_stack(stack, size, commande_split, found_count_pipe(to_pars));
 		exec_pipes(stack, enviroment_cpy);
 		close(stack->fd[0]);
 		free(stack);

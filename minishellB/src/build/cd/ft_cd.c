@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:28:47 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/04 15:30:47 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/07 12:29:19 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,9 +243,9 @@ void	found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export)
 	char	*pwd;
 	char	*home;
 	char	*old_pwd;
-	char	*line;
+/* 	char	*line;
 
-	line  = NULL;
+	line  = NULL; */
 	pwd = getcwd(NULL, 0);
 	home = found_variable_env(enviroment, "HOME");
 	old_pwd = found_variable_env(enviroment, "OLDPWD");

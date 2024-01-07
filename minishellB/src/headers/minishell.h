@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 14:58:13 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/05 18:43:01 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/07 14:00:56 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,14 +134,13 @@ void				commande_split_toParse(char **commande_split, char *line);
 
 // ----------- PIPE--------------//
 // 
-// int	pipe_modif(t_cmd *to_pars);
-// int	pipe_modif(t_minishell *minishell);
-// void	ft_init_stack(t_pipex *stack, int size, t_cmd *to_pars);
+char				**division_en_pipe(t_cmd *to_pars);
 int					ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_split);
-int					count_n_pipe(t_cmd *to_pars);
 // void				ft_init_stack(t_pipex *stack, int ac, char **av);
 void				ft_init_stack(t_pipex *stack, int ac, char **av, int count_n_pipe);
-void    			ft_execve(t_cmd *to_pars, t_envp *enviroment, char *line);
+int     ft_execve(t_cmd *to_pars, t_envp *enviroment, char *line);
+/* int     			ft_execve(t_cmd *to_pars, t_envp *enviroment, char line); */
+/* void    			ft_execve(t_cmd *to_pars, t_envp *enviroment, char *line); */
 char 				**envp_list_to_new_env(t_envp *enviroment);
 char				*ft_good_path_access(t_cmd	*to_pars, t_envp *enviroment);
 // void		ft_init_stack(stack, size, &to_pars, commande_split);
@@ -155,7 +154,7 @@ int					found_exit(t_cmd *to_pars);
 // int					print_pwd(t_envp *envp);
 int					found_echo(t_cmd *to_pars);
 int					ft_envp(t_cmd *to_pars);
-int					found_pipe(t_cmd *cmd);
+int					found_count_pipe(t_cmd *cmd);
 int					valid_variable_char(char c);
 t_envp				*found_and_add_env(char **env, t_envp *enviroment);
 void				found_cd_pwd_update(t_cmd *to_pars, t_envp *enviroment, t_exp *export);

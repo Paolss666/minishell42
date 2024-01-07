@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 15:17:32 by npaolett          #+#    #+#             */
-/*   Updated: 2023/12/13 14:43:54 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/07 13:15:18 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	ft_error_commande_not_to_pars(t_cmd *to_pars)
 	// close(stack->prev);
 	// close(stack->fd[1]);
 	// close(stack->fd[0]);
-	free(to_pars->cmd);
+/* 	free(to_pars->cmd); */
 	// exit(1);
 }
 
