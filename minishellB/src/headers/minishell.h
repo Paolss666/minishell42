@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 14:58:13 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/07 14:00:56 by npoalett         ###   ########.fr       */
+/*   Updated: 2024/01/08 18:15:06 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,15 +130,17 @@ t_cmd				*add_cmd_list(t_cmd *list, char **commande_split, char *line);
 int					join_found_flag(t_cmd **to_pars);
 char				*display_prompt(void);
 void				commande_split_toParse(char **commande_split, char *line);
-
+char 				***split_commands(t_cmd *to_pars);
 
 // ----------- PIPE--------------//
 // 
-char				**division_en_pipe(t_cmd *to_pars);
+char				***division_en_pipe(t_cmd *to_pars);
 int					ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_split);
+int exec(t_cmd *to_pars, t_envp *enviroment);
 // void				ft_init_stack(t_pipex *stack, int ac, char **av);
-void				ft_init_stack(t_pipex *stack, int ac, char **av, int count_n_pipe);
-int     ft_execve(t_cmd *to_pars, t_envp *enviroment, char *line);
+// void				ft_init_stack(t_pipex *stack, int ac, char **av, int count_n_pipe);
+t_pipex	*ft_init_stack(t_cmd *to_pars, int ac, char **av);
+int     ft_execve(t_cmd *to_pars, t_envp *enviroment/* , char *line */);
 /* int     			ft_execve(t_cmd *to_pars, t_envp *enviroment, char line); */
 /* void    			ft_execve(t_cmd *to_pars, t_envp *enviroment, char *line); */
 char 				**envp_list_to_new_env(t_envp *enviroment);

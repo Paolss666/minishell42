@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_commandes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:11:47 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/07 14:15:44 by npoalett         ###   ########.fr       */
+/*   Updated: 2024/01/08 17:11:05 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -417,11 +417,10 @@ int	main(int ac, char **av, char **env)
 			// 	printf("je suis la\n");
 			// 	found_SHLVL(enviroment, export);
 			// }
+			// int	pipe = found_count_pipe(to_pars);
 			// printf("size envp pour pipex -> %d\n", len_liste_envp(enviroment));
-			if (!found_token(to_pars)/*  && found_count_pipe(to_pars) */)
+			if (found_count_pipe(to_pars) || !found_token(to_pars))
 				ft_execve(to_pars, enviroment, line);
-			// if (found_pipe(to_pars) /* && !found_token(to_pars) */)
-				// /	ft_pipex(to_pars, len_liste_envp(enviroment), enviroment, ft_split(line, ' '));
 			if (found_echo(to_pars))
 				found_dollar_print_variable(to_pars, enviroment);
 			ft_pwd(to_pars);

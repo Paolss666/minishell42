@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 15:17:32 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/07 13:15:18 by npoalett         ###   ########.fr       */
+/*   Updated: 2024/01/08 17:26:28 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,6 @@ void	ft_error_commande_not_to_pars(t_cmd *to_pars)
 	ft_putstr_fd(" commande not found: ", 2);
 	ft_putstr_fd(to_pars->cmd, 2);
 	ft_putstr_fd("\n", 2);
-	// perror(" ");
-	// close(stack->prev);
-	// close(stack->fd[1]);
-	// close(stack->fd[0]);
-/* 	free(to_pars->cmd); */
-	// exit(1);
 }
 
 void	ft_error_directory_fd_out(t_pipex *stack)

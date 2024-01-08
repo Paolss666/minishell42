@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 15:54:16 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/07 12:30:48 by npoalett         ###   ########.fr       */
+/*   Updated: 2024/01/08 16:01:30 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,10 +172,10 @@ int	ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_spli
 			printf("shittttttttt\n");
 	if (found_count_pipe(to_pars))
 	{	
-		stack = (t_pipex *)malloc(sizeof(t_pipex));
-		if (!stack)
-			return (free(stack), 0);
-		ft_init_stack(stack, size, commande_split, found_count_pipe(to_pars));
+		// stack = (t_pipex *)malloc(sizeof(t_pipex));
+		// if (!stack)
+			// return (free(stack), 0);
+		stack = ft_init_stack(to_pars, size, commande_split, found_count_pipe(to_pars));
 		exec_pipes(stack, enviroment_cpy);
 		close(stack->fd[0]);
 		free(stack);

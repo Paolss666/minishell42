@@ -6,7 +6,7 @@
 /*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 15:18:52 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/05 15:58:07 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/08 17:55:44 by npaolett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ void	ft_redirect(t_pipex *stack, int i)
 	fd = 0;
 	if (i == 0)
 	{
-		// fd = open_file(stack, i);
+		fd = open_file(stack, i);
 		dup2(fd, 0);
 		close(fd);
 	}
 	if (i == stack->nmbr_mcd - 1)
 	{
-		// fd = open_file(stack, i);
+		fd = open_file(stack, i);
 		dup2(fd, 1);
 		close(fd);
 	}
