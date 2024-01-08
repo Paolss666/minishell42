@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 14:58:13 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/08 18:15:06 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/08 20:36:39 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,16 +133,16 @@ void				commande_split_toParse(char **commande_split, char *line);
 char 				***split_commands(t_cmd *to_pars);
 
 // ----------- PIPE--------------//
-// 
-char				***division_en_pipe(t_cmd *to_pars);
-int					ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_split);
-int exec(t_cmd *to_pars, t_envp *enviroment);
-// void				ft_init_stack(t_pipex *stack, int ac, char **av);
-// void				ft_init_stack(t_pipex *stack, int ac, char **av, int count_n_pipe);
+//
+char 				***found_pipw_for_parse_commands(t_cmd *to_pars);
+void				child(t_cmd *to_pars, char **enviroment, int i, char *get_good_path, int tmp_fd, int *fd);
+void				redirection(int *fd, int tmp_fd, int i, int n_pipe);
+void				parent(int *fd, int i, int tmp_fd);
+/* char				***division_en_pipe(t_cmd *to_pars); */
+/* int					ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_split); */
+/* int exec(t_cmd *to_pars, t_envp *enviroment); */
 t_pipex	*ft_init_stack(t_cmd *to_pars, int ac, char **av);
-int     ft_execve(t_cmd *to_pars, t_envp *enviroment/* , char *line */);
-/* int     			ft_execve(t_cmd *to_pars, t_envp *enviroment, char line); */
-/* void    			ft_execve(t_cmd *to_pars, t_envp *enviroment, char *line); */
+int     ft_execve(t_cmd *to_pars, t_envp *enviroment);
 char 				**envp_list_to_new_env(t_envp *enviroment);
 char				*ft_good_path_access(t_cmd	*to_pars, t_envp *enviroment);
 // void		ft_init_stack(stack, size, &to_pars, commande_split);

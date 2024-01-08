@@ -3,31 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npaolett <npaolett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npoalett <npoalett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 15:54:16 by npaolett          #+#    #+#             */
-/*   Updated: 2024/01/08 16:01:30 by npaolett         ###   ########.fr       */
+/*   Updated: 2024/01/08 20:12:26 by npoalett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 #include "../headers/pipex.h"
 
-int	found_count_pipe(t_cmd *cmd)
-{
-	int	pipe;
 
-	pipe = 0;
-	while (cmd != NULL)
-	{
-		if (ft_strncmp(cmd->cmd, "|", ft_strlen("|")) == 0)
-			pipe++;
-		cmd = cmd->next;
-	}
-	return (pipe);
-}
-
-
+/*
 
 void	ft_child_process(t_pipex *stack, int i, char **enviromet)
 {
@@ -106,7 +93,7 @@ char **cpy_enviroment_char(char **cpy_enviroment, t_envp *enviroment, int size)
 	cpy_enviroment[size + 1] = NULL;
 	return (cpy_enviroment);
 }
-
+ */
 
 // void	ft_redirect(t_pipex *stack, int i)
 // {
@@ -161,7 +148,7 @@ char **cpy_enviroment_char(char **cpy_enviroment, t_envp *enviroment, int size)
 // 	return (0);
 // }
 
-int	ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_split)
+/* int	ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_split)
 {
 	t_pipex *stack;
 	char 	**enviroment_cpy;
@@ -184,3 +171,4 @@ int	ft_pipex(t_cmd *to_pars, int size,  t_envp *enviroment, char **commande_spli
 	}
 	return (0);
 }
+ */
